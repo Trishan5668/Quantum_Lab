@@ -1,0 +1,46 @@
+namespace QuantumGravityToyModel {
+
+    open Microsoft.Quantum.Intrinsic;
+    open Microsoft.Quantum.Measurement;
+    open Microsoft.Quantum.Canon;
+
+    @EntryPoint()
+    operation Main() : Unit {
+
+        use geometry = Qubit[3];
+        use particle = Qubit[2];
+
+        // Put geometry into superposition
+        H(geometry[0]);
+        H(geometry[1]);
+        H(geometry[2]);
+
+        // Put particle into superposition
+        H(particle[0]);
+        H(particle[1]);
+
+        // Entangle particle path with geometry state
+        CNOT(geometry[0], particle[0]);
+        CNOT(geometry[1], particle[1]);
+
+        // Simulate geometry affecting particle motion
+        Controlled Z([geometry[2]], particle[0]);
+
+        Message("Measuring geometry:");
+
+        for q in geometry {
+            let result = M(q);
+            Message($"{result}");
+        }
+
+        Message("Measuring particle path:");
+
+        for q in particle {
+            let result = M(q);
+            Message($"{result}");
+        }
+
+        ResetAll(geometry);
+        ResetAll(particle);
+    }
+}

@@ -1,0 +1,15 @@
+services:
+  api:
+    build:
+      context: .
+      dockerfile: fastapi-server/Dockerfile
+    image: quantumlab-api:dev
+    container_name: quantumlab-api
+    ports:
+      - "8765:8765"
+    # Read LLM_PROVIDER + GEMINI_API_KEY from a local .env (gitignored).
+    env_file:
+      - .env
+    environment:
+      LLM_PROVIDER: ${LLM_PROVIDER:-gemini}
+    restart: unless-stopped

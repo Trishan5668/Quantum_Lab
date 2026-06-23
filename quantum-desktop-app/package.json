@@ -1,0 +1,14 @@
+{
+  "name": "quantum-desktop-app",
+  "version": "1.0.0",
+  "private": true,
+  "description": "The Electron + React frontend for QuantumLab.",
+  "workspaces": ["packages/*"],
+  "scripts": {
+    "dev:web": "npm run dev --workspace @quantumlab/webapp",
+    "dev:electron": "npm run dev --workspace @quantumlab/desktop",
+    "build:web": "npm run build --workspace @quantumlab/webapp",
+    "test": "npm run test --workspace @quantumlab/webapp",
+    "typecheck": "npm run typecheck --workspace @quantumlab/webapp"
+  }
+}

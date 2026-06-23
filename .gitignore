@@ -1,0 +1,59 @@
+# =============================================================================
+# QuantumLab -- repo-wide gitignore
+# =============================================================================
+
+# --- Secrets / env files ---
+.env
+.env.local
+.env.*.local
+*.env
+
+# --- Python ---
+__pycache__/
+*.py[cod]
+*$py.class
+*.egg-info/
+.eggs/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.tox/
+.coverage
+.coverage.*
+htmlcov/
+*.so
+
+# --- Build outputs ---
+build/
+dist/
+*.egg
+*.whl
+out/
+release/
+
+# --- Node / frontend ---
+node_modules/
+.vite/
+.parcel-cache/
+.next/
+.nuxt/
+.cache/
+.eslintcache
+.tsbuildinfo
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# --- Editor / OS ---
+.vscode/
+.idea/
+*.swp
+*.swo
+.DS_Store
+Thumbs.db
+Desktop.ini
+
+# --- Cursor scratch ---
+.cursor/

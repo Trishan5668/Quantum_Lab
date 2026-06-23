@@ -1,0 +1,122 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --bg-base: #0a0b0f;
+  --bg-surface: #12141a;
+  --bg-elevated: #1c1f2a;
+  --accent-quantum: #7c3aed;
+  --accent-glow: #a78bfa;
+  --accent-measure: #06b6d4;
+  --accent-warn: #f59e0b;
+  --text-primary: #f1f5f9;
+  --text-secondary: #94a3b8;
+  --text-muted: #475569;
+  --border: #1e2333;
+  --gate-h: #7c3aed;
+  --gate-xyz: #2563eb;
+  --gate-rot: #059669;
+  --gate-cnot: #dc2626;
+  --gate-measure: #06b6d4;
+
+  color-scheme: dark;
+}
+
+html,
+body,
+#root {
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  font-feature-settings: "ss01" on, "cv01" on, "cv02" on;
+  background: radial-gradient(
+      1100px 700px at 12% -5%,
+      rgba(124, 58, 237, 0.08),
+      transparent 60%
+    ),
+    radial-gradient(
+      900px 500px at 110% 10%,
+      rgba(6, 182, 212, 0.05),
+      transparent 60%
+    ),
+    var(--bg-base);
+}
+
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: #232838;
+  border-radius: 6px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #2d334a;
+}
+
+button,
+input,
+select,
+textarea {
+  font-family: inherit;
+}
+
+.katex {
+  font-size: 1em !important;
+  color: inherit;
+}
+
+/* Wire pulse: a moving neon highlight along the circuit wire */
+.wire-pulse {
+  position: absolute;
+  top: 50%;
+  left: 0;
+  transform: translateY(-50%);
+  height: 4px;
+  width: 80px;
+  border-radius: 999px;
+  background: linear-gradient(
+    90deg,
+    rgba(167, 139, 250, 0),
+    rgba(167, 139, 250, 0.9),
+    rgba(167, 139, 250, 0)
+  );
+  box-shadow:
+    0 0 12px 2px rgba(167, 139, 250, 0.5),
+    0 0 24px 4px rgba(124, 58, 237, 0.25);
+  pointer-events: none;
+}
+
+/* Faint afterglow that lingers after a pulse */
+.wire-afterglow {
+  background: linear-gradient(
+    90deg,
+    rgba(167, 139, 250, 0),
+    rgba(167, 139, 250, 0.18) 40%,
+    rgba(167, 139, 250, 0.18) 60%,
+    rgba(167, 139, 250, 0) 100%
+  );
+  transition: opacity 1500ms ease-out;
+}
+
+.gate-chip {
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+.panel-divider {
+  background-image: linear-gradient(
+    180deg,
+    transparent,
+    var(--border) 20%,
+    var(--border) 80%,
+    transparent
+  );
+  width: 1px;
+}
