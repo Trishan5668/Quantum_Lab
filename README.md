@@ -14,6 +14,18 @@ QuantumLab is a four-repository monorepo:
 
 ---
 
+## v2 status
+
+QuantumLab v2 adds mixed-state simulation and educational metrics while keeping v1 behavior as the default:
+
+- [x] **Density matrix engine** — ρ evolution via UρU† (`quantumlab/density.py`)
+- [x] **Noise channels** — amplitude/phase damping, depolarizing, bit/phase flip, T1/T2 preset
+- [x] **Metrics** — fidelity (pure & Uhlmann), entanglement entropy, purity
+- [x] **API v2** — `/api/v2/circuit/run`, `/api/v2/metrics/{fidelity,entropy,purity}`
+- [x] **UI** — Noise Settings panel, simulation mode toggle, Metrics panel
+- [x] **Education** — density, noise, fidelity, entropy markdown docs; LLM prompt updates
+- [x] **Backward compatible** — default statevector, no noise; all v1 tests pass
+
 ## v1 status
 
 All v1 deliverables are shipped and live-verified end-to-end:
@@ -93,8 +105,6 @@ These rules are enforced in code and in review:
 
 ## What's next
 
-- **v2** — density-matrix simulation, T1/T2 decoherence with Paik 2011 preset,
-  Bell-state fidelity gauge, 3-qubit bit-flip error correction.
 - **v3** — mission browser (Bell, teleportation, Grover, QFT, cavity coherence,
   threshold), star-based scoring, dynamic AI hints.
 

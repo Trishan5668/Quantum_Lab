@@ -1,5 +1,17 @@
 export type GateType = "H" | "X" | "Y" | "Z" | "RX" | "RY" | "RZ" | "CNOT" | "M";
 
+export type SimulationMode = "statevector" | "density";
+
+export type NoiseChannelType =
+  | "amplitude_damping"
+  | "phase_damping"
+  | "depolarizing"
+  | "bit_flip"
+  | "phase_flip"
+  | "t1_t2";
+
+export type FidelityTarget = "none" | "bell" | "ghz" | "zero";
+
 export interface GateParams {
   theta?: number;
 }
@@ -16,10 +28,20 @@ export interface CircuitState {
   numQubits: number;
   gates: GatePlacement[];
   results: SimulationResult | null;
+  resultsV2: SimulationResultV2 | null;
   isRunning: boolean;
   stepMode: boolean;
   currentStep: number;
   lastError: string | null;
+  simulationMode: SimulationMode;
+  noiseEnabled: boolean;
+  noiseModel: NoiseChannelType;
+  noiseProbability: number;
+  t1Us: number;
+  t2Us: number;
+  gateTimeNs: number;
+  fidelityTarget: FidelityTarget;
+  metrics: MetricsResult | null;
 }
 
 export interface ComplexAmplitude {
@@ -49,6 +71,37 @@ export interface SimulationResult {
   execution_time_ms: number;
   steps: StepResult[];
   final_state: StateSnapshot;
+}
+
+export interface SimulationResultV2 extends SimulationResult {
+  simulation_mode: SimulationMode;
+  mixed_state?: boolean;
+  noise_enabled?: boolean;
+  noise_channel?: string | null;
+  final_density?: DensityMatrixData | null;
+  purity?: number | null;
+}
+
+export interface FidelityMetric {
+  fidelity: number;
+  target_state: string;
+  interpretation: string;
+}
+
+export interface EntropyMetric {
+  entropy: number;
+  interpretation: string;
+}
+
+export interface PurityMetric {
+  purity: number;
+  interpretation: string;
+}
+
+export interface MetricsResult {
+  fidelity: FidelityMetric | null;
+  entropy: EntropyMetric | null;
+  purity: PurityMetric | null;
 }
 
 export interface ApiError {

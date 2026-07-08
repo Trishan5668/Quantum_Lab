@@ -1,6 +1,7 @@
 import { useMemo } from "react";
 import { InlineMath } from "react-katex";
 import { useCircuitStore, selectCurrentState } from "../../store/circuitStore";
+import { PanelSection, PanelPlaceholder } from "../ui/PanelSection";
 
 const AMP_EPS = 1e-10;
 
@@ -8,7 +9,7 @@ export function StateVectorPanel(): JSX.Element {
   const snapshot = useCircuitStore(selectCurrentState);
 
   const rows = useMemo(() => {
-    if (!snapshot) return [];
+    if (!snapshot?.amplitudes) return [];
     return snapshot.amplitudes
       .map((a, i) => ({
         idx: i,
@@ -21,18 +22,15 @@ export function StateVectorPanel(): JSX.Element {
   }, [snapshot]);
 
   return (
-    <div className="border-b border-border px-4 py-3">
-      <h2 className="mb-3 font-display text-xs font-semibold uppercase tracking-[0.2em] text-text-secondary">
-        State Vector
-      </h2>
+    <PanelSection title="State Vector" subtitle="Live amplitudes and Born-rule probabilities">
       {!snapshot ? (
-        <EmptyState message="Run a circuit to see the live state vector." />
+        <PanelPlaceholder>Run a circuit to see the live state vector.</PanelPlaceholder>
       ) : rows.length === 0 ? (
-        <EmptyState message="(no non-zero amplitudes)" />
+        <PanelPlaceholder>No non-zero amplitudes (mixed state or |0…0⟩).</PanelPlaceholder>
       ) : (
-        <div className="overflow-x-auto rounded-md border border-border bg-bg-base/40">
+        <div className="panel-card overflow-x-auto">
           <table className="w-full text-left font-mono text-[11px]">
-            <thead>
+            <thead className="sticky top-0 bg-bg-elevated/95">
               <tr className="border-b border-border text-text-muted">
                 <th className="px-2 py-1.5">Basis</th>
                 <th className="px-2 py-1.5 text-right">Re</th>
@@ -46,12 +44,8 @@ export function StateVectorPanel(): JSX.Element {
                   <td className="px-2 py-1">
                     <InlineMath math={`|${labelInner(r.label)}\\rangle`} />
                   </td>
-                  <td className="px-2 py-1 text-right text-text-primary">
-                    {fmt(r.re)}
-                  </td>
-                  <td className="px-2 py-1 text-right text-text-secondary">
-                    {fmt(r.im)}
-                  </td>
+                  <td className="px-2 py-1 text-right text-text-primary">{fmt(r.re)}</td>
+                  <td className="px-2 py-1 text-right text-text-secondary">{fmt(r.im)}</td>
                   <td className="px-2 py-1 text-right">
                     <ProbCell p={r.p} />
                   </td>
@@ -61,7 +55,7 @@ export function StateVectorPanel(): JSX.Element {
           </table>
         </div>
       )}
-    </div>
+    </PanelSection>
   );
 }
 
@@ -73,23 +67,14 @@ function ProbCell({ p }: { p: number }): JSX.Element {
       <span className="relative inline-block h-1.5 w-12 overflow-hidden rounded-full bg-bg-elevated">
         <span
           className="absolute left-0 top-0 h-full bg-gradient-to-r from-accent-quantum to-accent-glow transition-[width] duration-300"
-          style={{ width: `${(p * 100).toFixed(2)}%` }}
+          style={{ width: `${Math.min(100, p * 100)}%` }}
         />
       </span>
     </span>
   );
 }
 
-function EmptyState({ message }: { message: string }): JSX.Element {
-  return (
-    <div className="rounded-md border border-dashed border-border bg-bg-base/30 px-3 py-4 text-center font-mono text-[11px] text-text-muted">
-      {message}
-    </div>
-  );
-}
-
 function labelInner(label: string): string {
-  // expects "|XYZ>" -> "XYZ"
   return label.replace(/^\|/, "").replace(/>$/, "");
 }
 

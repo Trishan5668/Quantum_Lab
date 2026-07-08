@@ -1,4 +1,6 @@
 import { useCircuitStore } from "../../store/circuitStore";
+import { SimulationModeToggle } from "./SimulationModeToggle";
+import { Button } from "../ui/Button";
 
 export function Toolbar(): JSX.Element {
   const isRunning = useCircuitStore((s) => s.isRunning);
@@ -17,72 +19,63 @@ export function Toolbar(): JSX.Element {
   const canRun = !isRunning && gates.length > 0;
 
   return (
-    <div className="flex items-center justify-between border-b border-border bg-bg-surface/40 px-5 py-2">
-      <div className="flex items-center gap-2">
-        <button
-          type="button"
+    <div className="flex shrink-0 flex-wrap items-center justify-between gap-2 border-b border-border bg-bg-surface/40 px-4 py-2 sm:px-5">
+      <div className="flex flex-wrap items-center gap-2">
+        <Button
+          variant="primary"
+          size="md"
           disabled={!canRun}
+          loading={isRunning}
           onClick={() => void run()}
-          className="inline-flex items-center gap-2 rounded-md bg-accent-quantum px-3 py-1.5 font-mono text-xs font-semibold text-white shadow-sm shadow-accent-quantum/30 transition hover:bg-accent-glow disabled:cursor-not-allowed disabled:opacity-40"
+          aria-label="Run circuit"
         >
-          <PlayIcon /> {isRunning ? "Running..." : "Run Circuit"}
-        </button>
-        <button
-          type="button"
+          <PlayIcon /> {isRunning ? "Running…" : "Run Circuit"}
+        </Button>
+        <Button
+          variant={stepMode ? "secondary" : "ghost"}
+          size="md"
           onClick={() => setStepMode(!stepMode)}
-          className={`inline-flex items-center gap-2 rounded-md border px-3 py-1.5 font-mono text-xs transition ${
-            stepMode
-              ? "border-accent-glow bg-accent-quantum/15 text-accent-glow"
-              : "border-border text-text-secondary hover:border-accent-glow/40"
-          }`}
+          aria-pressed={stepMode}
+          aria-label="Toggle step through mode"
+          className={stepMode ? "border-accent-glow bg-accent-quantum/15 text-accent-glow" : ""}
         >
-          <StepIcon /> Step Through {stepMode ? "[on]" : "[off]"}
-        </button>
+          <StepIcon /> Step {stepMode ? "On" : "Off"}
+        </Button>
         {stepMode && (
-          <div className="ml-2 flex items-center gap-1 rounded-md border border-border bg-bg-elevated/60 px-2 py-1 text-[11px] font-mono text-text-secondary">
-            <button
-              type="button"
-              onClick={resetSteps}
-              className="rounded px-1.5 py-0.5 hover:bg-bg-base/50"
-              title="Reset"
-            >
+          <div
+            className="flex items-center gap-0.5 rounded-md border border-border bg-bg-elevated/60 px-1.5 py-1 font-mono text-[11px] text-text-secondary"
+            role="group"
+            aria-label="Step controls"
+          >
+            <Button variant="ghost" onClick={resetSteps} aria-label="Reset steps" className="px-1.5">
               «
-            </button>
-            <button
-              type="button"
-              onClick={stepBackward}
-              className="rounded px-1.5 py-0.5 hover:bg-bg-base/50"
-              title="Back"
-            >
+            </Button>
+            <Button variant="ghost" onClick={stepBackward} aria-label="Previous step" className="px-1.5">
               ‹
-            </button>
-            <span className="px-2">
+            </Button>
+            <span className="min-w-[3rem] px-1 text-center" aria-live="polite">
               {currentStep}/{totalSteps}
             </span>
-            <button
-              type="button"
-              onClick={stepForward}
-              className="rounded px-1.5 py-0.5 hover:bg-bg-base/50"
-              title="Forward"
-            >
+            <Button variant="ghost" onClick={stepForward} aria-label="Next step" className="px-1.5">
               ›
-            </button>
+            </Button>
           </div>
         )}
       </div>
-      <div className="flex items-center gap-2">
+      <div className="flex min-w-0 flex-wrap items-center justify-end gap-2">
+        <SimulationModeToggle />
         {lastError && (
-          <span className="rounded-md border border-red-500/40 bg-red-500/10 px-2 py-1 font-mono text-[11px] text-red-300">
+          <span
+            className="max-w-xs truncate rounded-md border border-red-500/40 bg-red-500/10 px-2 py-1 font-mono text-[11px] text-red-300"
+            title={lastError}
+            role="alert"
+          >
             {lastError}
           </span>
         )}
-        <button
-          type="button"
-          onClick={clearCircuit}
-          className="rounded-md border border-border px-3 py-1.5 font-mono text-xs text-text-secondary transition hover:border-red-500/40 hover:text-red-300"
-        >
+        <Button variant="danger" size="md" onClick={clearCircuit} aria-label="Clear circuit">
           Clear
-        </button>
+        </Button>
       </div>
     </div>
   );
@@ -95,6 +88,7 @@ function PlayIcon(): JSX.Element {
     </svg>
   );
 }
+
 function StepIcon(): JSX.Element {
   return (
     <svg width="12" height="10" viewBox="0 0 12 10" fill="currentColor" aria-hidden>

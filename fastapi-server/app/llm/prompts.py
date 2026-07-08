@@ -37,10 +37,20 @@ HINT_RIDER = (
     "full solution. Stay under 60 words."
 )
 
+V2_TOPIC_RIDER = (
+    "\n\nThe simulator now supports density-matrix mode, quantum noise "
+    "(T1/T2 decoherence, depolarizing channels), fidelity metrics, and "
+    "entanglement entropy. If the user asks about mixed states, decoherence, "
+    "fidelity percentages, or von Neumann entropy, explain in plain language: "
+    "T1 is energy decay (amplitude damping), T2 is loss of phase coherence, "
+    "fidelity measures overlap with a target state, and entropy S=1 bit on one "
+    "qubit of a Bell pair means maximal entanglement."
+)
+
 
 def system_prompt_for(req: ExplanationRequest) -> str:
     """Return the system prompt with mode-specific riders applied."""
-    base = SYSTEM_PROMPT_BASE
+    base = SYSTEM_PROMPT_BASE + V2_TOPIC_RIDER
     if req.mode == "deep":
         return base + DEEP_RIDER
     if req.mode == "hint":

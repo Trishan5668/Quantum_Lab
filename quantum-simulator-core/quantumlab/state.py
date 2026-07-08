@@ -18,11 +18,11 @@ two qubits using SWAP operators which are themselves built from
 from __future__ import annotations
 
 from dataclasses import dataclass, field
-from functools import reduce
-from typing import Any, cast
+from typing import TYPE_CHECKING, Any, cast
 
 import numpy as np
 
+from quantumlab._operators import full_unitary
 from quantumlab.exceptions import (
     InvalidGateError,
     NormalizationError,
@@ -30,102 +30,11 @@ from quantumlab.exceptions import (
 )
 from quantumlab.gates import GateMatrix, assert_valid_gate
 
+if TYPE_CHECKING:
+    from quantumlab.density import DensityMatrix
+
 _AMPLITUDE_EPS: float = 1e-10
 _NORM_TOL: float = 1e-9
-
-
-def _i2() -> np.ndarray:
-    return np.eye(2, dtype=np.complex128)
-
-
-def _kron_chain(factors: list[np.ndarray]) -> np.ndarray:
-    """Reduce a list of 2x2 matrices into their full Kronecker product."""
-    return reduce(np.kron, factors)
-
-
-def _swap_4x4() -> np.ndarray:
-    return np.array(
-        [
-            [1.0, 0.0, 0.0, 0.0],
-            [0.0, 0.0, 1.0, 0.0],
-            [0.0, 1.0, 0.0, 0.0],
-            [0.0, 0.0, 0.0, 1.0],
-        ],
-        dtype=np.complex128,
-    )
-
-
-def _adjacent_swap_full(q: int, num_qubits: int) -> np.ndarray:
-    """Build the SWAP operator on qubits (q, q+1) over the full Hilbert space."""
-    if q < 0 or q + 1 >= num_qubits:
-        raise QubitIndexError(
-            f"adjacent swap position {q} out of range for {num_qubits} qubits"
-        )
-    factors: list[np.ndarray] = []
-    if q > 0:
-        factors.append(np.eye(1 << q, dtype=np.complex128))
-    factors.append(_swap_4x4())
-    if num_qubits - q - 2 > 0:
-        factors.append(np.eye(1 << (num_qubits - q - 2), dtype=np.complex128))
-    return _kron_chain(factors)
-
-
-def _swap_qubits_full(i: int, j: int, num_qubits: int) -> np.ndarray:
-    """Operator swapping qubit positions ``i`` and ``j`` in an n-qubit register.
-
-    Implemented as a sequence of adjacent SWAPs so the construction is
-    composed entirely of ``np.kron``-built operators.
-    """
-    if i == j:
-        return np.eye(1 << num_qubits, dtype=np.complex128)
-    lo, hi = (i, j) if i < j else (j, i)
-    op = np.eye(1 << num_qubits, dtype=np.complex128)
-    for k in range(hi - 1, lo, -1):
-        op = _adjacent_swap_full(k, num_qubits) @ op
-    op = _adjacent_swap_full(lo, num_qubits) @ op
-    for k in range(lo + 1, hi):
-        op = _adjacent_swap_full(k, num_qubits) @ op
-    return op
-
-
-def _single_qubit_full(gate: GateMatrix, q: int, num_qubits: int) -> np.ndarray:
-    factors: list[np.ndarray] = []
-    for i in range(num_qubits):
-        factors.append(gate if i == q else _i2())
-    return _kron_chain(factors)
-
-
-def _two_qubit_full(
-    gate: GateMatrix, q0: int, q1: int, num_qubits: int
-) -> np.ndarray:
-    """Apply a 4x4 gate on logical qubits (q0, q1) of an n-qubit register.
-
-    The convention is that the gate's first input wire corresponds to
-    ``q0`` and the second to ``q1``. For CNOT this means
-    ``apply_gate(CNOT(), [c, t])`` treats ``c`` as the control and ``t``
-    as the target.
-    """
-    if q0 == q1:
-        raise QubitIndexError(
-            f"two-qubit gate cannot target the same qubit twice: {q0}"
-        )
-
-    factors: list[np.ndarray] = [gate]
-    for _ in range(num_qubits - 2):
-        factors.append(_i2())
-    embedded = _kron_chain(factors)
-
-    s0 = _swap_qubits_full(0, q0, num_qubits)
-    if q0 == 0:
-        q1_after = q1
-    elif q1 == 0:
-        q1_after = q0
-    else:
-        q1_after = q1
-    s1 = _swap_qubits_full(1, q1_after, num_qubits)
-
-    perm = s1 @ s0
-    return cast(np.ndarray, perm.conj().T @ embedded @ perm)
 
 
 @dataclass
@@ -218,12 +127,7 @@ class StateVector:
             )
         assert_valid_gate(gate, k_qubits=k)
 
-        if k == 1:
-            full = _single_qubit_full(gate, target_qubits[0], self.num_qubits)
-        else:
-            full = _two_qubit_full(
-                gate, target_qubits[0], target_qubits[1], self.num_qubits
-            )
+        full = full_unitary(gate, target_qubits, self.num_qubits)
         new_amps = full @ self.amplitudes
         return StateVector(amplitudes=new_amps, num_qubits=self.num_qubits)
 
@@ -236,6 +140,12 @@ class StateVector:
         """Return the full density matrix ``|psi><psi|``."""
         psi = self.amplitudes.reshape(-1, 1)
         return cast(np.ndarray, psi @ psi.conj().T)
+
+    def to_density_matrix(self) -> DensityMatrix:
+        """Return a :class:`~quantumlab.density.DensityMatrix` for this state."""
+        from quantumlab.density import DensityMatrix
+
+        return DensityMatrix.from_statevector(self)
 
     def reduced_density_matrix(self, qubit: int) -> np.ndarray:
         """Trace out all qubits except ``qubit``, returning a 2x2 matrix."""

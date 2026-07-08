@@ -3,12 +3,12 @@
 A ``CircuitDefinition`` is a plain dataclass describing the JSON
 payload the FastAPI bridge receives from the desktop client. The
 executor materializes each placement into a real ``GateMatrix`` and
-applies it via ``StateVector.apply_gate``.
+applies it via ``StateVector.apply_gate`` (default) or
+``DensityMatrix.apply_unitary`` when ``mode="density"``.
 
 Per project rules, ``Measure`` is treated as a marker: it does NOT
 collapse the simulated state because the educational UI needs the
-post-circuit probability distribution for visualization. A separate
-sampling endpoint can be added later if required.
+post-circuit probability distribution for visualization.
 """
 
 from __future__ import annotations
@@ -16,21 +16,24 @@ from __future__ import annotations
 from collections.abc import Callable
 from dataclasses import dataclass, field
 from time import perf_counter
-from typing import Any, Literal
+from typing import Any, Literal, overload
 
 import numpy as np
 
+from quantumlab.density import DensityMatrix
 from quantumlab.exceptions import (
     InvalidGateError,
     QubitIndexError,
     SimulationError,
 )
 from quantumlab.gates import CNOT, RX, RY, RZ, GateMatrix, H, X, Y, Z
+from quantumlab.noise import NoiseConfig, apply_noise, build_channel
 from quantumlab.state import StateVector
 
 GateType = Literal[
     "H", "X", "Y", "Z", "RX", "RY", "RZ", "CNOT", "M"
 ]
+SimulationMode = Literal["statevector", "density"]
 
 _SINGLE_QUBIT_GATES: dict[str, GateMatrix] = {
     "H": H(),
@@ -98,19 +101,84 @@ class StepResult:
 
 
 @dataclass
+class DensityStepResult:
+    gate_id: str
+    gate_type: str
+    qubit_targets: list[int]
+    params: dict[str, float]
+    time_step: int
+    density_after: DensityMatrix
+    probabilities: np.ndarray
+    purity: float
+
+    def to_dict(self) -> dict[str, Any]:
+        return {
+            "gate_id": self.gate_id,
+            "gate_type": self.gate_type,
+            "qubit_targets": list(self.qubit_targets),
+            "params": dict(self.params),
+            "time_step": self.time_step,
+            "density_after": self.density_after.to_dict(),
+            "probabilities": [float(p) for p in self.probabilities],
+            "purity": self.purity,
+        }
+
+
+@dataclass
 class CircuitResult:
     steps: list[StepResult]
     final_state: StateVector
     execution_time_ms: float
     num_qubits: int
+    simulation_mode: SimulationMode = "statevector"
 
     def to_dict(self) -> dict[str, Any]:
         return {
             "num_qubits": self.num_qubits,
             "execution_time_ms": self.execution_time_ms,
+            "simulation_mode": self.simulation_mode,
             "steps": [s.to_dict() for s in self.steps],
             "final_state": self.final_state.to_dict(),
         }
+
+
+@dataclass
+class DensityCircuitResult:
+    steps: list[DensityStepResult]
+    final_density: DensityMatrix
+    execution_time_ms: float
+    num_qubits: int
+    simulation_mode: SimulationMode = "density"
+    mixed_state: bool = False
+    noise_enabled: bool = False
+    noise_channel: str | None = None
+
+    def to_dict(self) -> dict[str, Any]:
+        payload: dict[str, Any] = {
+            "num_qubits": self.num_qubits,
+            "execution_time_ms": self.execution_time_ms,
+            "simulation_mode": self.simulation_mode,
+            "mixed_state": self.mixed_state,
+            "noise_enabled": self.noise_enabled,
+            "noise_channel": self.noise_channel,
+            "steps": [s.to_dict() for s in self.steps],
+            "final_density": self.final_density.to_dict(),
+            "purity": self.final_density.purity(),
+        }
+        if self.final_density.is_pure():
+            payload["final_state"] = self.final_density.to_statevector().to_dict()
+        else:
+            probs = self.final_density.probabilities()
+            payload["final_state"] = {
+                "num_qubits": self.num_qubits,
+                "amplitudes": [],
+                "probabilities": [float(p) for p in probs],
+                "basis_labels": [
+                    self.final_density.basis_label(i)
+                    for i in range(1 << self.num_qubits)
+                ],
+            }
+        return payload
 
 
 def _resolve_gate(placement: GatePlacement) -> GateMatrix | None:
@@ -147,6 +215,16 @@ def _resolve_gate(placement: GatePlacement) -> GateMatrix | None:
     raise InvalidGateError(f"unknown gate type: {gt!r}")
 
 
+def _noise_wires(
+    placement: GatePlacement, noise: NoiseConfig, num_qubits: int
+) -> list[int]:
+    if noise.target_qubits is not None:
+        return list(noise.target_qubits)
+    if len(placement.qubit_targets) == 1:
+        return [placement.qubit_targets[0]]
+    return list(range(num_qubits))
+
+
 def run_step(state: StateVector, placement: GatePlacement) -> StepResult:
     """Apply a single placement to ``state`` and return a structured result."""
     gate = _resolve_gate(placement)
@@ -165,21 +243,103 @@ def run_step(state: StateVector, placement: GatePlacement) -> StepResult:
     )
 
 
-def run_circuit(circuit: CircuitDefinition) -> CircuitResult:
+def run_density_step(
+    density: DensityMatrix,
+    placement: GatePlacement,
+    noise: NoiseConfig | None = None,
+) -> DensityStepResult:
+    """Apply a gate (and optional noise) to a density matrix."""
+    gate = _resolve_gate(placement)
+    new_density = density
+    if gate is not None:
+        new_density = new_density.apply_unitary(gate, placement.qubit_targets)
+    if noise is not None and noise.enabled and gate is not None:
+        channel = build_channel(noise)
+        wires = _noise_wires(placement, noise, new_density.num_qubits)
+        new_density = apply_noise(new_density, channel, wires)
+    return DensityStepResult(
+        gate_id=placement.id,
+        gate_type=placement.gate_type,
+        qubit_targets=list(placement.qubit_targets),
+        params=dict(placement.params),
+        time_step=placement.time_step,
+        density_after=new_density,
+        probabilities=new_density.probabilities(),
+        purity=new_density.purity(),
+    )
+
+
+@overload
+def run_circuit(
+    circuit: CircuitDefinition,
+    *,
+    mode: Literal["statevector"] = "statevector",
+    noise: NoiseConfig | None = None,
+    initial_state: StateVector | None = None,
+) -> CircuitResult: ...
+
+
+@overload
+def run_circuit(
+    circuit: CircuitDefinition,
+    *,
+    mode: Literal["density"],
+    noise: NoiseConfig | None = None,
+    initial_state: StateVector | None = None,
+) -> DensityCircuitResult: ...
+
+
+def run_circuit(
+    circuit: CircuitDefinition,
+    *,
+    mode: SimulationMode = "statevector",
+    noise: NoiseConfig | None = None,
+    initial_state: StateVector | None = None,
+) -> CircuitResult | DensityCircuitResult:
     """Execute the entire circuit, returning per-step and final results."""
     circuit.validate()
+    noise_cfg = noise or NoiseConfig()
+    use_density = mode == "density" or noise_cfg.enabled
+
     t0 = perf_counter()
     ordered = sorted(circuit.gates, key=lambda g: (g.time_step, g.id))
-    state = StateVector.zero(circuit.num_qubits)
-    steps: list[StepResult] = []
+
+    if not use_density:
+        state = initial_state if initial_state is not None else StateVector.zero(
+            circuit.num_qubits
+        )
+        steps: list[StepResult] = []
+        for placement in ordered:
+            step = run_step(state, placement)
+            steps.append(step)
+            state = step.state_after
+        elapsed_ms = (perf_counter() - t0) * 1000.0
+        return CircuitResult(
+            steps=steps,
+            final_state=state,
+            execution_time_ms=elapsed_ms,
+            num_qubits=circuit.num_qubits,
+            simulation_mode="statevector",
+        )
+
+    init = initial_state if initial_state is not None else StateVector.zero(
+        circuit.num_qubits
+    )
+    density = DensityMatrix.from_statevector(init)
+    dsteps: list[DensityStepResult] = []
+    active_noise = noise_cfg if noise_cfg.enabled else None
     for placement in ordered:
-        step = run_step(state, placement)
-        steps.append(step)
-        state = step.state_after
+        dstep = run_density_step(density, placement, active_noise)
+        dsteps.append(dstep)
+        density = dstep.density_after
     elapsed_ms = (perf_counter() - t0) * 1000.0
-    return CircuitResult(
-        steps=steps,
-        final_state=state,
+    return DensityCircuitResult(
+        steps=dsteps,
+        final_density=density,
         execution_time_ms=elapsed_ms,
         num_qubits=circuit.num_qubits,
+        simulation_mode="density",
+        mixed_state=not density.is_pure(),
+        noise_enabled=noise_cfg.enabled,
+        noise_channel=noise_cfg.channel if noise_cfg.enabled else None,
     )

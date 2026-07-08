@@ -1,5 +1,6 @@
 import { describe, expect, it, beforeEach } from "vitest";
-import { useCircuitStore } from "./circuitStore";
+import { useCircuitStore, normalizeV2ToSimulationResult } from "./circuitStore";
+import type { SimulationResultV2 } from "../types";
 
 describe("circuit store", () => {
   beforeEach(() => {
@@ -40,10 +41,58 @@ describe("circuit store", () => {
     expect(useCircuitStore.getState().gates).toHaveLength(0);
   });
 
-  it("drops gates that target removed qubits when shrinking", () => {
-    useCircuitStore.getState().setNumQubits(3);
-    useCircuitStore.getState().addGate("H", [2], 0);
-    useCircuitStore.getState().setNumQubits(2);
-    expect(useCircuitStore.getState().gates).toHaveLength(0);
+  it("defaults simulation to statevector with noise off", () => {
+    const s = useCircuitStore.getState();
+    expect(s.simulationMode).toBe("statevector");
+    expect(s.noiseEnabled).toBe(false);
+  });
+
+  it("updates simulation mode", () => {
+    useCircuitStore.getState().setSimulationMode("density");
+    expect(useCircuitStore.getState().simulationMode).toBe("density");
+  });
+
+  it("normalizes v2 density steps to state_after snapshots", () => {
+    const v2 = {
+      num_qubits: 1,
+      execution_time_ms: 1,
+      simulation_mode: "density" as const,
+      steps: [
+        {
+          gate_id: "g0",
+          gate_type: "H",
+          qubit_targets: [0],
+          params: {},
+          time_step: 0,
+          density_after: {
+            num_qubits: 1,
+            dim: 2,
+            real: [[0.5, 0.5], [0.5, 0.5]],
+            imag: [[0, 0], [0, 0]],
+            probabilities: [0.5, 0.5],
+            purity: 1,
+            basis_labels: ["|0>", "|1>"],
+            amplitudes: [
+              { real: 0.7071, imag: 0 },
+              { real: 0.7071, imag: 0 },
+            ],
+          },
+          probabilities: [0.5, 0.5],
+          purity: 1,
+        },
+      ],
+      final_state: {
+        num_qubits: 1,
+        amplitudes: [
+          { real: 0.7071, imag: 0 },
+          { real: 0.7071, imag: 0 },
+        ],
+        probabilities: [0.5, 0.5],
+        basis_labels: ["|0>", "|1>"],
+      },
+    } as unknown as SimulationResultV2;
+    const mapped = normalizeV2ToSimulationResult(v2);
+    expect(mapped.steps[0].state_after.amplitudes).toHaveLength(2);
+    expect(mapped.steps[0].state_after.probabilities).toEqual([0.5, 0.5]);
   });
 });

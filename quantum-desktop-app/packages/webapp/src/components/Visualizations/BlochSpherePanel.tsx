@@ -3,6 +3,7 @@ import { useCircuitStore, selectCurrentState } from "../../store/circuitStore";
 import { fetchBloch } from "../../api";
 import { BlochSphereCanvas } from "./BlochSphereCanvas";
 import type { BlochData } from "../../types";
+import { PanelSection, PanelPlaceholder } from "../ui/PanelSection";
 
 export function BlochSpherePanel(): JSX.Element {
   const snapshot = useCircuitStore(selectCurrentState);
@@ -12,8 +13,9 @@ export function BlochSpherePanel(): JSX.Element {
 
   useEffect(() => {
     let alive = true;
-    if (!snapshot) {
+    if (!snapshot || snapshot.amplitudes.length === 0) {
       setData(null);
+      setError(null);
       return;
     }
     setError(null);
@@ -29,24 +31,22 @@ export function BlochSpherePanel(): JSX.Element {
     };
   }, [snapshot]);
 
+  const subtitle = numQubits > 1 ? "Reduced density matrix per qubit" : "Single-qubit Bloch vector";
+
   return (
-    <div className="border-b border-border px-4 py-3">
-      <h2 className="mb-2 font-display text-xs font-semibold uppercase tracking-[0.2em] text-text-secondary">
-        Bloch Sphere {numQubits > 1 ? "(reduced per qubit)" : ""}
-      </h2>
+    <PanelSection title="Bloch Sphere" subtitle={subtitle}>
       {!snapshot ? (
-        <Placeholder text="Run a circuit to see qubits on the Bloch sphere." />
+        <PanelPlaceholder>Run a circuit to see qubits on the Bloch sphere.</PanelPlaceholder>
+      ) : snapshot.amplitudes.length === 0 ? (
+        <PanelPlaceholder>Bloch view requires a pure state (mixed ρ has no amplitudes).</PanelPlaceholder>
       ) : error ? (
-        <Placeholder text={error} />
+        <PanelPlaceholder>{error}</PanelPlaceholder>
       ) : !data ? (
-        <Placeholder text="Loading Bloch data..." />
+        <PanelPlaceholder>Loading Bloch data…</PanelPlaceholder>
       ) : (
-        <div className="grid grid-cols-1 gap-3">
+        <div className="grid grid-cols-1 gap-2">
           {data.qubits.map((q) => (
-            <div
-              key={q.qubit}
-              className="rounded-md border border-border bg-bg-base/30 p-2"
-            >
+            <div key={q.qubit} className="panel-card p-2">
               <div className="mb-1 flex items-center justify-between px-1 font-mono text-[10px] text-text-muted">
                 <span>q[{q.qubit}]</span>
                 <span>purity = {q.purity.toFixed(3)}</span>
@@ -63,14 +63,6 @@ export function BlochSpherePanel(): JSX.Element {
           ))}
         </div>
       )}
-    </div>
-  );
-}
-
-function Placeholder({ text }: { text: string }): JSX.Element {
-  return (
-    <div className="rounded-md border border-dashed border-border bg-bg-base/30 px-3 py-4 text-center font-mono text-[11px] text-text-muted">
-      {text}
-    </div>
+    </PanelSection>
   );
 }

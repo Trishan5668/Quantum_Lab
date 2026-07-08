@@ -34,13 +34,13 @@ export function CircuitCanvas(): JSX.Element {
   const totalColumns = Math.min(MAX_VISIBLE_COLUMNS, Math.max(usedColumns, 6));
 
   return (
-    <div className="relative">
+    <div className="circuit-canvas-shell px-4 pb-3 pt-3">
       <div
-        className={`relative mx-auto my-4 max-w-full rounded-lg border border-border bg-bg-surface/40 p-4 ${
+        className={`relative flex min-h-0 flex-1 flex-col rounded-lg border border-border bg-bg-surface/40 ${
           isRunning ? "animate-neon-border" : ""
         }`}
       >
-        <div className="mb-3 flex items-center justify-between">
+        <div className="flex shrink-0 items-center justify-between border-b border-border/60 px-4 py-2.5">
           <h2 className="font-display text-xs font-semibold uppercase tracking-[0.2em] text-text-secondary">
             Circuit Canvas
           </h2>
@@ -63,26 +63,28 @@ export function CircuitCanvas(): JSX.Element {
             </button>
           </div>
         </div>
-        <div
-          className="relative"
-          style={{
-            width: WIRE_LEFT_PAD + totalColumns * COLUMN_WIDTH + 8,
-            minHeight: numQubits * ROW_HEIGHT,
-          }}
-        >
-          {Array.from({ length: numQubits }).map((_, q) => (
-            <QubitRow
-              key={q}
-              qubit={q}
-              totalColumns={totalColumns}
-              gates={gates}
-              isRunning={isRunning}
-              stepMode={stepMode}
-              currentStep={currentStep}
-              numQubits={numQubits}
-            />
-          ))}
-          <CnotConnectors gates={gates} />
+        <div className="circuit-canvas-viewport px-4 py-3">
+          <div
+            className="relative"
+            style={{
+              width: WIRE_LEFT_PAD + totalColumns * COLUMN_WIDTH + 8,
+              minHeight: numQubits * ROW_HEIGHT,
+            }}
+          >
+            {Array.from({ length: numQubits }).map((_, q) => (
+              <QubitRow
+                key={q}
+                qubit={q}
+                totalColumns={totalColumns}
+                gates={gates}
+                isRunning={isRunning}
+                stepMode={stepMode}
+                currentStep={currentStep}
+                numQubits={numQubits}
+              />
+            ))}
+            <CnotConnectors gates={gates} />
+          </div>
         </div>
       </div>
     </div>

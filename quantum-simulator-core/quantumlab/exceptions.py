@@ -25,3 +25,7 @@ class SimulationError(QuantumLabError):
 
 class NormalizationError(QuantumLabError):
     """Raised when a state vector or density matrix fails normalization."""
+
+
+class InvalidDensityMatrixError(QuantumLabError):
+    """Raised when a density matrix fails structural or physical validation."""

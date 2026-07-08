@@ -19,7 +19,8 @@ def test_health(client: TestClient) -> None:
     body = r.json()
     assert body["error"] is None
     assert body["data"]["status"] == "ok"
-    assert body["data"]["version"] == "1.0.0"
+    assert body["data"]["version"] == "2.0.0"
+    assert body["data"]["core_version"] == "2.0.0"
 
 
 def test_circuit_run_bell_state(client: TestClient) -> None:

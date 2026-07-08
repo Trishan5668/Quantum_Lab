@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "quantumlab-api"
-version = "1.0.0"
+version = "2.0.0"
 description = "FastAPI bridge between QuantumLab desktop client and the quantum simulator core."
 requires-python = ">=3.11"
 license = { text = "MIT" }
@@ -16,7 +16,7 @@ dependencies = [
     "httpx>=0.27",
     "google-genai>=0.7",
     "numpy>=1.26",
-    "quantumlab>=1.0.0",
+    "quantumlab>=2.0.0",
 ]
 
 [project.optional-dependencies]

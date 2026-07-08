@@ -1,6 +1,8 @@
 import { useMemo, useRef } from "react";
 import { useCircuitStore } from "../../store/circuitStore";
 import { gateMeta } from "../../types";
+import { PanelSection } from "../ui/PanelSection";
+import { Button } from "../ui/Button";
 
 const PAD_LEFT = 56;
 const COL_W = 64;
@@ -57,21 +59,18 @@ export function CircuitDiagram(): JSX.Element {
   };
 
   return (
-    <div className="border-t border-border bg-bg-surface/60 px-5 py-3">
-      <div className="mb-2 flex items-center justify-between">
-        <h2 className="font-display text-xs font-semibold uppercase tracking-[0.2em] text-text-secondary">
-          Diagram (export-ready)
-        </h2>
-        <button
-          type="button"
-          onClick={handleExport}
-          className="rounded-md border border-border px-2 py-1 font-mono text-[10px] text-text-secondary hover:border-accent-glow hover:text-accent-glow"
-        >
-          ⬇ Export PNG
-        </button>
-      </div>
-      <div className="overflow-auto rounded-md border border-border bg-bg-base/50 p-2">
-        <svg ref={svgRef} width={width} height={height} className="block">
+    <PanelSection
+      title="Circuit Diagram"
+      subtitle="Export-ready schematic"
+      className="circuit-diagram-pane flex min-h-0 flex-col overflow-hidden border-t border-border py-2"
+      actions={
+        <Button variant="secondary" onClick={handleExport} aria-label="Export circuit as PNG">
+          Export PNG
+        </Button>
+      }
+    >
+      <div className="circuit-diagram-viewport panel-card p-2">
+        <svg ref={svgRef} width={width} height={height} className="block min-w-full">
           <rect width={width} height={height} fill="#0a0b0f" />
           {Array.from({ length: numQubits }).map((_, q) => (
             <g key={q}>
@@ -139,29 +138,14 @@ export function CircuitDiagram(): JSX.Element {
                 </g>
               );
             }
-            // CNOT
             const [c, t] = g.qubitTargets;
             const yc = 16 + c * ROW_H + ROW_H / 2;
             const yt = 16 + t * ROW_H + ROW_H / 2;
             return (
               <g key={g.id}>
-                <line
-                  x1={x}
-                  y1={yc}
-                  x2={x}
-                  y2={yt}
-                  stroke="#dc2626"
-                  strokeWidth={1.5}
-                />
+                <line x1={x} y1={yc} x2={x} y2={yt} stroke="#dc2626" strokeWidth={1.5} />
                 <circle cx={x} cy={yc} r={5} fill="#dc2626" />
-                <circle
-                  cx={x}
-                  cy={yt}
-                  r={10}
-                  fill="#12141a"
-                  stroke="#dc2626"
-                  strokeWidth={1.5}
-                />
+                <circle cx={x} cy={yt} r={10} fill="#12141a" stroke="#dc2626" strokeWidth={1.5} />
                 <line x1={x - 7} y1={yt} x2={x + 7} y2={yt} stroke="#dc2626" strokeWidth={1.5} />
                 <line x1={x} y1={yt - 7} x2={x} y2={yt + 7} stroke="#dc2626" strokeWidth={1.5} />
               </g>
@@ -169,6 +153,6 @@ export function CircuitDiagram(): JSX.Element {
           })}
         </svg>
       </div>
-    </div>
+    </PanelSection>
   );
 }

@@ -1,6 +1,6 @@
 {
   "name": "quantum-desktop-app",
-  "version": "1.0.0",
+  "version": "2.0.0",
   "private": true,
   "description": "The Electron + React frontend for QuantumLab.",
   "workspaces": ["packages/*"],

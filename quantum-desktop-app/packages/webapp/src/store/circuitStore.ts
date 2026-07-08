@@ -1,7 +1,28 @@
 import { create } from "zustand";
 import { v4 as uuidv4 } from "uuid";
 import { runCircuit, ApiClientError } from "../api";
-import type { CircuitState, GatePlacement, GateType, SimulationResult } from "../types";
+import {
+  runCircuitV2,
+  fetchFidelity,
+  fetchEntropy,
+  fetchPurity,
+  fetchPurityFromDensity,
+  ApiV2ClientError,
+} from "../apiV2";
+import type {
+  CircuitState,
+  ComplexAmplitude,
+  FidelityTarget,
+  GatePlacement,
+  GateType,
+  NoiseChannelType,
+  SimulationMode,
+  SimulationResult,
+  SimulationResultV2,
+  StateSnapshot,
+  StepResult,
+  MetricsResult,
+} from "../types";
 
 const MAX_QUBITS = 8;
 
@@ -20,6 +41,14 @@ interface CircuitActions {
   stepBackward: () => void;
   resetSteps: () => void;
   setError: (msg: string | null) => void;
+  setSimulationMode: (mode: SimulationMode) => void;
+  setNoiseEnabled: (enabled: boolean) => void;
+  setNoiseModel: (model: NoiseChannelType) => void;
+  setNoiseProbability: (p: number) => void;
+  setT1Us: (v: number) => void;
+  setT2Us: (v: number) => void;
+  setGateTimeNs: (v: number) => void;
+  setFidelityTarget: (target: FidelityTarget) => void;
 }
 
 type Store = CircuitState & CircuitActions;
@@ -28,11 +57,82 @@ const initialState: CircuitState = {
   numQubits: 1,
   gates: [],
   results: null,
+  resultsV2: null,
   isRunning: false,
   stepMode: false,
   currentStep: 0,
   lastError: null,
+  simulationMode: "statevector",
+  noiseEnabled: false,
+  noiseModel: "depolarizing",
+  noiseProbability: 0.01,
+  t1Us: 50,
+  t2Us: 25,
+  gateTimeNs: 50,
+  fidelityTarget: "none",
+  metrics: null,
 };
+
+function usesV2(state: Pick<CircuitState, "simulationMode" | "noiseEnabled">): boolean {
+  return state.simulationMode === "density" || state.noiseEnabled;
+}
+
+/** V2 density steps expose ``density_after`` instead of ``state_after``. */
+interface RawV2Step {
+  gate_id: string;
+  gate_type: string;
+  qubit_targets: number[];
+  params: Record<string, number>;
+  time_step: number;
+  state_after?: StateSnapshot;
+  density_after?: {
+    amplitudes?: ComplexAmplitude[];
+    probabilities: number[];
+    basis_labels: string[];
+  };
+  probabilities: number[];
+}
+
+function snapshotFromV2Step(step: RawV2Step, numQubits: number): StateSnapshot {
+  if (step.state_after) {
+    return {
+      ...step.state_after,
+      amplitudes: step.state_after.amplitudes ?? [],
+      probabilities: step.state_after.probabilities ?? [],
+      basis_labels: step.state_after.basis_labels ?? [],
+    };
+  }
+  const density = step.density_after;
+  return {
+    num_qubits: numQubits,
+    amplitudes: density?.amplitudes ?? [],
+    probabilities: density?.probabilities ?? step.probabilities ?? [],
+    basis_labels: density?.basis_labels ?? [],
+  };
+}
+
+export function normalizeV2ToSimulationResult(resultV2: SimulationResultV2): SimulationResult {
+  const steps: StepResult[] = (resultV2.steps as RawV2Step[]).map((step) => ({
+    gate_id: step.gate_id,
+    gate_type: step.gate_type,
+    qubit_targets: step.qubit_targets,
+    params: step.params ?? {},
+    time_step: step.time_step,
+    state_after: snapshotFromV2Step(step, resultV2.num_qubits),
+    probabilities: step.probabilities,
+  }));
+  return {
+    num_qubits: resultV2.num_qubits,
+    execution_time_ms: resultV2.execution_time_ms,
+    steps,
+    final_state: {
+      ...resultV2.final_state,
+      amplitudes: resultV2.final_state.amplitudes ?? [],
+      probabilities: resultV2.final_state.probabilities ?? [],
+      basis_labels: resultV2.final_state.basis_labels ?? [],
+    },
+  };
+}
 
 export const useCircuitStore = create<Store>((set, get) => ({
   ...initialState,
@@ -40,7 +140,7 @@ export const useCircuitStore = create<Store>((set, get) => ({
   addQubit: () =>
     set((s) => {
       if (s.numQubits >= MAX_QUBITS) return s;
-      return { numQubits: s.numQubits + 1, results: null, currentStep: 0 };
+      return { numQubits: s.numQubits + 1, results: null, resultsV2: null, currentStep: 0 };
     }),
 
   removeQubit: () =>
@@ -54,6 +154,7 @@ export const useCircuitStore = create<Store>((set, get) => ({
         numQubits: newN,
         gates: filtered,
         results: null,
+        resultsV2: null,
         currentStep: 0,
       };
     }),
@@ -68,6 +169,7 @@ export const useCircuitStore = create<Store>((set, get) => ({
         numQubits: clamped,
         gates: filtered,
         results: null,
+        resultsV2: null,
         currentStep: 0,
       };
     }),
@@ -85,6 +187,7 @@ export const useCircuitStore = create<Store>((set, get) => ({
       return {
         gates: [...s.gates, placement],
         results: null,
+        resultsV2: null,
         currentStep: 0,
       };
     }),
@@ -93,6 +196,7 @@ export const useCircuitStore = create<Store>((set, get) => ({
     set((s) => ({
       gates: s.gates.filter((g) => g.id !== id),
       results: null,
+      resultsV2: null,
       currentStep: 0,
     })),
 
@@ -102,6 +206,7 @@ export const useCircuitStore = create<Store>((set, get) => ({
         g.id === id ? { ...g, params: { ...g.params, ...params } } : g,
       ),
       results: null,
+      resultsV2: null,
     })),
 
   moveGate: (id, newTimeStep, newQubitTargets) =>
@@ -116,25 +221,80 @@ export const useCircuitStore = create<Store>((set, get) => ({
           : g,
       ),
       results: null,
+      resultsV2: null,
       currentStep: 0,
     })),
 
   clearCircuit: () =>
-    set({ gates: [], results: null, currentStep: 0, lastError: null }),
+    set({
+      gates: [],
+      results: null,
+      resultsV2: null,
+      metrics: null,
+      currentStep: 0,
+      lastError: null,
+    }),
 
   run: async () => {
-    const { numQubits, gates } = get();
-    set({ isRunning: true, lastError: null });
+    const state = get();
+    const { numQubits, gates } = state;
+    set({ isRunning: true, lastError: null, metrics: null });
     try {
-      const result: SimulationResult = await runCircuit({ numQubits, gates });
+      if (!usesV2(state)) {
+        const result: SimulationResult = await runCircuit({ numQubits, gates });
+        set({
+          results: result,
+          resultsV2: null,
+          isRunning: false,
+          currentStep: result.steps.length,
+        });
+        return;
+      }
+
+      const resultV2 = await runCircuitV2({ numQubits, gates }, {
+        simulationMode: state.simulationMode,
+        noiseEnabled: state.noiseEnabled,
+        noiseModel: state.noiseModel,
+        noiseProbability: state.noiseProbability,
+        t1Us: state.t1Us,
+        t2Us: state.t2Us,
+        gateTimeNs: state.gateTimeNs,
+      });
+
+      const mapped = normalizeV2ToSimulationResult(resultV2);
+
+      let metrics: MetricsResult = { fidelity: null, entropy: null, purity: null };
+
+      const amps = resultV2.final_state.amplitudes;
+      const density = resultV2.final_density;
+
+      if (state.fidelityTarget !== "none") {
+        metrics.fidelity = await fetchFidelity(numQubits, state.fidelityTarget, {
+          amplitudes: amps.length > 0 ? amps : undefined,
+          density: amps.length === 0 ? density ?? undefined : undefined,
+        });
+      }
+
+      if (amps.length > 0) {
+        metrics.purity = await fetchPurity(numQubits, amps);
+      } else if (density) {
+        metrics.purity = await fetchPurityFromDensity(numQubits, density);
+      }
+
+      if (density && numQubits >= 2) {
+        metrics.entropy = await fetchEntropy(numQubits, [0], density);
+      }
+
       set({
-        results: result,
+        results: mapped,
+        resultsV2: resultV2,
+        metrics,
         isRunning: false,
-        currentStep: result.steps.length,
+        currentStep: mapped.steps.length,
       });
     } catch (err) {
       const message =
-        err instanceof ApiClientError
+        err instanceof ApiClientError || err instanceof ApiV2ClientError
           ? `${err.code}: ${err.message}`
           : err instanceof Error
             ? err.message
@@ -157,6 +317,18 @@ export const useCircuitStore = create<Store>((set, get) => ({
     })),
   resetSteps: () => set({ currentStep: 0 }),
   setError: (msg) => set({ lastError: msg }),
+  setSimulationMode: (mode) =>
+    set({ simulationMode: mode, results: null, resultsV2: null, metrics: null }),
+  setNoiseEnabled: (enabled) =>
+    set({ noiseEnabled: enabled, results: null, resultsV2: null, metrics: null }),
+  setNoiseModel: (model) =>
+    set({ noiseModel: model, results: null, resultsV2: null, metrics: null }),
+  setNoiseProbability: (p) =>
+    set({ noiseProbability: p, results: null, resultsV2: null, metrics: null }),
+  setT1Us: (v) => set({ t1Us: v, results: null, resultsV2: null, metrics: null }),
+  setT2Us: (v) => set({ t2Us: v, results: null, resultsV2: null, metrics: null }),
+  setGateTimeNs: (v) => set({ gateTimeNs: v, results: null, resultsV2: null, metrics: null }),
+  setFidelityTarget: (target) => set({ fidelityTarget: target }),
 }));
 
 export function selectCurrentState(s: CircuitState): {
@@ -188,9 +360,13 @@ export function selectCurrentState(s: CircuitState): {
     }
     const step = s.results.steps[s.currentStep - 1];
     if (!step) return s.results.final_state;
-    return step.state_after;
+    return step.state_after ?? s.results.final_state;
   }
   return s.results.final_state;
+}
+
+export function selectDensityData(s: CircuitState) {
+  return s.resultsV2?.final_density ?? null;
 }
 
 export const MAX_QUBITS_CONST = MAX_QUBITS;
