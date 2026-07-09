@@ -3,6 +3,7 @@ from __future__ import annotations
 import numpy as np
 import pytest
 
+from quantumlab.exceptions import SimulationError
 from quantumlab.density import DensityMatrix
 from quantumlab.gates import X
 from quantumlab.noise import (
@@ -87,6 +88,26 @@ def test_build_channel_from_config() -> None:
     cfg = NoiseConfig(enabled=True, channel="depolarizing", probability=0.05)
     channel = build_channel(cfg)
     assert isinstance(channel, DepolarizingChannel)
+
+
+def test_t1t2_rejects_unphysical_t2() -> None:
+    with pytest.raises(SimulationError, match="T2"):
+        T1T2NoiseModel(t1_us=10.0, t2_us=25.0, gate_time_ns=50.0)
+
+
+def test_phase_damping_t2_decay_rate() -> None:
+    import math
+
+    sv = StateVector.from_amplitudes(
+        np.array([1, 1], dtype=np.complex128) / np.sqrt(2)
+    )
+    rho = DensityMatrix.from_statevector(sv)
+    t2_us = 50.0
+    t_us = 10.0
+    gamma = 1.0 - math.exp(-2.0 * t_us / t2_us)
+    out = PhaseDampingChannel(gamma).apply(rho, 0)
+    expected = 0.5 * math.exp(-t_us / t2_us)
+    assert abs(out.matrix[0, 1]) == pytest.approx(expected, rel=1e-6)
 
 
 def test_apply_noise_all_qubits() -> None:

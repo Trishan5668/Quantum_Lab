@@ -35,6 +35,10 @@ dev = [
     "mypy>=1.10",
     "ruff>=0.5",
 ]
+validation = [
+    "qiskit>=1.0",
+    "fpdf2>=2.7",
+]
 
 [tool.setuptools.packages.find]
 where = ["."]

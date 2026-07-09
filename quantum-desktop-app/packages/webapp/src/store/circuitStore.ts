@@ -35,6 +35,13 @@ interface CircuitActions {
   updateGateParams: (id: string, params: Partial<GatePlacement["params"]>) => void;
   moveGate: (id: string, newTimeStep: number, newQubitTargets?: number[]) => void;
   clearCircuit: () => void;
+  loadPreset: (preset: {
+    numQubits: number;
+    gates: Omit<GatePlacement, "id">[];
+    simulationMode?: SimulationMode;
+    noiseEnabled?: boolean;
+    fidelityTarget?: FidelityTarget;
+  }) => void;
   run: () => Promise<void>;
   setStepMode: (enabled: boolean) => void;
   stepForward: () => void;
@@ -233,6 +240,21 @@ export const useCircuitStore = create<Store>((set, get) => ({
       metrics: null,
       currentStep: 0,
       lastError: null,
+    }),
+
+  loadPreset: (preset) =>
+    set({
+      numQubits: preset.numQubits,
+      gates: preset.gates.map((g) => ({ ...g, id: uuidv4() })),
+      simulationMode: preset.simulationMode ?? "statevector",
+      noiseEnabled: preset.noiseEnabled ?? false,
+      fidelityTarget: preset.fidelityTarget ?? "none",
+      results: null,
+      resultsV2: null,
+      metrics: null,
+      currentStep: 0,
+      lastError: null,
+      stepMode: false,
     }),
 
   run: async () => {

@@ -71,7 +71,13 @@ class AmplitudeDampingChannel(QuantumChannel):
 
 @dataclass(frozen=True)
 class PhaseDampingChannel(QuantumChannel):
-    """Pure dephasing (T2-like): coherence loss without energy change."""
+    """Pure dephasing (T2-like): coherence loss without energy change.
+
+    Kraus operators ``K0 = diag(1, sqrt(1-gamma))``, ``K1 = diag(0, sqrt(gamma))``
+    scale off-diagonal elements of rho by ``sqrt(1-gamma)`` per application.
+    When mapping a Ramsey time ``T2``, use ``gamma = 1 - exp(-2t/T2)`` so that
+    coherence decays as ``exp(-t/T2)``.
+    """
 
     gamma: float
 
@@ -156,6 +162,10 @@ class T1T2NoiseModel(QuantumChannel):
     def __post_init__(self) -> None:
         if self.t1_us <= 0 or self.t2_us <= 0:
             raise SimulationError("T1 and T2 must be positive")
+        if self.t2_us > 2.0 * self.t1_us + 1e-9:
+            raise SimulationError(
+                f"T2 ({self.t2_us} us) must satisfy T2 <= 2*T1 ({2 * self.t1_us} us)"
+            )
         if self.gate_time_ns < 0:
             raise SimulationError("gate_time_ns must be non-negative")
 
@@ -166,8 +176,14 @@ class T1T2NoiseModel(QuantumChannel):
 
     @property
     def p_phase(self) -> float:
+        """Dephasing probability for Kraus phase damping at gate duration.
+
+        Phase-damping Kraus operators scale off-diagonals by ``sqrt(1-gamma)``.
+        For standard Ramsey T2 decay ``|rho_01(t)| = |rho_01(0)| exp(-t/T2)`` we need
+        ``sqrt(1-gamma) = exp(-t/T2)``, hence ``gamma = 1 - exp(-2t/T2)``.
+        """
         gate_time_us = self.gate_time_ns * 1e-3
-        return 1.0 - math.exp(-gate_time_us / self.t2_us)
+        return 1.0 - math.exp(-2.0 * gate_time_us / self.t2_us)
 
     def kraus_operators(self) -> list[GateMatrix]:
         raise SimulationError(

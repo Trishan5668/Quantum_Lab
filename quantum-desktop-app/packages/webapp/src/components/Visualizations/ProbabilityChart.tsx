@@ -3,7 +3,7 @@ import Plot from "react-plotly.js";
 import { useCircuitStore, selectCurrentState } from "../../store/circuitStore";
 import { PanelSection, PanelPlaceholder } from "../ui/PanelSection";
 
-export function ProbabilityChart(): JSX.Element {
+export function ProbabilityChart({ compact = false }: { compact?: boolean }): JSX.Element {
   const snapshot = useCircuitStore(selectCurrentState);
 
   const { x, y } = useMemo(() => {
@@ -13,6 +13,23 @@ export function ProbabilityChart(): JSX.Element {
       y: snapshot.probabilities,
     };
   }, [snapshot]);
+
+  if (compact) {
+    return (
+      <div className="px-2 py-2">
+        <p className="mb-1 font-display text-[10px] font-semibold uppercase tracking-[0.15em] text-text-secondary">
+          Probabilities
+        </p>
+        {!snapshot ? (
+          <p className="text-xs text-text-muted">Run to see results</p>
+        ) : (
+          <div className="panel-card overflow-hidden p-1">
+            <ProbabilityPlot x={x} y={y} height={120} />
+          </div>
+        )}
+      </div>
+    );
+  }
 
   return (
     <PanelSection title="Measurement Probabilities" subtitle="Born-rule |⟨b|ψ⟩|²">
@@ -30,9 +47,11 @@ export function ProbabilityChart(): JSX.Element {
 const ProbabilityPlot = memo(function ProbabilityPlot({
   x,
   y,
+  height = 160,
 }: {
   x: string[];
   y: number[];
+  height?: number;
 }) {
   return (
     <Plot
@@ -55,7 +74,7 @@ const ProbabilityPlot = memo(function ProbabilityPlot({
       ]}
       layout={{
         autosize: true,
-        height: 160,
+        height,
         margin: { l: 32, r: 8, t: 8, b: 36 },
         paper_bgcolor: "rgba(0,0,0,0)",
         plot_bgcolor: "rgba(0,0,0,0)",

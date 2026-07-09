@@ -2,7 +2,7 @@ import { useCircuitStore } from "../../store/circuitStore";
 import { SimulationModeToggle } from "./SimulationModeToggle";
 import { Button } from "../ui/Button";
 
-export function Toolbar(): JSX.Element {
+export function Toolbar({ compact = false }: { compact?: boolean }): JSX.Element {
   const isRunning = useCircuitStore((s) => s.isRunning);
   const stepMode = useCircuitStore((s) => s.stepMode);
   const currentStep = useCircuitStore((s) => s.currentStep);
@@ -23,14 +23,16 @@ export function Toolbar(): JSX.Element {
       <div className="flex flex-wrap items-center gap-2">
         <Button
           variant="primary"
-          size="md"
+          size={compact ? "sm" : "md"}
           disabled={!canRun}
           loading={isRunning}
           onClick={() => void run()}
           aria-label="Run circuit"
         >
-          <PlayIcon /> {isRunning ? "Running…" : "Run Circuit"}
+          <PlayIcon /> {isRunning ? "Running…" : compact ? "Run" : "Run Circuit"}
         </Button>
+        {!compact && (
+        <>
         <Button
           variant={stepMode ? "secondary" : "ghost"}
           size="md"
@@ -61,9 +63,11 @@ export function Toolbar(): JSX.Element {
             </Button>
           </div>
         )}
+        </>
+        )}
       </div>
       <div className="flex min-w-0 flex-wrap items-center justify-end gap-2">
-        <SimulationModeToggle />
+        {!compact && <SimulationModeToggle />}
         {lastError && (
           <span
             className="max-w-xs truncate rounded-md border border-red-500/40 bg-red-500/10 px-2 py-1 font-mono text-[11px] text-red-300"
@@ -73,9 +77,11 @@ export function Toolbar(): JSX.Element {
             {lastError}
           </span>
         )}
+        {!compact && (
         <Button variant="danger" size="md" onClick={clearCircuit} aria-label="Clear circuit">
           Clear
         </Button>
+        )}
       </div>
     </div>
   );

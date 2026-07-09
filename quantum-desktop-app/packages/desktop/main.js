@@ -4,7 +4,7 @@ const { app, BrowserWindow, shell } = require("electron");
 const path = require("node:path");
 const { spawn } = require("node:child_process");
 
-const DEV_URL = process.env.QUANTUMLAB_DEV_URL || "http://127.0.0.1:5173";
+const DEV_URL = process.env.QUANTUMLAB_DEV_URL || "http://127.0.0.1:5173/app";
 const PROD_INDEX = path.resolve(__dirname, "..", "webapp", "dist", "index.html");
 const isDev = !app.isPackaged;
 
@@ -58,7 +58,7 @@ function createWindow() {
   if (isDev) {
     void mainWindow.loadURL(DEV_URL);
   } else {
-    void mainWindow.loadFile(PROD_INDEX);
+    void mainWindow.loadFile(PROD_INDEX, { hash: "/app" });
   }
 
   mainWindow.on("closed", () => {
