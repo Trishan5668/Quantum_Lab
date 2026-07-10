@@ -16,7 +16,7 @@ dependencies = [
     "httpx>=0.27",
     "google-genai>=0.7",
     "numpy>=1.26",
-    "quantumlab @ file://../quantum-simulator-core",,
+    
 ]
 
 [project.optional-dependencies]
