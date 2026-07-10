@@ -9,6 +9,7 @@ import { fetchDensity } from "../../api";
 import type { DensityMatrixData } from "../../types";
 
 import { PanelSection, PanelPlaceholder } from "../ui/PanelSection";
+import { BACKEND_UNAVAILABLE_MESSAGE } from "../../config/api";
 
 
 
@@ -62,7 +63,7 @@ export function DensityHeatmap(): JSX.Element {
 
       .catch((err: Error) => {
 
-        if (alive) setError(err.message);
+        if (alive) setError(err.message === BACKEND_UNAVAILABLE_MESSAGE ? BACKEND_UNAVAILABLE_MESSAGE : err.message);
 
       });
 

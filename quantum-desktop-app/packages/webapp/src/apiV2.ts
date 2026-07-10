@@ -8,8 +8,7 @@ import type {
   SimulationMode,
   SimulationResultV2,
 } from "./types";
-
-const API_V2_BASE = "http://127.0.0.1:8765/api/v2";
+import { BACKEND_UNAVAILABLE_MESSAGE, apiUrl } from "./config/api";
 
 export class ApiV2ClientError extends Error {
   readonly code: string;
@@ -29,21 +28,31 @@ async function postV2<TResponse, TBody = unknown>(
 ): Promise<TResponse> {
   let resp: Response;
   try {
-    resp = await fetch(`${API_V2_BASE}${path}`, {
+    resp = await fetch(apiUrl(path, "v2"), {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(body),
     });
-  } catch (err) {
+  } catch {
     throw new ApiV2ClientError(
       "NetworkError",
-      err instanceof Error ? err.message : String(err),
+      BACKEND_UNAVAILABLE_MESSAGE,
       0,
       null,
     );
   }
 
-  const envelope = (await resp.json()) as ApiEnvelope<TResponse>;
+  let envelope: ApiEnvelope<TResponse>;
+  try {
+    envelope = (await resp.json()) as ApiEnvelope<TResponse>;
+  } catch {
+    throw new ApiV2ClientError(
+      "BadResponse",
+      `Server returned non-JSON response (status ${resp.status})`,
+      resp.status,
+      null,
+    );
+  }
   if (!resp.ok || envelope.error) {
     const e = envelope.error;
     throw new ApiV2ClientError(

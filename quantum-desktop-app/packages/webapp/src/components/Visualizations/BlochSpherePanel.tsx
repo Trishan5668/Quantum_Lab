@@ -4,6 +4,7 @@ import { fetchBloch } from "../../api";
 import { BlochSphereCanvas } from "./BlochSphereCanvas";
 import type { BlochData } from "../../types";
 import { PanelSection, PanelPlaceholder } from "../ui/PanelSection";
+import { BACKEND_UNAVAILABLE_MESSAGE } from "../../config/api";
 
 export function BlochSpherePanel(): JSX.Element {
   const snapshot = useCircuitStore(selectCurrentState);
@@ -24,7 +25,7 @@ export function BlochSpherePanel(): JSX.Element {
         if (alive) setData(d);
       })
       .catch((err: Error) => {
-        if (alive) setError(err.message);
+        if (alive) setError(err.message === BACKEND_UNAVAILABLE_MESSAGE ? BACKEND_UNAVAILABLE_MESSAGE : err.message);
       });
     return () => {
       alive = false;

@@ -41,7 +41,7 @@ npm install
 npm run dev
 \`\`\`
 
-Open http://127.0.0.1:5173 for the platform or http://127.0.0.1:5173/app for the simulator.
+Open the Vite dev server URL for the platform, or append \`/app\` for the simulator.
 
 ## Desktop (optional)
 
@@ -121,7 +121,7 @@ Fidelity (pure & Uhlmann), von Neumann entanglement entropy, purity.`,
     title: "API v1",
     category: "api",
     summary: "Circuit run, step, visualize, and explain endpoints.",
-    content: `Base URL: \`http://127.0.0.1:8765\`
+    content: `Base URL: configured with \`VITE_API_URL\`.
 
 | Method | Path | Description |
 |--------|------|-------------|

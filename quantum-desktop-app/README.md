@@ -38,6 +38,39 @@ npm run dev
 
 Then open <http://127.0.0.1:5173>.
 
+The webapp uses `VITE_API_URL` for all backend calls. Copy
+`packages/webapp/.env.example` to `packages/webapp/.env` for local development.
+In production, set `VITE_API_URL` to the deployed FastAPI service URL.
+
+## Deploying the webapp
+
+For Vercel, create the project from `quantum-desktop-app/packages/webapp`:
+
+| Setting | Value |
+| --- | --- |
+| Framework preset | Vite |
+| Install command | `npm install` |
+| Build command | `npm run build` |
+| Output directory | `dist` |
+
+Set the Vercel environment variable:
+
+```bash
+VITE_API_URL=https://your-backend.example.com
+```
+
+Deploy the FastAPI app from `fastapi-server/` to Render, Railway, Fly.io, or a
+similar host with:
+
+```bash
+python -m uvicorn app.main:app --host 0.0.0.0 --port $PORT
+```
+
+Set `CORS_ORIGINS=https://your-vercel-app.vercel.app` on the FastAPI host so the
+deployed browser app can call it.
+
+Only `VITE_API_URL` changes between local development and production.
+
 **Terminal 3 (optional) — Electron shell:**
 
 ```bash

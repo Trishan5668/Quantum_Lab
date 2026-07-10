@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { GatePalette } from "../components/CircuitBuilder/GatePalette";
 import { CircuitCanvas } from "../components/CircuitBuilder/CircuitCanvas";
@@ -15,6 +15,12 @@ import { ELI15Panel } from "../components/ELI15Panel/ELI15Panel";
 import { LearningLayerSelector } from "../components/platform/LearningLayerSelector";
 import { PageMeta } from "../components/platform/PageMeta";
 import { fetchHealth } from "../api";
+import {
+  API_BASE_URL,
+  BACKEND_UNAVAILABLE_MESSAGE,
+  ENVIRONMENT_LABEL,
+  frontendUrl,
+} from "../config/api";
 import { usePlatformStore, type LearningLayer } from "../store/platformStore";
 
 type HealthStatus = "checking" | "ok" | "down";
@@ -36,10 +42,23 @@ export default function SimulatorPage(): JSX.Element {
   const learningLayer = usePlatformStore((s) => s.learningLayer);
   const [health, setHealth] = useState<HealthStatus>("checking");
   const [healthVersion, setHealthVersion] = useState("");
+  const [diagnosticsOpen, setDiagnosticsOpen] = useState(false);
+
+  const ping = useCallback(async () => {
+    setHealth((current) => (current === "ok" ? current : "checking"));
+    try {
+      const data = await fetchHealth();
+      setHealth("ok");
+      setHealthVersion(`core v${data.core_version} / api v${data.version}`);
+    } catch {
+      setHealth("down");
+      setHealthVersion("");
+    }
+  }, []);
 
   useEffect(() => {
     let alive = true;
-    const ping = async () => {
+    const guardedPing = async () => {
       try {
         const data = await fetchHealth();
         if (!alive) return;
@@ -48,10 +67,11 @@ export default function SimulatorPage(): JSX.Element {
       } catch {
         if (!alive) return;
         setHealth("down");
+        setHealthVersion("");
       }
     };
-    void ping();
-    const id = window.setInterval(ping, 8000);
+    void guardedPing();
+    const id = window.setInterval(guardedPing, 8000);
     return () => {
       alive = false;
       window.clearInterval(id);
@@ -83,9 +103,19 @@ export default function SimulatorPage(): JSX.Element {
           </div>
           <div className="flex items-center gap-2">
             <LearningLayerSelector />
-            <HealthBadge status={health} version={healthVersion} />
+            <HealthBadge
+              status={health}
+              version={healthVersion}
+              diagnosticsOpen={diagnosticsOpen}
+              onDiagnostics={() => setDiagnosticsOpen((open) => !open)}
+              onRetry={() => void ping()}
+            />
           </div>
         </header>
+
+        {diagnosticsOpen && (
+          <DiagnosticsPanel status={health} version={healthVersion} onRetry={() => void ping()} />
+        )}
 
         <Toolbar />
 
@@ -127,9 +157,15 @@ export default function SimulatorPage(): JSX.Element {
 function HealthBadge({
   status,
   version,
+  diagnosticsOpen,
+  onDiagnostics,
+  onRetry,
 }: {
   status: HealthStatus;
   version: string;
+  diagnosticsOpen: boolean;
+  onDiagnostics: () => void;
+  onRetry: () => void;
 }): JSX.Element {
   const color =
     status === "ok"
@@ -141,18 +177,72 @@ function HealthBadge({
     status === "ok" ? "bg-emerald-400" : status === "down" ? "bg-red-400" : "bg-zinc-400";
   const label =
     status === "ok"
-      ? `API connected · ${version}`
+      ? `API connected - ${version}`
       : status === "down"
-        ? "API unreachable @127.0.0.1:8765"
+        ? BACKEND_UNAVAILABLE_MESSAGE
         : "Checking API...";
 
   return (
-    <span
-      className={`inline-flex max-w-[min(100%,280px)] shrink-0 items-center gap-2 truncate rounded-full px-3 py-1 font-mono text-[10px] ring-1 ${color}`}
-      title={label}
-    >
-      <span className={`h-1.5 w-1.5 shrink-0 animate-pulse rounded-full ${dotColor}`} />
-      <span className="truncate">{label}</span>
-    </span>
+    <div className="flex shrink-0 items-center gap-1.5">
+      <span
+        className={`inline-flex max-w-[min(100%,280px)] shrink-0 items-center gap-2 truncate rounded-full px-3 py-1 font-mono text-[10px] ring-1 ${color}`}
+        title={`${label} Backend URL: ${API_BASE_URL}`}
+      >
+        <span className={`h-1.5 w-1.5 shrink-0 animate-pulse rounded-full ${dotColor}`} />
+        <span className="truncate">{label}</span>
+      </span>
+      {status === "down" && (
+        <button type="button" className="btn btn-secondary btn-sm" onClick={onRetry}>
+          Retry
+        </button>
+      )}
+      <button
+        type="button"
+        className="btn btn-ghost btn-sm"
+        onClick={onDiagnostics}
+        aria-expanded={diagnosticsOpen}
+      >
+        Diagnostics
+      </button>
+    </div>
+  );
+}
+
+function DiagnosticsPanel({
+  status,
+  version,
+  onRetry,
+}: {
+  status: HealthStatus;
+  version: string;
+  onRetry: () => void;
+}): JSX.Element {
+  const backendStatus =
+    status === "ok" ? `Connected (${version})` : status === "down" ? BACKEND_UNAVAILABLE_MESSAGE : "Checking...";
+
+  return (
+    <section className="border-b border-border bg-bg-surface/95 px-4 py-3 shadow-lg sm:px-5">
+      <div className="mx-auto grid max-w-5xl gap-3 font-mono text-[11px] text-text-secondary sm:grid-cols-[1fr_auto] sm:items-start">
+        <div className="grid gap-1.5 sm:grid-cols-2">
+          <DiagnosticRow label="Environment" value={ENVIRONMENT_LABEL} />
+          <DiagnosticRow label="Frontend URL" value={frontendUrl()} />
+          <DiagnosticRow label="Configured API URL" value={API_BASE_URL} />
+          <DiagnosticRow label="Backend Status" value={backendStatus} />
+          <DiagnosticRow label="Backend URL" value={API_BASE_URL} />
+        </div>
+        <button type="button" className="btn btn-secondary btn-sm justify-self-start" onClick={onRetry}>
+          Retry
+        </button>
+      </div>
+    </section>
+  );
+}
+
+function DiagnosticRow({ label, value }: { label: string; value: string }): JSX.Element {
+  return (
+    <div className="min-w-0">
+      <span className="text-text-muted">{label}: </span>
+      <span className="break-all text-text-primary">{value}</span>
+    </div>
   );
 }

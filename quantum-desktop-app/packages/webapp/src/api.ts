@@ -7,8 +7,7 @@ import type {
   SimulationResult,
   StateSnapshot,
 } from "./types";
-
-const API_BASE = "http://127.0.0.1:8765/api/v1";
+import { BACKEND_UNAVAILABLE_MESSAGE, apiUrl } from "./config/api";
 
 export class ApiClientError extends Error {
   readonly code: string;
@@ -28,15 +27,15 @@ async function postJson<TResponse, TBody = unknown>(
 ): Promise<TResponse> {
   let resp: Response;
   try {
-    resp = await fetch(`${API_BASE}${path}`, {
+    resp = await fetch(apiUrl(path), {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(body),
     });
-  } catch (err) {
+  } catch {
     throw new ApiClientError(
       "NetworkError",
-      err instanceof Error ? err.message : String(err),
+      BACKEND_UNAVAILABLE_MESSAGE,
       0,
       null,
     );
@@ -121,9 +120,14 @@ export async function fetchDensity(state: StateSnapshot): Promise<DensityMatrixD
 }
 
 export async function fetchHealth(): Promise<{ status: string; version: string; core_version: string }> {
-  const resp = await fetch(`${API_BASE}/health`);
+  let resp: Response;
+  try {
+    resp = await fetch(apiUrl("/health"));
+  } catch {
+    throw new ApiClientError("NetworkError", BACKEND_UNAVAILABLE_MESSAGE, 0, null);
+  }
   if (!resp.ok) {
-    throw new ApiClientError("Unreachable", `health returned ${resp.status}`, resp.status, null);
+    throw new ApiClientError("Unreachable", BACKEND_UNAVAILABLE_MESSAGE, resp.status, null);
   }
   const env = (await resp.json()) as ApiEnvelope<{
     status: string;
@@ -160,17 +164,17 @@ export async function streamExplain(
 ): Promise<void> {
   let resp: Response;
   try {
-    resp = await fetch(`${API_BASE}/explain`, {
+    resp = await fetch(apiUrl("/explain"), {
       method: "POST",
       headers: { "Content-Type": "application/json", Accept: "text/event-stream" },
       body: JSON.stringify(req),
       signal,
     });
-  } catch (err) {
+  } catch {
     handlers.onError(
       new ApiClientError(
         "NetworkError",
-        err instanceof Error ? err.message : String(err),
+        BACKEND_UNAVAILABLE_MESSAGE,
         0,
         null,
       ),

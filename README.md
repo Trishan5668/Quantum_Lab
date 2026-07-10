@@ -76,6 +76,69 @@ QUANTUMLAB_NO_API=1 npm run dev
 
 Open <http://127.0.0.1:5173> in a browser, or use the Electron window.
 
+The webapp reads its backend from `VITE_API_URL`. For local development, copy
+`quantum-desktop-app/packages/webapp/.env.example` to `.env` and keep:
+
+```bash
+VITE_API_URL=http://127.0.0.1:8765
+```
+
+If `VITE_API_URL` is unset, the Vite dev build falls back to the local FastAPI
+server. Production builds fall back to `https://your-backend-url`, but deployed
+frontends should set `VITE_API_URL` explicitly.
+
+---
+
+## Deployment
+
+### Backend: FastAPI on Render, Railway, Fly.io, or similar
+
+Deploy `fastapi-server/` as the service root and run:
+
+```bash
+python -m uvicorn app.main:app --host 0.0.0.0 --port $PORT
+```
+
+Set backend environment variables on the host as needed:
+
+```bash
+CORS_ORIGINS=https://your-vercel-app.vercel.app
+LLM_PROVIDER=gemini
+GEMINI_API_KEY=your_key
+```
+
+After deploy, confirm the service responds at:
+
+```bash
+https://your-backend.example.com/api/v1/health
+```
+
+### Frontend: Vercel
+
+Create a Vercel project for `quantum-desktop-app/packages/webapp`.
+
+Use these settings:
+
+| Setting | Value |
+| --- | --- |
+| Framework preset | Vite |
+| Install command | `npm install` |
+| Build command | `npm run build` |
+| Output directory | `dist` |
+
+Set this Vercel environment variable:
+
+```bash
+VITE_API_URL=https://your-backend.example.com
+```
+
+For local development, keep `VITE_API_URL` pointed at the local FastAPI server.
+For production, point the same variable at the deployed FastAPI URL. No frontend
+code changes are required when moving between local and hosted backends.
+
+Also set `CORS_ORIGINS` on the FastAPI host to the deployed Vercel frontend
+origin. Use a comma-separated list if you have preview and production domains.
+
 ---
 
 ## Architecture
@@ -87,7 +150,7 @@ Electron shell  --renders-->  React webapp  --HTTP/SSE-->  FastAPI bridge  --Pyt
 ```
 
 - Electron ↔ Webapp: only `contextBridge`, no `nodeIntegration`.
-- Webapp ↔ FastAPI: JSON over HTTP on `localhost:8765`; SSE for streaming AI.
+- Webapp ↔ FastAPI: JSON over HTTP/SSE using `VITE_API_URL`.
 - FastAPI ↔ core: direct in-process Python import — no subprocesses.
 - Every API response is wrapped in `{ data, error }`. Errors use proper
   HTTP status codes — never a 200 with an error in the body.

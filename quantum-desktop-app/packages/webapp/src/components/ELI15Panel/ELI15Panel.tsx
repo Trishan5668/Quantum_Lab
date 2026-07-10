@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 
 import { ApiClientError, streamExplain, type ExplainRequest } from "../../api";
+import { BACKEND_UNAVAILABLE_MESSAGE } from "../../config/api";
 
 import { useCircuitStore } from "../../store/circuitStore";
 
@@ -163,7 +164,7 @@ export function ELI15Panel(): JSX.Element {
 
             setStatus("error");
 
-            setError(`${err.code}: ${err.message}`);
+            setError(err.status === 0 ? BACKEND_UNAVAILABLE_MESSAGE : `${err.code}: ${err.message}`);
 
           },
 

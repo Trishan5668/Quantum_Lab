@@ -1,6 +1,7 @@
 import { Link } from "react-router-dom";
 import { PageMeta } from "../components/platform/PageMeta";
 import { SectionHeader } from "../components/platform/SectionHeader";
+import { API_BASE_URL, backendUrl } from "../config/api";
 
 export default function ApiPage(): JSX.Element {
   return (
@@ -21,7 +22,9 @@ export default function ApiPage(): JSX.Element {
             <h3 className="font-display text-xs font-semibold uppercase tracking-[0.2em] text-text-secondary">
               Base URL
             </h3>
-            <code className="mt-2 block font-mono text-sm text-accent-glow">http://127.0.0.1:8765</code>
+            <code className="mt-2 block break-all font-mono text-sm text-accent-glow">
+              {API_BASE_URL}
+            </code>
           </section>
 
           <section className="platform-card p-6">
@@ -53,7 +56,7 @@ export default function ApiPage(): JSX.Element {
           <p className="text-sm text-text-muted">
             Interactive OpenAPI documentation is available at{" "}
             <a
-              href="http://127.0.0.1:8765/docs"
+              href={backendUrl("/docs")}
               target="_blank"
               rel="noopener noreferrer"
               className="text-accent-measure hover:underline"

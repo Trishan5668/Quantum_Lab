@@ -23,6 +23,7 @@ import type {
   StepResult,
   MetricsResult,
 } from "../types";
+import { BACKEND_UNAVAILABLE_MESSAGE } from "../config/api";
 
 const MAX_QUBITS = 8;
 
@@ -317,7 +318,9 @@ export const useCircuitStore = create<Store>((set, get) => ({
     } catch (err) {
       const message =
         err instanceof ApiClientError || err instanceof ApiV2ClientError
-          ? `${err.code}: ${err.message}`
+          ? err.status === 0
+            ? BACKEND_UNAVAILABLE_MESSAGE
+            : `${err.code}: ${err.message}`
           : err instanceof Error
             ? err.message
             : String(err);
