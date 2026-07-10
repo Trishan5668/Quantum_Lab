@@ -1,5 +1,5 @@
 const DEVELOPMENT_API_URL = "http://127.0.0.1:8765";
-const PRODUCTION_FALLBACK_API_URL = "https://your-backend-url";
+const PRODUCTION_FALLBACK_API_URL = "https://quantum-lab-2ukm.onrender.com";
 
 function trimTrailingSlash(url: string): string {
   return url.replace(/\/+$/, "");
