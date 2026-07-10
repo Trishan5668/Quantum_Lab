@@ -84,7 +84,7 @@ VITE_API_URL=http://127.0.0.1:8765
 ```
 
 If `VITE_API_URL` is unset, the Vite dev build falls back to the local FastAPI
-server. Production builds fall back to `https://your-backend-url`, but deployed
+server. Production builds fall back to `https://quantum-lab-2ukm.onrender.com`, but deployed
 frontends should set `VITE_API_URL` explicitly.
 
 ---
