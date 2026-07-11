@@ -15,13 +15,13 @@ export default function DocsPage(): JSX.Element {
     <>
       <PageMeta
         title="Documentation"
-        description="Installation, architecture, quantum theory, simulation engine, API, and contributing guides."
+        description="Installation, architecture, quantum theory, simulation engine, and API guides."
       />
       <div className="platform-container py-12 sm:py-16">
         <SectionHeader
           eyebrow="Docs"
           title="Production documentation"
-          subtitle="Everything you need to install, understand, and contribute to QuantumLab."
+          subtitle="Everything you need to install, understand, and use QuantumLab."
         />
         <div className="grid gap-8 lg:grid-cols-[220px_1fr]">
           <nav className="space-y-4" aria-label="Documentation categories">

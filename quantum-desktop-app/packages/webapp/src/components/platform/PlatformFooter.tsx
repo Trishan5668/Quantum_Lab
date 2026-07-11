@@ -30,7 +30,6 @@ export function PlatformFooter(): JSX.Element {
               Community
             </p>
             <ul className="mt-3 space-y-2 text-sm text-text-muted">
-              <li><Link to="/opensource" className="hover:text-text-primary">Contributing</Link></li>
               <li><Link to="/community" className="hover:text-text-primary">Community</Link></li>
               <li><Link to="/blog" className="hover:text-text-primary">Blog</Link></li>
             </ul>
@@ -40,7 +39,7 @@ export function PlatformFooter(): JSX.Element {
               QuantumLab
             </p>
             <p className="mt-3 text-sm leading-relaxed text-text-muted">
-              The open-source quantum computing platform. Build, visualize, and understand — from your first qubit to research.
+              The quantum computing learning platform. Build, visualize, and understand — from your first qubit to research.
             </p>
           </div>
         </div>

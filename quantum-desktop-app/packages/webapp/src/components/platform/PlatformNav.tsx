@@ -6,7 +6,6 @@ const NAV_LINKS = [
   { to: "/docs", label: "Docs" },
   { to: "/research", label: "Research" },
   { to: "/api", label: "API" },
-  { to: "/opensource", label: "Open Source" },
 ] as const;
 
 export function PlatformNav(): JSX.Element {
@@ -44,14 +43,6 @@ export function PlatformNav(): JSX.Element {
         </nav>
 
         <div className="flex shrink-0 items-center gap-2">
-          <a
-            href="https://github.com"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="btn btn-ghost btn-sm hidden sm:inline-flex"
-          >
-            GitHub
-          </a>
           <Link to="/app" className="btn btn-primary btn-sm">
             Launch
           </Link>

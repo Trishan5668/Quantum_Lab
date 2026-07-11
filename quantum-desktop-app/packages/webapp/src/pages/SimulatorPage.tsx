@@ -99,7 +99,7 @@ export default function SimulatorPage(): JSX.Element {
                   QuantumLab
                 </h1>
                 <p className="truncate text-xs text-text-muted">
-                  Open-source quantum computing platform
+                  Quantum computing learning platform
                 </p>
               </div>
             </Link>

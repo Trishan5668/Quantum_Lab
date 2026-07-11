@@ -36,9 +36,9 @@ const FEATURES = [
     to: "/algorithms",
   },
   {
-    title: "Open Source",
-    description: "MIT core, CC-BY-SA education. Built for students and researchers.",
-    to: "/opensource",
+    title: "Learning Content",
+    description: "Structured lessons and references built for students and researchers.",
+    to: "/docs",
   },
 ] as const;
 
@@ -46,7 +46,7 @@ export default function LandingPage(): JSX.Element {
   return (
     <>
       <PageMeta
-        title="QuantumLab — The Open Source Quantum Computing Platform"
+        title="QuantumLab — Quantum Computing Learning Platform"
         description="Build, visualize, and understand quantum computing. From your first qubit to quantum research."
       />
 
@@ -58,10 +58,10 @@ export default function LandingPage(): JSX.Element {
           className="mx-auto max-w-4xl text-center"
         >
           <p className="mb-4 font-display text-[10px] font-semibold uppercase tracking-[0.3em] text-accent-measure">
-            Open Source · Production Quality
+            Interactive Learning · Production Quality
           </p>
           <h1 className="font-sans text-4xl font-semibold leading-[1.1] tracking-tight text-text-primary sm:text-5xl lg:text-6xl">
-            The Open Source
+            The Interactive
             <br />
             <span className="bg-gradient-to-r from-accent-glow to-accent-measure bg-clip-text text-transparent">
               Quantum Computing Platform
@@ -78,14 +78,6 @@ export default function LandingPage(): JSX.Element {
             <Link to="/app" className="btn btn-primary btn-md">
               Launch QuantumLab
             </Link>
-            <a
-              href="https://github.com"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="btn btn-secondary btn-md"
-            >
-              GitHub
-            </a>
             <Link to="/app" className="btn btn-ghost btn-md">
               Demo
             </Link>

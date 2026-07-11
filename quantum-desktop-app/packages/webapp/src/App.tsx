@@ -15,7 +15,6 @@ const AlgorithmsPage = lazy(() => import("./pages/AlgorithmsPage"));
 const DocsPage = lazy(() => import("./pages/DocsPage"));
 const ResearchPage = lazy(() => import("./pages/ResearchPage"));
 const ApiPage = lazy(() => import("./pages/ApiPage"));
-const OpenSourcePage = lazy(() => import("./pages/OpenSourcePage"));
 const CommunityPage = lazy(() => import("./pages/CommunityPage"));
 const BlogPage = lazy(() => import("./pages/BlogPage"));
 
@@ -41,7 +40,6 @@ function AppRoutes(): JSX.Element {
           <Route path="research" element={<ResearchPage />} />
           <Route path="research/:slug" element={<ResearchPage />} />
           <Route path="api" element={<ApiPage />} />
-          <Route path="opensource" element={<OpenSourcePage />} />
           <Route path="community" element={<CommunityPage />} />
           <Route path="blog" element={<BlogPage />} />
         </Route>

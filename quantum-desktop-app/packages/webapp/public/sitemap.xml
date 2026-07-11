@@ -7,7 +7,6 @@
   <url><loc>/docs</loc><priority>0.8</priority></url>
   <url><loc>/research</loc><priority>0.7</priority></url>
   <url><loc>/api</loc><priority>0.7</priority></url>
-  <url><loc>/opensource</loc><priority>0.7</priority></url>
   <url><loc>/community</loc><priority>0.6</priority></url>
   <url><loc>/blog</loc><priority>0.6</priority></url>
 </urlset>

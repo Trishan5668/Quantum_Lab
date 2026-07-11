@@ -13,7 +13,6 @@ export const DOC_CATEGORIES = [
   { id: "simulation", label: "Simulation Engine" },
   { id: "api", label: "API Reference" },
   { id: "frontend", label: "Frontend" },
-  { id: "contributing", label: "Contributing" },
 ] as const;
 
 export const DOC_ARTICLES: DocArticle[] = [
@@ -55,7 +54,7 @@ npm run dev
     slug: "architecture",
     title: "Platform Architecture",
     category: "architecture",
-    summary: "Monorepo layout: core engine, API bridge, React platform, education content.",
+    summary: "System layout: core engine, API bridge, React platform, education content.",
     content: `## Packages
 
 | Package | Role |
@@ -161,26 +160,6 @@ Interactive OpenAPI docs: \`/docs\``,
 - **react-router-dom** for platform routes
 
 Electron and browser share the same components. The simulator lives at \`/app\`.`,
-  },
-  {
-    slug: "contributing",
-    title: "Contributing",
-    category: "contributing",
-    summary: "How to contribute code, docs, and education content.",
-    content: `## Code
-
-1. Fork the repository
-2. Create a feature branch
-3. Run tests: \`pytest\` (core + API), \`npm test\` (webapp)
-4. Open a pull request
-
-## Education content
-
-Content in \`quantum-education-content/\` is CC-BY-SA 4.0. See CONTRIBUTING.md in that folder.
-
-## Issue templates
-
-Use GitHub Issues for bugs, features, and documentation improvements.`,
   },
 ];
 
