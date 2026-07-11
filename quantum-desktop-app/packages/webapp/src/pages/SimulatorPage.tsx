@@ -30,13 +30,16 @@ type HealthStatus = "checking" | "ok" | "down";
 function panelVisible(layer: LearningLayer, panel: string): boolean {
   switch (panel) {
     case "statevector":
-      return layer !== "explore";
+      return layer === "understand" || layer === "intuition" || layer === "research";
+    case "bloch":
+    case "probability":
+      return layer === "explore" || layer === "understand" || layer === "intuition" || layer === "research";
     case "density":
     case "metrics":
     case "noise":
       return layer === "research";
     case "mathematics":
-      return layer === "mathematics" || layer === "physics" || layer === "research";
+      return layer === "mathematics" || layer === "research";
     case "physics":
       return layer === "physics" || layer === "research";
     default:
@@ -149,8 +152,8 @@ export default function SimulatorPage(): JSX.Element {
                 {panelVisible(learningLayer, "mathematics") && <MathematicsPanel />}
                 {panelVisible(learningLayer, "physics") && <PhysicsPanel />}
                 {panelVisible(learningLayer, "statevector") && <StateVectorPanel />}
-                <BlochSpherePanel />
-                <ProbabilityChart />
+                {panelVisible(learningLayer, "bloch") && <BlochSpherePanel />}
+                {panelVisible(learningLayer, "probability") && <ProbabilityChart />}
                 {panelVisible(learningLayer, "density") && <DensityHeatmap />}
                 {panelVisible(learningLayer, "metrics") && <MetricsPanel />}
               </div>
