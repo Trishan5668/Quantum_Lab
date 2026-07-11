@@ -32,14 +32,18 @@ export function PhysicsPanel(): JSX.Element {
       subtitle="Why the circuit behaves this way"
       actions={
         <FullscreenReport label="Physics fullscreen" title="QuantumLab Physics Report" subtitle={subtitle}>
-          <ReportReader title="QuantumLab Physics Report" subtitle={subtitle} sections={sections} />
+          <div className="physics-report-surface physics-report-fullscreen">
+            <ReportReader title="QuantumLab Physics Report" subtitle={subtitle} sections={sections} />
+          </div>
         </FullscreenReport>
       }
     >
       {!results && gates.length > 0 && (
         <PanelPlaceholder>Run the circuit to bind this report to the latest simulator output.</PanelPlaceholder>
       )}
-      <ReportReader title="QuantumLab Physics Report" subtitle={subtitle} sections={sections} compact />
+      <div className="physics-report-surface">
+        <ReportReader title="QuantumLab Physics Report" subtitle={subtitle} sections={sections} compact />
+      </div>
     </PanelSection>
   );
 }
