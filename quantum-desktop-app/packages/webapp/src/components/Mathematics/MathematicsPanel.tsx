@@ -1,6 +1,7 @@
 import { useMemo, useState } from "react";
 import { useCircuitStore } from "../../store/circuitStore";
 import type { GatePlacement } from "../../types";
+import { FullscreenReport } from "../Reports/ReportReader";
 import { PanelPlaceholder, PanelSection } from "../ui/PanelSection";
 import { AmplitudeTable } from "./AmplitudeTable";
 import { DensityDerivation } from "./DensityDerivation";
@@ -39,8 +40,81 @@ export function MathematicsPanel(): JSX.Element {
     <PanelSection
       title="Mathematics"
       subtitle="Every amplitude change, matrix product, and probability rule"
-      actions={<DifficultySelector value={difficulty} onChange={setDifficulty} />}
+      actions={
+        <>
+          <DifficultySelector value={difficulty} onChange={setDifficulty} />
+          <FullscreenReport
+            label="Mathematics fullscreen"
+            title="QuantumLab Mathematics"
+            subtitle="Every amplitude change, matrix product, and probability rule"
+          >
+            <div className="report-reader report-reader-compact">
+              <MathematicsPanelBody
+                numQubits={numQubits}
+                gates={gates}
+                resultsV2={resultsV2}
+                metrics={metrics}
+                noiseEnabled={noiseEnabled}
+                noiseModel={noiseModel}
+                noiseProbability={noiseProbability}
+                t1Us={t1Us}
+                t2Us={t2Us}
+                gateTimeNs={gateTimeNs}
+                difficulty={difficulty}
+                derivation={derivation}
+              />
+            </div>
+          </FullscreenReport>
+        </>
+      }
     >
+      <MathematicsPanelBody
+        numQubits={numQubits}
+        gates={gates}
+        resultsV2={resultsV2}
+        metrics={metrics}
+        noiseEnabled={noiseEnabled}
+        noiseModel={noiseModel}
+        noiseProbability={noiseProbability}
+        t1Us={t1Us}
+        t2Us={t2Us}
+        gateTimeNs={gateTimeNs}
+        difficulty={difficulty}
+        derivation={derivation}
+      />
+    </PanelSection>
+  );
+}
+
+function MathematicsPanelBody({
+  numQubits,
+  gates,
+  resultsV2,
+  metrics,
+  noiseEnabled,
+  noiseModel,
+  noiseProbability,
+  t1Us,
+  t2Us,
+  gateTimeNs,
+  difficulty,
+  derivation,
+}: {
+  numQubits: number;
+  gates: GatePlacement[];
+  resultsV2: ReturnType<typeof useCircuitStore.getState>["resultsV2"];
+  metrics: ReturnType<typeof useCircuitStore.getState>["metrics"];
+  noiseEnabled: boolean;
+  noiseModel: ReturnType<typeof useCircuitStore.getState>["noiseModel"];
+  noiseProbability: number;
+  t1Us: number;
+  t2Us: number;
+  gateTimeNs: number;
+  difficulty: Difficulty;
+  derivation: ReturnType<typeof buildDerivation>;
+}): JSX.Element {
+  return (
+    <>
       {gates.length === 0 ? (
         <EmptyDerivation numQubits={numQubits} />
       ) : (
@@ -94,7 +168,7 @@ export function MathematicsPanel(): JSX.Element {
           )}
         </div>
       )}
-    </PanelSection>
+    </>
   );
 }
 

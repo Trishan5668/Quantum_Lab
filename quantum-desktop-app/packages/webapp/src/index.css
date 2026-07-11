@@ -521,6 +521,248 @@ textarea {
   color: var(--text-secondary);
 }
 
+.report-reader {
+  min-width: 0;
+  color: var(--text-secondary);
+}
+
+.report-reader-compact .report-tools {
+  position: static;
+}
+
+.report-tools {
+  position: sticky;
+  top: 0;
+  z-index: 5;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.375rem;
+  border-bottom: 1px solid var(--border);
+  background: rgba(18, 20, 26, 0.96);
+  padding: 0.5rem 0;
+}
+
+.report-search {
+  min-width: 10rem;
+  flex: 1;
+  border-radius: 0.375rem;
+  border: 1px solid var(--border);
+  background: rgba(10, 11, 15, 0.65);
+  padding: 0.375rem 0.625rem;
+  font-size: 0.75rem;
+  color: var(--text-primary);
+}
+
+.report-layout {
+  display: grid;
+  grid-template-columns: minmax(8rem, 0.35fr) minmax(0, 1fr);
+  gap: 0.875rem;
+  align-items: start;
+}
+
+.report-reader-compact .report-layout {
+  grid-template-columns: 1fr;
+}
+
+.report-reader-compact .report-toc {
+  display: none;
+}
+
+.report-toc {
+  position: sticky;
+  top: 3.25rem;
+  display: grid;
+  gap: 0.25rem;
+  max-height: calc(95vh - 8rem);
+  overflow: auto;
+  border-right: 1px solid var(--border);
+  padding: 0.75rem 0.625rem 0.75rem 0;
+}
+
+.report-toc-link {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  gap: 0.375rem;
+  border-radius: 0.25rem;
+  padding: 0.25rem 0.375rem;
+  font-size: 0.6875rem;
+  line-height: 1.35;
+  color: var(--text-muted);
+}
+
+.report-toc-link:hover {
+  background: rgba(28, 31, 42, 0.55);
+  color: var(--text-secondary);
+}
+
+.report-sections {
+  display: grid;
+  min-width: 0;
+  gap: 0.75rem;
+  padding-top: 0.75rem;
+}
+
+.report-title-block {
+  border-bottom: 1px solid var(--border);
+  padding-bottom: 0.625rem;
+}
+
+.report-title-block h2,
+.report-modal-header h2 {
+  margin: 0;
+  font-family: "JetBrains Mono", ui-monospace, monospace;
+  font-size: 1rem;
+  color: var(--text-primary);
+}
+
+.report-title-block p,
+.report-modal-header p {
+  margin: 0.25rem 0 0;
+  font-size: 0.75rem;
+  color: var(--text-muted);
+}
+
+.report-eyebrow {
+  margin: 0 0 0.25rem;
+  font-family: "JetBrains Mono", ui-monospace, monospace;
+  font-size: 0.625rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+}
+
+.report-section {
+  border-radius: var(--panel-radius);
+  border: 1px solid var(--border);
+  background: rgba(10, 11, 15, 0.36);
+  box-shadow: var(--panel-shadow);
+}
+
+.report-section-summary {
+  display: flex;
+  cursor: pointer;
+  list-style: none;
+  justify-content: space-between;
+  gap: 0.75rem;
+  padding: 0.75rem;
+}
+
+.report-section-summary::-webkit-details-marker {
+  display: none;
+}
+
+.report-section[open] .report-section-summary {
+  border-bottom: 1px solid rgba(30, 35, 51, 0.75);
+}
+
+.report-section-title {
+  display: block;
+  font-family: "JetBrains Mono", ui-monospace, monospace;
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.report-section-subtitle {
+  display: block;
+  margin-top: 0.1875rem;
+  font-size: 0.6875rem;
+  color: var(--text-muted);
+}
+
+.report-section-body {
+  display: grid;
+  gap: 0.75rem;
+  padding: 0.75rem;
+}
+
+.physics-textbook-block {
+  display: grid;
+  gap: 0.625rem;
+}
+
+.physics-textbook-block p,
+.physics-subsection p {
+  margin: 0;
+  font-size: 0.8125rem;
+  line-height: 1.7;
+  color: var(--text-secondary);
+}
+
+.physics-subsection {
+  display: grid;
+  gap: 0.5rem;
+  border-radius: var(--panel-radius);
+  border: 1px solid rgba(30, 35, 51, 0.75);
+  background: rgba(18, 20, 26, 0.42);
+  padding: 0.625rem;
+}
+
+.physics-subsection h4 {
+  margin: 0;
+  font-family: "JetBrains Mono", ui-monospace, monospace;
+  font-size: 0.6875rem;
+  color: var(--text-primary);
+}
+
+.report-modal {
+  position: fixed;
+  inset: 0;
+  z-index: 80;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0, 0, 0, 0.72);
+  padding: 2.5vh 2.5vw;
+}
+
+.report-modal-panel {
+  display: flex;
+  width: 95vw;
+  height: 95vh;
+  min-width: 0;
+  flex-direction: column;
+  overflow: hidden;
+  border-radius: 0.5rem;
+  border: 1px solid var(--border);
+  background: var(--bg-surface);
+  box-shadow: 0 24px 70px rgba(0, 0, 0, 0.5);
+}
+
+.report-modal-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1rem;
+  border-bottom: 1px solid var(--border);
+  padding: 0.875rem 1rem;
+}
+
+.report-modal-body {
+  min-height: 0;
+  flex: 1;
+  overflow: auto;
+  padding: 0 1rem 1rem;
+}
+
+@media (max-width: 900px) {
+  .report-layout {
+    grid-template-columns: 1fr;
+  }
+
+  .report-toc {
+    position: static;
+    max-height: 10rem;
+    border-right: 0;
+    border-bottom: 1px solid var(--border);
+    padding-right: 0;
+  }
+
+  .report-section-summary {
+    flex-direction: column;
+  }
+}
+
 .wire-pulse {
   position: absolute;
   top: 50%;

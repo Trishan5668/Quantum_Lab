@@ -1,6 +1,6 @@
 import { create } from "zustand";
 
-export type LearningLayer = "explore" | "understand" | "intuition" | "mathematics" | "research";
+export type LearningLayer = "explore" | "understand" | "intuition" | "mathematics" | "physics" | "research";
 
 interface PlatformState {
   learningLayer: LearningLayer;
@@ -41,6 +41,12 @@ export const LEARNING_LAYERS: {
     label: "Math",
     tagline: "Whiteboard derivations",
     description: "Gate matrices, tensor products, row-column multiplication, and proof mode.",
+  },
+  {
+    id: "physics",
+    label: "Physics",
+    tagline: "Principles behind the circuit",
+    description: "Hilbert space, superposition, interference, entanglement, measurement, and information flow.",
   },
   {
     id: "research",
