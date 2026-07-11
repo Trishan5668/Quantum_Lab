@@ -27,7 +27,10 @@ async function postJson<TResponse, TBody = unknown>(
 ): Promise<TResponse> {
   let resp: Response;
   try {
-    resp = await fetch(apiUrl(path), {
+    const finalUrl = apiUrl(path);
+    console.log("API URL =", finalUrl);
+    console.trace();
+    resp = await fetch(finalUrl, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(body),
@@ -122,7 +125,10 @@ export async function fetchDensity(state: StateSnapshot): Promise<DensityMatrixD
 export async function fetchHealth(): Promise<{ status: string; version: string; core_version: string }> {
   let resp: Response;
   try {
-    resp = await fetch(apiUrl("/health"));
+    const finalUrl = apiUrl("/health");
+    console.log("API URL =", finalUrl);
+    console.trace();
+    resp = await fetch(finalUrl);
   } catch {
     throw new ApiClientError("NetworkError", BACKEND_UNAVAILABLE_MESSAGE, 0, null);
   }
@@ -164,7 +170,10 @@ export async function streamExplain(
 ): Promise<void> {
   let resp: Response;
   try {
-    resp = await fetch(apiUrl("/explain"), {
+    const finalUrl = apiUrl("/explain");
+    console.log("API URL =", finalUrl);
+    console.trace();
+    resp = await fetch(finalUrl, {
       method: "POST",
       headers: { "Content-Type": "application/json", Accept: "text/event-stream" },
       body: JSON.stringify(req),

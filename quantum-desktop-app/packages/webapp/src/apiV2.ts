@@ -28,7 +28,10 @@ async function postV2<TResponse, TBody = unknown>(
 ): Promise<TResponse> {
   let resp: Response;
   try {
-    resp = await fetch(apiUrl(path, "v2"), {
+    const finalUrl = apiUrl(path, "v2");
+    console.log("API URL =", finalUrl);
+    console.trace();
+    resp = await fetch(finalUrl, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(body),

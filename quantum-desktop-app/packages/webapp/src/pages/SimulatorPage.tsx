@@ -12,6 +12,7 @@ import { ProbabilityChart } from "../components/Visualizations/ProbabilityChart"
 import { DensityHeatmap } from "../components/Visualizations/DensityHeatmap";
 import { MetricsPanel } from "../components/Visualizations/MetricsPanel";
 import { ELI15Panel } from "../components/ELI15Panel/ELI15Panel";
+import { MathematicsPanel } from "../components/Mathematics/MathematicsPanel";
 import { LearningLayerSelector } from "../components/platform/LearningLayerSelector";
 import { PageMeta } from "../components/platform/PageMeta";
 import { fetchHealth } from "../api";
@@ -33,6 +34,8 @@ function panelVisible(layer: LearningLayer, panel: string): boolean {
     case "metrics":
     case "noise":
       return layer === "research";
+    case "mathematics":
+      return layer === "mathematics" || layer === "research";
     default:
       return true;
   }
@@ -140,6 +143,7 @@ export default function SimulatorPage(): JSX.Element {
 
             <aside className="sidebar-right border-l border-border bg-bg-surface/60">
               <div className="sidebar-scroll">
+                {panelVisible(learningLayer, "mathematics") && <MathematicsPanel />}
                 {panelVisible(learningLayer, "statevector") && <StateVectorPanel />}
                 <BlochSpherePanel />
                 <ProbabilityChart />

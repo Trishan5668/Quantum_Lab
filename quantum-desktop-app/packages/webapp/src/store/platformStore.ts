@@ -1,6 +1,6 @@
 import { create } from "zustand";
 
-export type LearningLayer = "explore" | "understand" | "intuition" | "research";
+export type LearningLayer = "explore" | "understand" | "intuition" | "mathematics" | "research";
 
 interface PlatformState {
   learningLayer: LearningLayer;
@@ -35,6 +35,12 @@ export const LEARNING_LAYERS: {
     label: "Intuition",
     tagline: "Plain English",
     description: "Phase, interference, measurement, entanglement, and decoherence explained clearly.",
+  },
+  {
+    id: "mathematics",
+    label: "Math",
+    tagline: "Whiteboard derivations",
+    description: "Gate matrices, tensor products, row-column multiplication, and proof mode.",
   },
   {
     id: "research",

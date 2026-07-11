@@ -410,6 +410,117 @@ textarea {
   min-height: 120px;
 }
 
+.math-latex-block {
+  display: flex;
+  min-width: 0;
+  align-items: flex-start;
+  gap: 0.5rem;
+  border-radius: var(--panel-radius);
+  border: 1px solid var(--border);
+  background: rgba(10, 11, 15, 0.45);
+  padding: 0.5rem 0.625rem;
+}
+
+.math-latex-compact {
+  padding-block: 0.375rem;
+}
+
+.math-latex-block .katex-display {
+  margin: 0;
+  overflow-x: auto;
+  overflow-y: hidden;
+  text-align: left;
+}
+
+.math-proof {
+  border-radius: var(--panel-radius);
+  border: 1px solid var(--border);
+  background: rgba(10, 11, 15, 0.36);
+  box-shadow: var(--panel-shadow);
+}
+
+.math-proof-summary {
+  display: flex;
+  cursor: pointer;
+  list-style: none;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  padding: 0.625rem 0.75rem;
+}
+
+.math-proof-summary::-webkit-details-marker {
+  display: none;
+}
+
+.math-proof[open] .math-proof-summary {
+  border-bottom: 1px solid rgba(30, 35, 51, 0.75);
+}
+
+.math-why {
+  flex-shrink: 0;
+  border-radius: 0.25rem;
+  border: 1px solid rgba(167, 139, 250, 0.24);
+  padding: 0.125rem 0.375rem;
+  font-family: "JetBrains Mono", ui-monospace, monospace;
+  font-size: 0.625rem;
+  color: var(--accent-glow);
+}
+
+.math-proof-body {
+  display: grid;
+  gap: 0.75rem;
+  padding: 0.75rem;
+}
+
+.math-matrix-wrap {
+  max-width: 100%;
+  overflow: auto;
+  border-radius: var(--panel-radius);
+  border: 1px solid var(--border);
+  background: rgba(10, 11, 15, 0.45);
+}
+
+.math-matrix {
+  width: 100%;
+  border-collapse: collapse;
+  font-family: "JetBrains Mono", ui-monospace, monospace;
+  font-size: 0.625rem;
+  color: var(--text-secondary);
+}
+
+.math-matrix th,
+.math-matrix td {
+  border: 1px solid rgba(30, 35, 51, 0.7);
+  padding: 0.25rem 0.375rem;
+  text-align: right;
+  white-space: nowrap;
+}
+
+.math-matrix th {
+  background: rgba(28, 31, 42, 0.6);
+  color: var(--text-muted);
+  font-weight: 500;
+}
+
+.math-row-product,
+.math-born-row,
+.math-proof-node {
+  border-radius: var(--panel-radius);
+  border: 1px solid rgba(30, 35, 51, 0.75);
+  background: rgba(18, 20, 26, 0.46);
+  padding: 0.5rem 0.625rem;
+}
+
+.math-born-row {
+  display: flex;
+  justify-content: space-between;
+  gap: 0.75rem;
+  font-family: "JetBrains Mono", ui-monospace, monospace;
+  font-size: 0.6875rem;
+  color: var(--text-secondary);
+}
+
 .wire-pulse {
   position: absolute;
   top: 50%;
