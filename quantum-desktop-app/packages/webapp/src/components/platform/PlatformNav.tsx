@@ -1,5 +1,6 @@
 import { Link, useLocation } from "react-router-dom";
 import { UserMenu } from "../../auth/UserMenu";
+import { REPOSITORY_URL } from "../../config/attribution";
 
 const NAV_LINKS = [
   { to: "/learn", label: "Learn" },
@@ -7,6 +8,7 @@ const NAV_LINKS = [
   { to: "/docs", label: "Docs" },
   { to: "/research", label: "Research" },
   { to: "/api", label: "API" },
+  { to: "/about", label: "About" },
 ] as const;
 
 export function PlatformNav(): JSX.Element {
@@ -44,6 +46,16 @@ export function PlatformNav(): JSX.Element {
         </nav>
 
         <div className="flex shrink-0 items-center gap-2">
+          {REPOSITORY_URL && (
+            <a
+              href={REPOSITORY_URL}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="btn btn-ghost btn-sm hidden sm:inline-flex"
+            >
+              ★ Star on GitHub
+            </a>
+          )}
           <Link to="/app" className="btn btn-primary btn-sm">
             Launch
           </Link>

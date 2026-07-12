@@ -1,11 +1,27 @@
 import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react";
 import path from "node:path";
+import { execSync } from "node:child_process";
 
 const workspaceRoot = path.resolve(__dirname, "../..");
 
+function repositoryUrl(): string {
+  try {
+    return execSync("git remote get-url origin", {
+      cwd: path.resolve(__dirname, "../../.."),
+      encoding: "utf8",
+      stdio: ["ignore", "pipe", "ignore"],
+    }).trim();
+  } catch {
+    return "";
+  }
+}
+
 export default defineConfig({
   plugins: [react()],
+  define: {
+    __REPOSITORY_URL__: JSON.stringify(repositoryUrl()),
+  },
   resolve: {
     alias: {
       "@": path.resolve(__dirname, "./src"),

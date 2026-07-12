@@ -171,6 +171,18 @@ These rules are enforced in code and in review:
 - **v3** — mission browser (Bell, teleportation, Grover, QFT, cavity coherence,
   threshold), star-based scoring, dynamic AI hints.
 
+## Creator
+
+QuantumLab is created and maintained by
+
+Trishan Ghosh
+
+Email:
+ghoshtg17@gmail.com
+
+Instagram:
+https://instagram.com/trishan_5668/
+
 ## License
 
 - `quantum-simulator-core`, `fastapi-server`, `quantum-desktop-app`: MIT.

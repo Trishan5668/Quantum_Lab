@@ -4,6 +4,7 @@ import { Link } from "react-router-dom";
 import { PageMeta } from "../components/platform/PageMeta";
 import { SectionHeader } from "../components/platform/SectionHeader";
 import { ContentCard } from "../components/platform/ContentCard";
+import { CREATOR } from "../config/attribution";
 
 const LiveSimulatorEmbed = lazy(
   () => import("../components/platform/LiveSimulatorEmbed").then((m) => ({ default: m.LiveSimulatorEmbed })),
@@ -46,7 +47,7 @@ export default function LandingPage(): JSX.Element {
   return (
     <>
       <PageMeta
-        title="QuantumLab — Quantum Computing Learning Platform"
+        title="QuantumLab"
         description="Build, visualize, and understand quantum computing. From your first qubit to quantum research."
       />
 
@@ -100,7 +101,7 @@ export default function LandingPage(): JSX.Element {
           <Suspense
             fallback={
               <div className="live-simulator-embed flex h-[360px] items-center justify-center">
-                <span className="font-mono text-xs text-text-muted">Loading simulator…</span>
+                <span className="font-mono text-xs text-text-muted">Loading simulator...</span>
               </div>
             }
           >
@@ -151,6 +152,16 @@ export default function LandingPage(): JSX.Element {
           </Link>
         </div>
       </section>
+
+      <section className="platform-container pb-4 text-center">
+        <p className="font-display text-[10px] font-semibold uppercase tracking-[0.22em] text-text-muted">
+          Built with ❤️ for Quantum Education
+        </p>
+        <p className="mt-2 text-xs text-text-muted">
+          Created by <span className="text-text-secondary">{CREATOR.name}</span>
+        </p>
+      </section>
     </>
   );
 }
+

@@ -20,6 +20,7 @@ const BlogPage = lazy(() => import("./pages/BlogPage"));
 const ProfilePage = lazy(() => import("./pages/ProfilePage"));
 const SettingsPage = lazy(() => import("./pages/SettingsPage"));
 const HistoryPage = lazy(() => import("./pages/HistoryPage"));
+const AboutPage = lazy(() => import("./pages/AboutPage"));
 
 function PageLoader(): JSX.Element {
   return (
@@ -45,6 +46,7 @@ function AppRoutes(): JSX.Element {
           <Route path="api" element={<ApiPage />} />
           <Route path="community" element={<CommunityPage />} />
           <Route path="blog" element={<BlogPage />} />
+          <Route path="about" element={<AboutPage />} />
           <Route path="profile" element={<ProfilePage />} />
           <Route path="settings" element={<SettingsPage />} />
           <Route path="history" element={<HistoryPage />} />

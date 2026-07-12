@@ -26,6 +26,7 @@ import {
 import { usePlatformStore, type LearningLayer } from "../store/platformStore";
 import { UserMenu } from "../auth/UserMenu";
 import { useCircuitPersistence } from "../auth/useCircuitPersistence";
+import { CREATOR } from "../config/attribution";
 
 type HealthStatus = "checking" | "ok" | "down";
 
@@ -140,6 +141,7 @@ export default function SimulatorPage(): JSX.Element {
                 <GatePalette />
               </div>
               {panelVisible(learningLayer, "noise") && <NoiseSettings />}
+              <SidebarCreator />
             </aside>
 
             <section className="center-column grid min-h-0 grid-rows-[1fr_13rem_auto] overflow-hidden border-border bg-bg-base/20">
@@ -167,6 +169,59 @@ export default function SimulatorPage(): JSX.Element {
         </CircuitDndProvider>
       </div>
     </>
+  );
+}
+
+function SidebarCreator(): JSX.Element {
+  return (
+    <div className="border-t border-border/70 px-4 py-3">
+      <div className="mb-3 h-px bg-gradient-to-r from-transparent via-border to-transparent" />
+      <div className="flex items-end justify-between gap-3">
+        <div className="min-w-0">
+          <p className="font-display text-[10px] uppercase tracking-[0.18em] text-text-muted">Created by</p>
+          <p className="truncate text-sm font-medium text-text-secondary">{CREATOR.name}</p>
+        </div>
+        <div className="flex shrink-0 items-center gap-1">
+          <a
+            href={`mailto:${CREATOR.email}`}
+            className="inline-flex h-7 w-7 items-center justify-center rounded-md text-text-muted transition-colors hover:bg-bg-elevated hover:text-accent-glow focus:outline-none focus-visible:ring-2 focus-visible:ring-accent-quantum/50"
+            aria-label={`Email ${CREATOR.name}`}
+            title="Email"
+          >
+            <MailIcon />
+          </a>
+          <a
+            href={CREATOR.instagram}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex h-7 w-7 items-center justify-center rounded-md text-text-muted transition-colors hover:bg-bg-elevated hover:text-accent-glow focus:outline-none focus-visible:ring-2 focus-visible:ring-accent-quantum/50"
+            aria-label={`${CREATOR.name} on Instagram`}
+            title="Instagram"
+          >
+            <InstagramIcon />
+          </a>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function MailIcon(): JSX.Element {
+  return (
+    <svg aria-hidden="true" viewBox="0 0 24 24" className="h-3.5 w-3.5" fill="none" stroke="currentColor" strokeWidth="1.8">
+      <path d="M4 6h16v12H4z" />
+      <path d="m4 7 8 6 8-6" />
+    </svg>
+  );
+}
+
+function InstagramIcon(): JSX.Element {
+  return (
+    <svg aria-hidden="true" viewBox="0 0 24 24" className="h-3.5 w-3.5" fill="none" stroke="currentColor" strokeWidth="1.8">
+      <rect x="4" y="4" width="16" height="16" rx="4" />
+      <circle cx="12" cy="12" r="3.5" />
+      <path d="M17.5 6.8h.01" />
+    </svg>
   );
 }
 
