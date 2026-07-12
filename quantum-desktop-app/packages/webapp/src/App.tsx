@@ -17,6 +17,9 @@ const ResearchPage = lazy(() => import("./pages/ResearchPage"));
 const ApiPage = lazy(() => import("./pages/ApiPage"));
 const CommunityPage = lazy(() => import("./pages/CommunityPage"));
 const BlogPage = lazy(() => import("./pages/BlogPage"));
+const ProfilePage = lazy(() => import("./pages/ProfilePage"));
+const SettingsPage = lazy(() => import("./pages/SettingsPage"));
+const HistoryPage = lazy(() => import("./pages/HistoryPage"));
 
 function PageLoader(): JSX.Element {
   return (
@@ -42,6 +45,9 @@ function AppRoutes(): JSX.Element {
           <Route path="api" element={<ApiPage />} />
           <Route path="community" element={<CommunityPage />} />
           <Route path="blog" element={<BlogPage />} />
+          <Route path="profile" element={<ProfilePage />} />
+          <Route path="settings" element={<SettingsPage />} />
+          <Route path="history" element={<HistoryPage />} />
         </Route>
         <Route path="app" element={<SimulatorPage />} />
         <Route path="*" element={<Navigate to="/" replace />} />

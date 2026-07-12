@@ -1,6 +1,8 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
 import App from "./App";
+import { AuthProvider } from "./auth/AuthProvider";
+import { LoginModal } from "./auth/LoginModal";
 import "katex/dist/katex.min.css";
 import "./index.css";
 
@@ -11,6 +13,9 @@ if (!root) {
 
 ReactDOM.createRoot(root).render(
   <React.StrictMode>
-    <App />
+    <AuthProvider>
+      <App />
+      <LoginModal />
+    </AuthProvider>
   </React.StrictMode>,
 );

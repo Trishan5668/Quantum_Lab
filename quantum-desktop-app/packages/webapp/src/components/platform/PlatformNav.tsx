@@ -1,4 +1,5 @@
 import { Link, useLocation } from "react-router-dom";
+import { UserMenu } from "../../auth/UserMenu";
 
 const NAV_LINKS = [
   { to: "/learn", label: "Learn" },
@@ -46,6 +47,7 @@ export function PlatformNav(): JSX.Element {
           <Link to="/app" className="btn btn-primary btn-sm">
             Launch
           </Link>
+          <UserMenu />
         </div>
       </div>
     </header>

@@ -43,6 +43,14 @@ interface CircuitActions {
     noiseEnabled?: boolean;
     fidelityTarget?: FidelityTarget;
   }) => void;
+  loadSavedCircuit: (saved: {
+    numQubits: number;
+    gates: GatePlacement[];
+    simulationMode: SimulationMode;
+    results: SimulationResult | null;
+    resultsV2: SimulationResultV2 | null;
+    noiseEnabled: boolean;
+  }) => void;
   run: () => Promise<void>;
   setStepMode: (enabled: boolean) => void;
   stepForward: () => void;
@@ -256,6 +264,21 @@ export const useCircuitStore = create<Store>((set, get) => ({
       currentStep: 0,
       lastError: null,
       stepMode: false,
+    }),
+
+  loadSavedCircuit: (saved) =>
+    set({
+      numQubits: saved.numQubits,
+      gates: saved.gates,
+      simulationMode: saved.simulationMode,
+      noiseEnabled: saved.noiseEnabled,
+      results: saved.results,
+      resultsV2: saved.resultsV2,
+      metrics: null,
+      currentStep: saved.results?.steps.length ?? 0,
+      lastError: null,
+      stepMode: false,
+      isRunning: false,
     }),
 
   run: async () => {

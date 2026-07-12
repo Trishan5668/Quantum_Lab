@@ -1,0 +1,53 @@
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+    function signedIn() {
+      return request.auth != null;
+    }
+
+    function ownsResource() {
+      return signedIn() && resource.data.ownerUid == request.auth.uid;
+    }
+
+    function ownsIncoming() {
+      return signedIn() && request.resource.data.ownerUid == request.auth.uid;
+    }
+
+    match /users/{userId} {
+      allow create: if signedIn()
+        && userId == request.auth.uid
+        && request.resource.data.role == "student";
+      allow read: if signedIn() && userId == request.auth.uid;
+      allow update: if signedIn()
+        && userId == request.auth.uid
+        && request.resource.data.uid == request.auth.uid
+        && request.resource.data.role == resource.data.role;
+      allow delete: if false;
+    }
+
+    match /preferences/{userId} {
+      allow create, read, update, delete: if signedIn() && userId == request.auth.uid;
+    }
+
+    match /simulations/{documentId} {
+      allow create: if ownsIncoming();
+      allow read, update, delete: if ownsResource();
+    }
+
+    match /reports/{documentId} {
+      allow create: if ownsIncoming();
+      allow read, update, delete: if ownsResource();
+    }
+
+    match /bookmarks/{documentId} {
+      allow create: if ownsIncoming();
+      allow read, update, delete: if ownsResource();
+    }
+
+    match /recentCircuits/{documentId} {
+      allow create: if ownsIncoming();
+      allow read, update, delete: if ownsResource();
+    }
+  }
+}

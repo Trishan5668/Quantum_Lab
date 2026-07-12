@@ -1,8 +1,17 @@
 import { useCircuitStore } from "../../store/circuitStore";
 import { SimulationModeToggle } from "./SimulationModeToggle";
 import { Button } from "../ui/Button";
+import type { SaveStatus } from "../../auth/types";
 
-export function Toolbar({ compact = false }: { compact?: boolean }): JSX.Element {
+export function Toolbar({
+  compact = false,
+  onSave,
+  saveStatus = "idle",
+}: {
+  compact?: boolean;
+  onSave?: () => void;
+  saveStatus?: SaveStatus;
+}): JSX.Element {
   const isRunning = useCircuitStore((s) => s.isRunning);
   const stepMode = useCircuitStore((s) => s.stepMode);
   const currentStep = useCircuitStore((s) => s.currentStep);
@@ -68,6 +77,17 @@ export function Toolbar({ compact = false }: { compact?: boolean }): JSX.Element
       </div>
       <div className="flex min-w-0 flex-wrap items-center justify-end gap-2">
         {!compact && <SimulationModeToggle />}
+        {!compact && onSave && (
+          <Button
+            variant="secondary"
+            size="md"
+            onClick={onSave}
+            loading={saveStatus === "saving"}
+            aria-label="Save circuit"
+          >
+            Save
+          </Button>
+        )}
         {lastError && (
           <span
             className="max-w-xs truncate rounded-md border border-red-500/40 bg-red-500/10 px-2 py-1 font-mono text-[11px] text-red-300"

@@ -24,6 +24,8 @@ import {
   frontendUrl,
 } from "../config/api";
 import { usePlatformStore, type LearningLayer } from "../store/platformStore";
+import { UserMenu } from "../auth/UserMenu";
+import { useCircuitPersistence } from "../auth/useCircuitPersistence";
 
 type HealthStatus = "checking" | "ok" | "down";
 
@@ -52,6 +54,7 @@ export default function SimulatorPage(): JSX.Element {
   const [health, setHealth] = useState<HealthStatus>("checking");
   const [healthVersion, setHealthVersion] = useState("");
   const [diagnosticsOpen, setDiagnosticsOpen] = useState(false);
+  const { saveStatus, lastSavedAt, saveNow } = useCircuitPersistence();
 
   const ping = useCallback(async () => {
     setHealth((current) => (current === "ok" ? current : "checking"));
@@ -111,6 +114,7 @@ export default function SimulatorPage(): JSX.Element {
             </Link>
           </div>
           <div className="flex items-center gap-2">
+            <SaveIndicator status={saveStatus} lastSavedAt={lastSavedAt} />
             <LearningLayerSelector />
             <HealthBadge
               status={health}
@@ -119,6 +123,7 @@ export default function SimulatorPage(): JSX.Element {
               onDiagnostics={() => setDiagnosticsOpen((open) => !open)}
               onRetry={() => void ping()}
             />
+            <UserMenu />
           </div>
         </header>
 
@@ -126,7 +131,7 @@ export default function SimulatorPage(): JSX.Element {
           <DiagnosticsPanel status={health} version={healthVersion} onRetry={() => void ping()} />
         )}
 
-        <Toolbar />
+        <Toolbar onSave={() => void saveNow("manual")} saveStatus={saveStatus} />
 
         <CircuitDndProvider>
           <main className="app-main-grid">
@@ -162,6 +167,24 @@ export default function SimulatorPage(): JSX.Element {
         </CircuitDndProvider>
       </div>
     </>
+  );
+}
+
+function SaveIndicator({ status, lastSavedAt }: { status: string; lastSavedAt: string | null }): JSX.Element | null {
+  if (status === "idle") return null;
+  const label =
+    status === "saving"
+      ? "Saving..."
+      : status === "saved"
+        ? "Saved ✓"
+        : status === "offline"
+          ? "Offline draft"
+          : "Save failed";
+  const title = lastSavedAt ? `Last saved ${new Date(lastSavedAt).toLocaleTimeString()}` : label;
+  return (
+    <span className="hidden rounded-full border border-border bg-bg-elevated/50 px-2.5 py-1 font-mono text-[10px] text-text-muted sm:inline-flex" title={title}>
+      {label}
+    </span>
   );
 }
 
