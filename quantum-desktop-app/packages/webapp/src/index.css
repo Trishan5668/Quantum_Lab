@@ -419,6 +419,74 @@ textarea {
   overscroll-behavior: contain;
 }
 
+.initial-state-control {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.375rem;
+  border-right: 1px solid rgba(30, 35, 51, 0.8);
+  padding-right: 0.5rem;
+}
+
+.initial-state-control label {
+  font-family: "JetBrains Mono", ui-monospace, monospace;
+  font-size: 0.625rem;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+}
+
+.initial-state-control select,
+.initial-state-select-button,
+.initial-state-mini {
+  min-height: 1.625rem;
+  border-radius: 0.25rem;
+  border: 1px solid var(--border);
+  background: rgba(10, 11, 15, 0.55);
+  padding: 0.25rem 0.45rem;
+  font-family: "JetBrains Mono", ui-monospace, monospace;
+  font-size: 0.625rem;
+  color: var(--text-secondary);
+}
+
+.initial-state-control select {
+  min-width: 5.25rem;
+  color: var(--accent-glow);
+}
+
+.initial-state-select-button {
+  display: inline-flex;
+  min-width: 5.25rem;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+  color: var(--accent-glow);
+}
+
+.initial-state-mini:hover,
+.initial-state-select-button:hover,
+.initial-state-control select:hover {
+  border-color: rgba(167, 139, 250, 0.45);
+  color: var(--text-primary);
+}
+
+:root[data-theme="light"] .initial-state-control select,
+:root[data-theme="light"] .initial-state-select-button,
+:root[data-theme="light"] .initial-state-mini {
+  background: rgba(255, 255, 255, 0.82);
+}
+
+@media (max-width: 900px) {
+  .initial-state-control {
+    width: 100%;
+    justify-content: flex-end;
+    border-right: 0;
+    border-bottom: 1px solid rgba(30, 35, 51, 0.8);
+    padding-right: 0;
+    padding-bottom: 0.375rem;
+  }
+}
+
 .basis-modal {
   position: fixed;
   inset: 0;

@@ -1,4 +1,4 @@
-import { describe, expect, it, beforeEach } from "vitest";
+import { describe, expect, it, beforeEach, vi } from "vitest";
 import { useCircuitStore, normalizeV2ToSimulationResult, selectCurrentState } from "./circuitStore";
 import type { SimulationResultV2 } from "../types";
 import { basisStateSnapshot } from "../utils/basisState";
@@ -48,6 +48,31 @@ describe("circuit store", () => {
       expect(snapshot.probabilities[expectedIndex]).toBe(1);
       expect(snapshot.amplitudes.filter((amp) => amp.real === 1)).toHaveLength(1);
     }
+  });
+
+  it("changes the initial basis state without removing existing gates", () => {
+    useCircuitStore.getState().setNumQubits(3);
+    useCircuitStore.getState().addGate("H", [0], 0);
+    useCircuitStore.getState().setInitialBasisState("101");
+    let state = useCircuitStore.getState();
+    expect(state.gates).toHaveLength(1);
+    expect(state.initialBasisState).toBe("101");
+    expect(state.results?.steps).toHaveLength(0);
+    expect(state.results?.final_state.probabilities).toEqual([0, 0, 0, 0, 0, 1, 0, 0]);
+
+    useCircuitStore.getState().resetInitialBasisState();
+    state = useCircuitStore.getState();
+    expect(state.gates).toHaveLength(1);
+    expect(state.initialBasisState).toBe("000");
+    expect(state.results?.final_state.probabilities).toEqual([1, 0, 0, 0, 0, 0, 0, 0]);
+
+    const randomSpy = vi.spyOn(Math, "random").mockReturnValue(5 / 8);
+    useCircuitStore.getState().randomizeInitialBasisState();
+    randomSpy.mockRestore();
+    state = useCircuitStore.getState();
+    expect(state.gates).toHaveLength(1);
+    expect(state.initialBasisState).toBe("101");
+    expect(state.results?.final_state.probabilities).toEqual([0, 0, 0, 0, 0, 1, 0, 0]);
   });
 
   it("places single-qubit gates at the given time step", () => {

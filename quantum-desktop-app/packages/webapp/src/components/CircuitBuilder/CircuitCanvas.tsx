@@ -10,7 +10,7 @@ import {
   type GatePlacement,
   type GateType,
 } from "../../types";
-import { displayKet } from "../../utils/basisState";
+import { displayKet, generateBasisStates } from "../../utils/basisState";
 import { BasisStateSelectionModal } from "./BasisStateSelectionModal";
 import { ThetaInput, formatTheta } from "./ThetaControls";
 
@@ -29,6 +29,7 @@ export function CircuitCanvas(): JSX.Element {
   const addQubitWithBasisState = useCircuitStore((s) => s.addQubitWithBasisState);
   const removeQubit = useCircuitStore((s) => s.removeQubit);
   const [basisModalOpen, setBasisModalOpen] = useState(false);
+  const [initialStateModalOpen, setInitialStateModalOpen] = useState(false);
 
   const usedColumns = useMemo(() => {
     const maxStep = gates.reduce((m, g) => Math.max(m, g.timeStep), -1);
@@ -48,7 +49,8 @@ export function CircuitCanvas(): JSX.Element {
           <h2 className="font-display text-xs font-semibold uppercase tracking-[0.2em] text-text-secondary">
             Circuit Canvas
           </h2>
-          <div className="flex items-center gap-1">
+          <div className="flex flex-wrap items-center justify-end gap-2">
+            <InitialStateControl onOpenSearch={() => setInitialStateModalOpen(true)} />
             <button
               type="button"
               onClick={removeQubit}
@@ -102,6 +104,63 @@ export function CircuitCanvas(): JSX.Element {
           }}
         />
       )}
+      {initialStateModalOpen && (
+        <BasisStateSelectionModal
+          numQubits={numQubits}
+          initialBasisState={selectedBasisState}
+          onCancel={() => setInitialStateModalOpen(false)}
+          onConfirm={(basisState) => {
+            useCircuitStore.getState().setInitialBasisState(basisState);
+            setInitialStateModalOpen(false);
+          }}
+        />
+      )}
+    </div>
+  );
+}
+
+function InitialStateControl({ onOpenSearch }: { onOpenSearch: () => void }): JSX.Element {
+  const numQubits = useCircuitStore((s) => s.numQubits);
+  const selectedBasisState = useCircuitStore((s) => s.selectedBasisState);
+  const setInitialBasisState = useCircuitStore((s) => s.setInitialBasisState);
+  const resetInitialBasisState = useCircuitStore((s) => s.resetInitialBasisState);
+  const randomizeInitialBasisState = useCircuitStore((s) => s.randomizeInitialBasisState);
+  const options = useMemo(() => generateBasisStates(numQubits), [numQubits]);
+  const zeroKet = displayKet("0".repeat(numQubits));
+
+  return (
+    <div className="initial-state-control">
+      <label htmlFor="initial-state-select">Initial State</label>
+      {options.length <= 64 ? (
+        <select
+          id="initial-state-select"
+          value={selectedBasisState}
+          onChange={(event) => setInitialBasisState(event.target.value)}
+          aria-label="Initial computational basis state"
+        >
+          {options.map((option) => (
+            <option key={option} value={option}>
+              {displayKet(option)}
+            </option>
+          ))}
+        </select>
+      ) : (
+        <button
+          type="button"
+          className="initial-state-select-button"
+          onClick={onOpenSearch}
+          aria-label="Open searchable initial state dropdown"
+        >
+          <span>{displayKet(selectedBasisState)}</span>
+          <span aria-hidden="true">v</span>
+        </button>
+      )}
+      <button type="button" className="initial-state-mini" onClick={resetInitialBasisState}>
+        Reset to {zeroKet}
+      </button>
+      <button type="button" className="initial-state-mini" onClick={randomizeInitialBasisState}>
+        Random Basis State
+      </button>
     </div>
   );
 }
