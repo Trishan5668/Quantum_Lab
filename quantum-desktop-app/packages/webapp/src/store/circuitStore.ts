@@ -24,13 +24,22 @@ import type {
   MetricsResult,
 } from "../types";
 import { BACKEND_UNAVAILABLE_MESSAGE } from "../config/api";
+import {
+  basisStateResult,
+  basisStateSnapshot,
+  normalizeBasisState,
+} from "../utils/basisState";
 
 const MAX_QUBITS = 8;
 
 interface CircuitActions {
   addQubit: () => void;
+  addQubitWithBasisState: (basisState: string) => void;
   removeQubit: () => void;
   setNumQubits: (n: number) => void;
+  setInitialBasisState: (basisState: string) => void;
+  resetInitialBasisState: () => void;
+  randomizeInitialBasisState: () => void;
   addGate: (gateType: GateType, qubitTargets: number[], timeStep: number, theta?: number) => void;
   removeGate: (id: string) => void;
   updateGateParams: (id: string, params: Partial<GatePlacement["params"]>) => void;
@@ -42,9 +51,12 @@ interface CircuitActions {
     simulationMode?: SimulationMode;
     noiseEnabled?: boolean;
     fidelityTarget?: FidelityTarget;
+    initialBasisState?: string;
   }) => void;
   loadSavedCircuit: (saved: {
     numQubits: number;
+    initialBasisState?: string;
+    selectedBasisState?: string;
     gates: GatePlacement[];
     simulationMode: SimulationMode;
     results: SimulationResult | null;
@@ -71,6 +83,8 @@ type Store = CircuitState & CircuitActions;
 
 const initialState: CircuitState = {
   numQubits: 1,
+  initialBasisState: "0",
+  selectedBasisState: "0",
   gates: [],
   results: null,
   resultsV2: null,
@@ -156,7 +170,33 @@ export const useCircuitStore = create<Store>((set, get) => ({
   addQubit: () =>
     set((s) => {
       if (s.numQubits >= MAX_QUBITS) return s;
-      return { numQubits: s.numQubits + 1, results: null, resultsV2: null, currentStep: 0 };
+      const nextN = s.numQubits + 1;
+      const nextBasis = "0".repeat(nextN);
+      return {
+        numQubits: nextN,
+        initialBasisState: nextBasis,
+        selectedBasisState: nextBasis,
+        results: basisStateResult(nextN, nextBasis),
+        resultsV2: null,
+        metrics: null,
+        currentStep: 0,
+      };
+    }),
+
+  addQubitWithBasisState: (basisState) =>
+    set((s) => {
+      if (s.numQubits >= MAX_QUBITS) return s;
+      const nextN = s.numQubits + 1;
+      const nextBasis = normalizeBasisState(nextN, basisState);
+      return {
+        numQubits: nextN,
+        initialBasisState: nextBasis,
+        selectedBasisState: nextBasis,
+        results: basisStateResult(nextN, nextBasis),
+        resultsV2: null,
+        metrics: null,
+        currentStep: 0,
+      };
     }),
 
   removeQubit: () =>
@@ -168,9 +208,12 @@ export const useCircuitStore = create<Store>((set, get) => ({
       );
       return {
         numQubits: newN,
+        initialBasisState: normalizeBasisState(newN, s.initialBasisState.slice(0, newN)),
+        selectedBasisState: normalizeBasisState(newN, s.selectedBasisState.slice(0, newN)),
         gates: filtered,
-        results: null,
+        results: basisStateResult(newN, s.initialBasisState.slice(0, newN)),
         resultsV2: null,
+        metrics: null,
         currentStep: 0,
       };
     }),
@@ -183,9 +226,52 @@ export const useCircuitStore = create<Store>((set, get) => ({
       );
       return {
         numQubits: clamped,
+        initialBasisState: "0".repeat(clamped),
+        selectedBasisState: "0".repeat(clamped),
         gates: filtered,
-        results: null,
+        results: basisStateResult(clamped),
         resultsV2: null,
+        metrics: null,
+        currentStep: 0,
+      };
+    }),
+
+  setInitialBasisState: (basisState) =>
+    set((s) => {
+      const nextBasis = normalizeBasisState(s.numQubits, basisState);
+      return {
+        initialBasisState: nextBasis,
+        selectedBasisState: nextBasis,
+        results: basisStateResult(s.numQubits, nextBasis),
+        resultsV2: null,
+        metrics: null,
+        currentStep: 0,
+      };
+    }),
+
+  resetInitialBasisState: () =>
+    set((s) => {
+      const nextBasis = "0".repeat(s.numQubits);
+      return {
+        initialBasisState: nextBasis,
+        selectedBasisState: nextBasis,
+        results: basisStateResult(s.numQubits, nextBasis),
+        resultsV2: null,
+        metrics: null,
+        currentStep: 0,
+      };
+    }),
+
+  randomizeInitialBasisState: () =>
+    set((s) => {
+      const index = Math.floor(Math.random() * (1 << s.numQubits));
+      const nextBasis = index.toString(2).padStart(s.numQubits, "0");
+      return {
+        initialBasisState: nextBasis,
+        selectedBasisState: nextBasis,
+        results: basisStateResult(s.numQubits, nextBasis),
+        resultsV2: null,
+        metrics: null,
         currentStep: 0,
       };
     }),
@@ -242,52 +328,65 @@ export const useCircuitStore = create<Store>((set, get) => ({
     })),
 
   clearCircuit: () =>
-    set({
+    set((s) => ({
       gates: [],
-      results: null,
+      results: basisStateResult(s.numQubits, s.initialBasisState),
       resultsV2: null,
       metrics: null,
       currentStep: 0,
       lastError: null,
-    }),
+    })),
 
   loadPreset: (preset) =>
-    set({
+    set(() => {
+      const nextBasis = normalizeBasisState(preset.numQubits, preset.initialBasisState);
+      return {
       numQubits: preset.numQubits,
+      initialBasisState: nextBasis,
+      selectedBasisState: nextBasis,
       gates: preset.gates.map((g) => ({ ...g, id: uuidv4() })),
       simulationMode: preset.simulationMode ?? "statevector",
       noiseEnabled: preset.noiseEnabled ?? false,
       fidelityTarget: preset.fidelityTarget ?? "none",
-      results: null,
+      results: basisStateResult(preset.numQubits, nextBasis),
       resultsV2: null,
       metrics: null,
       currentStep: 0,
       lastError: null,
       stepMode: false,
+      };
     }),
 
   loadSavedCircuit: (saved) =>
-    set({
+    set(() => {
+      const nextBasis = normalizeBasisState(
+        saved.numQubits,
+        saved.initialBasisState ?? saved.selectedBasisState,
+      );
+      return {
       numQubits: saved.numQubits,
+      initialBasisState: nextBasis,
+      selectedBasisState: nextBasis,
       gates: saved.gates,
       simulationMode: saved.simulationMode,
       noiseEnabled: saved.noiseEnabled,
-      results: saved.results,
+      results: saved.results ?? basisStateResult(saved.numQubits, nextBasis),
       resultsV2: saved.resultsV2,
       metrics: null,
       currentStep: saved.results?.steps.length ?? 0,
       lastError: null,
       stepMode: false,
       isRunning: false,
+      };
     }),
 
   run: async () => {
     const state = get();
-    const { numQubits, gates } = state;
+    const { numQubits, gates, initialBasisState } = state;
     set({ isRunning: true, lastError: null, metrics: null });
     try {
       if (!usesV2(state)) {
-        const result: SimulationResult = await runCircuit({ numQubits, gates });
+        const result: SimulationResult = await runCircuit({ numQubits, gates, initialBasisState });
         set({
           results: result,
           resultsV2: null,
@@ -297,7 +396,7 @@ export const useCircuitStore = create<Store>((set, get) => ({
         return;
       }
 
-      const resultV2 = await runCircuitV2({ numQubits, gates }, {
+      const resultV2 = await runCircuitV2({ numQubits, gates, initialBasisState }, {
         simulationMode: state.simulationMode,
         noiseEnabled: state.noiseEnabled,
         noiseModel: state.noiseModel,
@@ -366,16 +465,39 @@ export const useCircuitStore = create<Store>((set, get) => ({
   resetSteps: () => set({ currentStep: 0 }),
   setError: (msg) => set({ lastError: msg }),
   setSimulationMode: (mode) =>
-    set({ simulationMode: mode, results: null, resultsV2: null, metrics: null }),
+    set((s) => ({
+      simulationMode: mode,
+      results: basisStateResult(s.numQubits, s.initialBasisState),
+      resultsV2: null,
+      metrics: null,
+    })),
   setNoiseEnabled: (enabled) =>
-    set({ noiseEnabled: enabled, results: null, resultsV2: null, metrics: null }),
+    set((s) => ({
+      noiseEnabled: enabled,
+      results: basisStateResult(s.numQubits, s.initialBasisState),
+      resultsV2: null,
+      metrics: null,
+    })),
   setNoiseModel: (model) =>
-    set({ noiseModel: model, results: null, resultsV2: null, metrics: null }),
+    set((s) => ({
+      noiseModel: model,
+      results: basisStateResult(s.numQubits, s.initialBasisState),
+      resultsV2: null,
+      metrics: null,
+    })),
   setNoiseProbability: (p) =>
-    set({ noiseProbability: p, results: null, resultsV2: null, metrics: null }),
-  setT1Us: (v) => set({ t1Us: v, results: null, resultsV2: null, metrics: null }),
-  setT2Us: (v) => set({ t2Us: v, results: null, resultsV2: null, metrics: null }),
-  setGateTimeNs: (v) => set({ gateTimeNs: v, results: null, resultsV2: null, metrics: null }),
+    set((s) => ({
+      noiseProbability: p,
+      results: basisStateResult(s.numQubits, s.initialBasisState),
+      resultsV2: null,
+      metrics: null,
+    })),
+  setT1Us: (v) =>
+    set((s) => ({ t1Us: v, results: basisStateResult(s.numQubits, s.initialBasisState), resultsV2: null, metrics: null })),
+  setT2Us: (v) =>
+    set((s) => ({ t2Us: v, results: basisStateResult(s.numQubits, s.initialBasisState), resultsV2: null, metrics: null })),
+  setGateTimeNs: (v) =>
+    set((s) => ({ gateTimeNs: v, results: basisStateResult(s.numQubits, s.initialBasisState), resultsV2: null, metrics: null })),
   setFidelityTarget: (target) => set({ fidelityTarget: target }),
 }));
 
@@ -388,23 +510,7 @@ export function selectCurrentState(s: CircuitState): {
   if (!s.results) return null;
   if (s.stepMode) {
     if (s.currentStep <= 0) {
-      const n = s.numQubits;
-      const dim = 1 << n;
-      const amps = Array.from({ length: dim }, (_, i) => ({
-        real: i === 0 ? 1 : 0,
-        imag: 0,
-      }));
-      const probs = Array.from({ length: dim }, (_, i) => (i === 0 ? 1 : 0));
-      const labels = Array.from(
-        { length: dim },
-        (_, i) => `|${i.toString(2).padStart(n, "0")}>`,
-      );
-      return {
-        num_qubits: n,
-        amplitudes: amps,
-        probabilities: probs,
-        basis_labels: labels,
-      };
+      return basisStateSnapshot(s.numQubits, s.initialBasisState);
     }
     const step = s.results.steps[s.currentStep - 1];
     if (!step) return s.results.final_state;

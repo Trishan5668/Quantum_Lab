@@ -12,6 +12,7 @@ import { MeasurementProof } from "./MeasurementProof";
 import { ProofTree } from "./ProofTree";
 import { StateEvolution } from "./StateEvolution";
 import { buildDerivation, noiseKrausLatex, vectorToLatex } from "./mathDerivations";
+import { basisIndex, displayKet, normalizeBasisState } from "../../utils/basisState";
 
 type Difficulty = "beginner" | "intermediate" | "advanced" | "research";
 
@@ -19,6 +20,7 @@ const DIFFICULTIES: Difficulty[] = ["beginner", "intermediate", "advanced", "res
 
 export function MathematicsPanel(): JSX.Element {
   const numQubits = useCircuitStore((s) => s.numQubits);
+  const initialBasisState = useCircuitStore((s) => s.initialBasisState);
   const gates = useCircuitStore((s) => s.gates);
   const results = useCircuitStore((s) => s.results);
   const resultsV2 = useCircuitStore((s) => s.resultsV2);
@@ -32,8 +34,8 @@ export function MathematicsPanel(): JSX.Element {
   const [difficulty, setDifficulty] = useState<Difficulty>("intermediate");
 
   const derivation = useMemo(
-    () => buildDerivation(numQubits, gates, results?.steps),
-    [numQubits, gates, results?.steps],
+    () => buildDerivation(numQubits, gates, results?.steps, initialBasisState),
+    [numQubits, gates, results?.steps, initialBasisState],
   );
 
   return (
@@ -51,6 +53,7 @@ export function MathematicsPanel(): JSX.Element {
             <div className="report-reader report-reader-compact">
               <MathematicsPanelBody
                 numQubits={numQubits}
+                initialBasisState={initialBasisState}
                 gates={gates}
                 resultsV2={resultsV2}
                 metrics={metrics}
@@ -70,6 +73,7 @@ export function MathematicsPanel(): JSX.Element {
     >
       <MathematicsPanelBody
         numQubits={numQubits}
+        initialBasisState={initialBasisState}
         gates={gates}
         resultsV2={resultsV2}
         metrics={metrics}
@@ -88,6 +92,7 @@ export function MathematicsPanel(): JSX.Element {
 
 function MathematicsPanelBody({
   numQubits,
+  initialBasisState,
   gates,
   resultsV2,
   metrics,
@@ -101,6 +106,7 @@ function MathematicsPanelBody({
   derivation,
 }: {
   numQubits: number;
+  initialBasisState: string;
   gates: GatePlacement[];
   resultsV2: ReturnType<typeof useCircuitStore.getState>["resultsV2"];
   metrics: ReturnType<typeof useCircuitStore.getState>["metrics"];
@@ -116,10 +122,15 @@ function MathematicsPanelBody({
   return (
     <>
       {gates.length === 0 ? (
-        <EmptyDerivation numQubits={numQubits} />
+        <EmptyDerivation numQubits={numQubits} initialBasisState={initialBasisState} />
       ) : (
         <div className="space-y-3">
-          <InitialState gates={gates} numQubits={numQubits} vector={derivation.initialState.amplitudes.map((a) => ({ re: a.real, im: a.imag }))} />
+          <InitialState
+            gates={gates}
+            numQubits={numQubits}
+            initialBasisState={initialBasisState}
+            vector={derivation.initialState.amplitudes.map((a) => ({ re: a.real, im: a.imag }))}
+          />
           {derivation.steps.map((step, index) => (
             <ExpandableProof
               key={step.placement.id}
@@ -197,12 +208,17 @@ function DifficultySelector({
   );
 }
 
-function EmptyDerivation({ numQubits }: { numQubits: number }): JSX.Element {
-  const initial = useMemo(() => buildDerivation(numQubits, []), [numQubits]);
+function EmptyDerivation({ numQubits, initialBasisState }: { numQubits: number; initialBasisState: string }): JSX.Element {
+  const initial = useMemo(() => buildDerivation(numQubits, [], undefined, initialBasisState), [numQubits, initialBasisState]);
   return (
     <div className="space-y-3">
       <PanelPlaceholder>Add gates to watch the derivation unfold live.</PanelPlaceholder>
-      <InitialState gates={[]} numQubits={numQubits} vector={initial.initialState.amplitudes.map((a) => ({ re: a.real, im: a.imag }))} />
+      <InitialState
+        gates={[]}
+        numQubits={numQubits}
+        initialBasisState={initialBasisState}
+        vector={initial.initialState.amplitudes.map((a) => ({ re: a.real, im: a.imag }))}
+      />
       <AmplitudeTable snapshot={initial.initialState} />
     </div>
   );
@@ -211,22 +227,30 @@ function EmptyDerivation({ numQubits }: { numQubits: number }): JSX.Element {
 function InitialState({
   gates,
   numQubits,
+  initialBasisState,
   vector,
 }: {
   gates: GatePlacement[];
   numQubits: number;
+  initialBasisState: string;
   vector: { re: number; im: number }[];
 }): JSX.Element {
-  const ket = `|${"0".repeat(numQubits)}\\rangle`;
+  const selected = normalizeBasisState(numQubits, initialBasisState);
+  const selectedIndex = basisIndex(selected);
+  const ket = `|${selected}\\rangle`;
+  const tuple = vector.map((entry) => (Math.abs(entry.re - 1) < 1e-10 && Math.abs(entry.im) < 1e-10 ? "1" : "0")).join(",");
   return (
     <ExpandableProof
       title="Initial computational basis state"
-      subtitle={gates.length ? `${gates.length} gate${gates.length === 1 ? "" : "s"} in circuit` : "all amplitude starts in |0...0>"}
+      subtitle={gates.length ? `${gates.length} gate${gates.length === 1 ? "" : "s"} in circuit` : `selected ${displayKet(selected)}`}
       defaultOpen
     >
       <LatexBlock math={`${ket}\\;\\longrightarrow\\;${vectorToLatex(vector)}`} compact />
+      <p className="font-mono text-xs leading-5 text-text-secondary">
+        Corresponding basis vector: ({tuple})^T
+      </p>
       <p className="text-xs leading-5 text-text-secondary">
-        Basis states are listed in big-endian binary order. The first basis label is {ket}, so its column-vector entry is 1 and every other entry starts at 0.
+        Initial state selected by user: {displayKet(selected)}. Basis states are listed in big-endian binary order, so {displayKet(selected)} has index {selectedIndex}; the amplitude at that index equals 1 and every other entry starts at 0.
       </p>
     </ExpandableProof>
   );

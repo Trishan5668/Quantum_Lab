@@ -40,6 +40,16 @@ def test_v2_run_defaults_match_v1(client: TestClient) -> None:
     assert v1["final_state"]["probabilities"] == v2["final_state"]["probabilities"]
 
 
+def test_v2_run_uses_initial_basis_state(client: TestClient) -> None:
+    resp = client.post(
+        "/api/v2/circuit/run",
+        json={"num_qubits": 3, "initial_basis_state": "101", "gates": []},
+    )
+    assert resp.status_code == 200
+    probs = resp.json()["data"]["final_state"]["probabilities"]
+    assert probs == [0.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0]
+
+
 def test_v2_density_mode(client: TestClient) -> None:
     payload = _bell_payload()
     payload["simulation"] = {"mode": "density", "noise": {"enabled": False}}

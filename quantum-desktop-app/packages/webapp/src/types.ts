@@ -26,6 +26,8 @@ export interface GatePlacement {
 
 export interface CircuitState {
   numQubits: number;
+  initialBasisState: string;
+  selectedBasisState: string;
   gates: GatePlacement[];
   results: SimulationResult | null;
   resultsV2: SimulationResultV2 | null;

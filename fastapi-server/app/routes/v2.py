@@ -72,6 +72,15 @@ def _state_from_amplitudes(
     return StateVector(amplitudes=amps, num_qubits=num_qubits)
 
 
+def _initial_state_from_basis(payload: CircuitV2In) -> StateVector:
+    basis = payload.initial_basis_state or ("0" * payload.num_qubits)
+    if len(basis) != payload.num_qubits or any(bit not in "01" for bit in basis):
+        basis = "0" * payload.num_qubits
+    amps = np.zeros(1 << payload.num_qubits, dtype=np.complex128)
+    amps[int(basis, 2)] = 1.0
+    return StateVector(amplitudes=amps, num_qubits=payload.num_qubits)
+
+
 def _density_from_request(
     payload: FidelityRequest | EntropyRequest | PurityRequest,
 ) -> DensityMatrix:
@@ -105,9 +114,10 @@ async def run(payload: CircuitV2In) -> dict[str, object]:
     circuit = _circuit_from_in(payload)
     noise = _noise_from_in(payload)
     mode = payload.simulation.mode
+    initial_state = _initial_state_from_basis(payload)
 
     if mode == "statevector" and not noise.enabled:
-        result = run_circuit(circuit)
+        result = run_circuit(circuit, initial_state=initial_state)
         out = CircuitV2RunOut(
             num_qubits=result.num_qubits,
             execution_time_ms=result.execution_time_ms,
@@ -117,7 +127,7 @@ async def run(payload: CircuitV2In) -> dict[str, object]:
         )
         return envelope(out.model_dump())
 
-    result = run_circuit(circuit, mode="density", noise=noise)
+    result = run_circuit(circuit, mode="density", noise=noise, initial_state=initial_state)
     assert isinstance(result, DensityCircuitResult)
     d = result.to_dict()
     out = CircuitV2RunOut(

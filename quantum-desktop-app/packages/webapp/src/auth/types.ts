@@ -44,6 +44,8 @@ export interface CircuitSnapshot {
   userId: string;
   circuitJson: {
     numQubits: number;
+    initialBasisState?: string;
+    selectedBasisState?: string;
     gates: GatePlacement[];
     simulationMode: SimulationMode;
     noiseEnabled: boolean;
@@ -65,4 +67,3 @@ export interface CircuitSnapshot {
   thumbnail: string;
   source: "autosave" | "manual" | "run";
 }
-

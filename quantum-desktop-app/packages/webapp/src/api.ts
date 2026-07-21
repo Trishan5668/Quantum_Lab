@@ -89,9 +89,10 @@ async function postJson<TResponse, TBody = unknown>(
   return envelope.data;
 }
 
-function serializeCircuit(state: Pick<CircuitState, "numQubits" | "gates">) {
+function serializeCircuit(state: Pick<CircuitState, "numQubits" | "gates" | "initialBasisState">) {
   return {
     num_qubits: state.numQubits,
+    initial_basis_state: state.initialBasisState,
     gates: state.gates.map((g: GatePlacement) => ({
       id: g.id,
       gate_type: g.gateType,
@@ -103,7 +104,7 @@ function serializeCircuit(state: Pick<CircuitState, "numQubits" | "gates">) {
 }
 
 export async function runCircuit(
-  state: Pick<CircuitState, "numQubits" | "gates">,
+  state: Pick<CircuitState, "numQubits" | "gates" | "initialBasisState">,
 ): Promise<SimulationResult> {
   return postJson<SimulationResult>("/circuit/run", serializeCircuit(state));
 }

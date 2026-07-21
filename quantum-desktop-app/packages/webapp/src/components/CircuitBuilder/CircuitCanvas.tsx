@@ -10,6 +10,8 @@ import {
   type GatePlacement,
   type GateType,
 } from "../../types";
+import { displayKet } from "../../utils/basisState";
+import { BasisStateSelectionModal } from "./BasisStateSelectionModal";
 import { ThetaInput, formatTheta } from "./ThetaControls";
 
 const WIRE_LEFT_PAD = 64;
@@ -23,8 +25,10 @@ export function CircuitCanvas(): JSX.Element {
   const isRunning = useCircuitStore((s) => s.isRunning);
   const stepMode = useCircuitStore((s) => s.stepMode);
   const currentStep = useCircuitStore((s) => s.currentStep);
-  const addQubit = useCircuitStore((s) => s.addQubit);
+  const selectedBasisState = useCircuitStore((s) => s.selectedBasisState);
+  const addQubitWithBasisState = useCircuitStore((s) => s.addQubitWithBasisState);
   const removeQubit = useCircuitStore((s) => s.removeQubit);
+  const [basisModalOpen, setBasisModalOpen] = useState(false);
 
   const usedColumns = useMemo(() => {
     const maxStep = gates.reduce((m, g) => Math.max(m, g.timeStep), -1);
@@ -55,7 +59,7 @@ export function CircuitCanvas(): JSX.Element {
             </button>
             <button
               type="button"
-              onClick={addQubit}
+              onClick={() => setBasisModalOpen(true)}
               disabled={numQubits >= MAX_QUBITS_CONST}
               className="rounded border border-accent-quantum/40 bg-accent-quantum/10 px-2 py-0.5 font-mono text-[10px] text-accent-glow hover:bg-accent-quantum/20 disabled:cursor-not-allowed disabled:opacity-30"
             >
@@ -87,6 +91,17 @@ export function CircuitCanvas(): JSX.Element {
           </div>
         </div>
       </div>
+      {basisModalOpen && (
+        <BasisStateSelectionModal
+          numQubits={numQubits + 1}
+          initialBasisState={`${selectedBasisState}0`}
+          onCancel={() => setBasisModalOpen(false)}
+          onConfirm={(basisState) => {
+            addQubitWithBasisState(basisState);
+            setBasisModalOpen(false);
+          }}
+        />
+      )}
     </div>
   );
 }
@@ -119,7 +134,7 @@ function QubitRow({
         style={{ width: WIRE_LEFT_PAD - 8 }}
       >
         <span className="block">q[{qubit}]</span>
-        <span className="text-[9px] text-text-muted">|0⟩</span>
+        <span className="text-[9px] text-text-muted">{displayKet("0")}</span>
       </div>
       <div
         className="absolute top-1/2 -translate-y-1/2 overflow-hidden rounded-full bg-gradient-to-r from-accent-quantum/20 via-text-muted/40 to-text-muted/40"

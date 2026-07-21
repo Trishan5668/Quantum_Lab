@@ -71,9 +71,10 @@ async function postV2<TResponse, TBody = unknown>(
   return envelope.data;
 }
 
-function serializeCircuitV2(state: Pick<CircuitState, "numQubits" | "gates">) {
+function serializeCircuitV2(state: Pick<CircuitState, "numQubits" | "gates" | "initialBasisState">) {
   return {
     num_qubits: state.numQubits,
+    initial_basis_state: state.initialBasisState,
     gates: state.gates.map((g: GatePlacement) => ({
       id: g.id,
       gate_type: g.gateType,
@@ -95,7 +96,7 @@ export interface RunCircuitV2Options {
 }
 
 export async function runCircuitV2(
-  state: Pick<CircuitState, "numQubits" | "gates">,
+  state: Pick<CircuitState, "numQubits" | "gates" | "initialBasisState">,
   options: RunCircuitV2Options,
 ): Promise<SimulationResultV2> {
   const body = {

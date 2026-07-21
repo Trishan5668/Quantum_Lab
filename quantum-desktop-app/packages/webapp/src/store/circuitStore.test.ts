@@ -1,6 +1,7 @@
 import { describe, expect, it, beforeEach } from "vitest";
-import { useCircuitStore, normalizeV2ToSimulationResult } from "./circuitStore";
+import { useCircuitStore, normalizeV2ToSimulationResult, selectCurrentState } from "./circuitStore";
 import type { SimulationResultV2 } from "../types";
+import { basisStateSnapshot } from "../utils/basisState";
 
 describe("circuit store", () => {
   beforeEach(() => {
@@ -12,13 +13,41 @@ describe("circuit store", () => {
     const s = useCircuitStore.getState();
     expect(s.numQubits).toBe(1);
     expect(s.gates.length).toBe(0);
-    expect(s.results).toBeNull();
+    expect(s.initialBasisState).toBe("0");
   });
 
   it("adds qubits up to a maximum of 8", () => {
     const { addQubit } = useCircuitStore.getState();
     for (let i = 0; i < 12; i++) addQubit();
     expect(useCircuitStore.getState().numQubits).toBe(8);
+  });
+
+  it("adds a qubit with the selected computational basis state", () => {
+    useCircuitStore.getState().addQubitWithBasisState("10");
+    const s = useCircuitStore.getState();
+    const snapshot = selectCurrentState(s);
+    expect(s.numQubits).toBe(2);
+    expect(s.initialBasisState).toBe("10");
+    expect(snapshot?.amplitudes.map((a) => a.real)).toEqual([0, 0, 1, 0]);
+    expect(snapshot?.probabilities).toEqual([0, 0, 1, 0]);
+  });
+
+  it("maps a selected 3-qubit basis state to the matching big-endian index", () => {
+    useCircuitStore.getState().setNumQubits(3);
+    useCircuitStore.getState().setInitialBasisState("101");
+    const snapshot = selectCurrentState(useCircuitStore.getState());
+    expect(snapshot?.amplitudes.map((a) => a.real)).toEqual([0, 0, 0, 0, 0, 1, 0, 0]);
+  });
+
+  it("maps selected basis states to the matching index for 1 through 5 qubits", () => {
+    for (let n = 1; n <= 5; n += 1) {
+      const basis = `${"1"}${"0".repeat(Math.max(0, n - 2))}${n > 1 ? "1" : ""}`.slice(0, n);
+      const snapshot = basisStateSnapshot(n, basis);
+      const expectedIndex = Number.parseInt(basis, 2);
+      expect(snapshot.amplitudes[expectedIndex].real).toBe(1);
+      expect(snapshot.probabilities[expectedIndex]).toBe(1);
+      expect(snapshot.amplitudes.filter((amp) => amp.real === 1)).toHaveLength(1);
+    }
   });
 
   it("places single-qubit gates at the given time step", () => {

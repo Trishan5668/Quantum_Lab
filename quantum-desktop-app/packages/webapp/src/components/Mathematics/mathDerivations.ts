@@ -6,6 +6,7 @@ import type {
   NoiseChannelType,
   StateSnapshot,
 } from "../../types";
+import { basisIndex, normalizeBasisState } from "../../utils/basisState";
 
 export interface Complex {
   re: number;
@@ -78,9 +79,10 @@ export function buildDerivation(
   numQubits: number,
   gates: GatePlacement[],
   resultSteps?: { state_after?: StateSnapshot }[],
+  initialBasisState?: string,
 ): MathematicsDerivation {
   const basisLabels = basisLabelsFor(numQubits);
-  let state = zeroState(numQubits);
+  let state = computationalBasisState(numQubits, initialBasisState);
   const initialState = snapshotFromVector(numQubits, state);
   const ordered = [...gates].sort((a, b) => a.timeStep - b.timeStep || a.id.localeCompare(b.id));
   const steps = ordered.map((placement, index) => {
@@ -122,6 +124,12 @@ export function basisLabelsFor(numQubits: number): string[] {
 
 export function zeroState(numQubits: number): Complex[] {
   return Array.from({ length: 1 << numQubits }, (_, i) => (i === 0 ? ONE : ZERO));
+}
+
+export function computationalBasisState(numQubits: number, basisState?: string | null): Complex[] {
+  const selected = normalizeBasisState(numQubits, basisState);
+  const selectedIndex = basisIndex(selected);
+  return Array.from({ length: 1 << numQubits }, (_, i) => (i === selectedIndex ? ONE : ZERO));
 }
 
 export function snapshotFromVector(numQubits: number, vector: Complex[]): StateSnapshot {

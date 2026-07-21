@@ -6,6 +6,7 @@ import { buildPhysicsReport } from "./physicsReport";
 
 export function PhysicsPanel(): JSX.Element {
   const numQubits = useCircuitStore((s) => s.numQubits);
+  const initialBasisState = useCircuitStore((s) => s.initialBasisState);
   const gates = useCircuitStore((s) => s.gates);
   const results = useCircuitStore((s) => s.results);
   const resultsV2 = useCircuitStore((s) => s.resultsV2);
@@ -14,12 +15,13 @@ export function PhysicsPanel(): JSX.Element {
     () =>
       buildPhysicsReport({
         numQubits,
+        initialBasisState,
         gates,
         steps: results?.steps,
         resultsV2,
         metrics,
       }),
-    [gates, metrics, numQubits, results?.steps, resultsV2],
+    [gates, initialBasisState, metrics, numQubits, results?.steps, resultsV2],
   );
 
   const subtitle = results

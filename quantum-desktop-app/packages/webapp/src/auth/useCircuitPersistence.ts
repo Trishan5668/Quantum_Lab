@@ -44,6 +44,8 @@ export function useCircuitPersistence(): {
     const unsubscribe = useCircuitStore.subscribe((state, previous) => {
       const circuitChanged =
         state.numQubits !== previous.numQubits ||
+        state.initialBasisState !== previous.initialBasisState ||
+        state.selectedBasisState !== previous.selectedBasisState ||
         state.simulationMode !== previous.simulationMode ||
         state.noiseEnabled !== previous.noiseEnabled ||
         JSON.stringify(state.gates) !== JSON.stringify(previous.gates);
@@ -67,4 +69,3 @@ export function useCircuitPersistence(): {
 
   return { saveStatus, lastSavedAt, saveNow };
 }
-

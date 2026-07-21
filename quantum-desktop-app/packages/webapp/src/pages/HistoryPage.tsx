@@ -30,6 +30,8 @@ export default function HistoryPage(): JSX.Element {
   const reopen = (snapshot: CircuitSnapshot) => {
     loadSavedCircuit({
       numQubits: snapshot.circuitJson.numQubits,
+      initialBasisState: snapshot.circuitJson.initialBasisState,
+      selectedBasisState: snapshot.circuitJson.selectedBasisState,
       gates: snapshot.circuitJson.gates,
       simulationMode: snapshot.circuitJson.simulationMode,
       results: snapshot.simulationResult,
@@ -77,4 +79,3 @@ export default function HistoryPage(): JSX.Element {
     </>
   );
 }
-

@@ -195,6 +195,7 @@ function mathReport(state: CircuitState): string {
     .map(({ label, probability }) => `${label}: ${probability.toFixed(6)}`);
   return [
     `${state.numQubits} qubit circuit`,
+    `initial basis: |${state.initialBasisState}>`,
     `${state.gates.length} gates`,
     `mode: ${state.simulationMode}`,
     `probabilities: ${terms.length ? terms.join(", ") : "not simulated"}`,
@@ -205,7 +206,7 @@ function physicsReport(state: CircuitState): string {
   const density = state.resultsV2?.final_density ? "density matrix available" : "statevector-derived density";
   const noise = state.noiseEnabled ? `${state.noiseModel} noise p=${state.noiseProbability}` : "ideal evolution";
   return [
-    `Circuit evolves ${state.numQubits} qubit${state.numQubits === 1 ? "" : "s"} under ${noise}.`,
+    `Circuit starts in |${state.initialBasisState}> and evolves ${state.numQubits} qubit${state.numQubits === 1 ? "" : "s"} under ${noise}.`,
     `Final representation: ${density}.`,
     `Metrics: fidelity=${state.metrics?.fidelity?.fidelity ?? "n/a"}, entropy=${state.metrics?.entropy?.entropy ?? "n/a"}, purity=${state.metrics?.purity?.purity ?? state.resultsV2?.purity ?? "n/a"}.`,
   ].join("\n");
@@ -224,6 +225,8 @@ export function buildCircuitSnapshot(
     userId: uid,
     circuitJson: {
       numQubits: state.numQubits,
+      initialBasisState: state.initialBasisState,
+      selectedBasisState: state.selectedBasisState,
       gates: state.gates,
       simulationMode: state.simulationMode,
       noiseEnabled: state.noiseEnabled,
@@ -335,4 +338,3 @@ export async function listRecentCircuits(uid: string): Promise<CircuitSnapshot[]
   const snapshot = await getDocs(q);
   return snapshot.docs.map((entry) => entry.data() as CircuitSnapshot);
 }
-

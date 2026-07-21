@@ -30,6 +30,7 @@ class GatePlacementIn(BaseModel):
 
 class CircuitIn(BaseModel):
     num_qubits: int = Field(..., ge=1, le=8)
+    initial_basis_state: str | None = None
     gates: list[GatePlacementIn] = Field(default_factory=list)
 
 

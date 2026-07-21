@@ -54,6 +54,16 @@ def test_circuit_run_bell_state(client: TestClient) -> None:
     assert math.isclose(probs[2], 0.0, abs_tol=1e-9)
 
 
+def test_circuit_run_uses_initial_basis_state(client: TestClient) -> None:
+    r = client.post(
+        "/api/v1/circuit/run",
+        json={"num_qubits": 3, "initial_basis_state": "101", "gates": []},
+    )
+    assert r.status_code == 200
+    probs = r.json()["data"]["final_state"]["probabilities"]
+    assert probs == [0.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0]
+
+
 def test_circuit_run_rejects_bad_qubit(client: TestClient) -> None:
     payload = {
         "num_qubits": 1,

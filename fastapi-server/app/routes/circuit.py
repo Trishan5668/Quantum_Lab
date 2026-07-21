@@ -39,11 +39,20 @@ def _circuit_from_in(payload: CircuitIn) -> CircuitDefinition:
     return CircuitDefinition(num_qubits=payload.num_qubits, gates=placements)
 
 
+def _initial_state_from_basis(payload: CircuitIn) -> StateVector:
+    basis = payload.initial_basis_state or ("0" * payload.num_qubits)
+    if len(basis) != payload.num_qubits or any(bit not in "01" for bit in basis):
+        basis = "0" * payload.num_qubits
+    amps = np.zeros(1 << payload.num_qubits, dtype=np.complex128)
+    amps[int(basis, 2)] = 1.0
+    return StateVector(amplitudes=amps, num_qubits=payload.num_qubits)
+
+
 @router.post("/run")
 async def run(payload: CircuitIn) -> dict[str, object]:
     """Execute the full circuit and return per-step + final state."""
     circuit = _circuit_from_in(payload)
-    result = run_circuit(circuit)
+    result = run_circuit(circuit, initial_state=_initial_state_from_basis(payload))
     out = CircuitRunOut.model_validate(result.to_dict())
     return envelope(out.model_dump())
 
