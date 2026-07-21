@@ -14,6 +14,29 @@ import type { ReportSection } from "../Reports/ReportReader";
 import type { GatePlacement, MetricsResult, SimulationResultV2, StateSnapshot } from "../../types";
 import { displayKet, normalizeBasisState } from "../../utils/basisState";
 
+
+function stackPhysicsInterpretation(
+  gateName: string,
+  stackCount: number
+): string {
+  if (stackCount <= 1) return "";
+
+  if (gateName === "H") {
+    return `Applying Hadamard ${stackCount} times corresponds to H^${stackCount}. Repeated applications can alternately create and remove superposition.`;
+  }
+
+  if (gateName === "X") {
+    return `Applying X ${stackCount} times corresponds to repeated bit flips. X² = I, so even powers restore the original basis state.`;
+  }
+
+  if (gateName === "CNOT") {
+    return `Applying CNOT ${stackCount} times corresponds to repeated controlled bit flips. CNOT² = I, so every pair of applications cancels out.`;
+  }
+
+  return `This operation applies ${gateName} ${stackCount} consecutive times, producing the effective operator ${gateName}^${stackCount}.`;
+}
+
+
 const EPS = 1e-10;
 const ZERO: Complex = { re: 0, im: 0 };
 
@@ -115,7 +138,10 @@ function GateStackingChapter({ ctx }: { ctx: PhysicsContext }): JSX.Element {
           <ul>
             {stacked.map((gate) => (
               <li key={gate.id}>
-                {gate.gateType}^{gate.stackCount ?? 1} on q[{gate.qubitTargets.join(", ")}]: {stackPhysicsInterpretation(gate)}
+                {gate.gateType}^{gate.stackCount ?? 1} on q[{gate.qubitTargets.join(", ")}]: {stackPhysicsInterpretation(
+  gate.gateType,
+  gate.stackCount ?? 1
+)}
               </li>
             ))}
           </ul>
@@ -753,7 +779,10 @@ function initialMarkdown(ctx: PhysicsContext): string {
 function stackingMarkdown(ctx: PhysicsContext): string {
   const stacked = ctx.gates.filter((gate) => (gate.stackCount ?? 1) > 1);
   if (!stacked.length) return "No gate stacks are present.";
-  return stacked.map((gate) => `${gate.gateType}^${gate.stackCount ?? 1}: ${stackPhysicsInterpretation(gate)}`).join(" ");
+  return stacked.map((gate) => `${gate.gateType}^${gate.stackCount ?? 1}: ${stackPhysicsInterpretation(
+  gate.gateType,
+  gate.stackCount ?? 1
+)}`).join(" ");
 }
 
 function superpositionMarkdown(ctx: PhysicsContext): string {
