@@ -90,6 +90,7 @@ export function buildPhysicsReport({
     chapter("Hilbert Space", hilbertSubtitle(ctx), hilbertLatex(ctx), hilbertMarkdown(ctx), () => <HilbertChapter ctx={ctx} />, true),
     chapter("Computational Basis", basisSubtitle(ctx), basisLatex(ctx), basisMarkdown(ctx), () => <ComputationalBasisChapter ctx={ctx} />),
     chapter("Initial State", initialSubtitle(ctx), initialLatex(ctx), initialMarkdown(ctx), () => <InitialStateChapter ctx={ctx} />),
+    chapter("Gate Stacking", stackingSubtitle(ctx), stackingLatex(ctx), stackingMarkdown(ctx), () => <GateStackingChapter ctx={ctx} />),
     chapter("Superposition", superpositionSubtitle(ctx), superpositionLatex(ctx), superpositionMarkdown(ctx), () => <SuperpositionChapter ctx={ctx} />),
     chapter("Tensor Products", tensorSubtitle(ctx), tensorLatex(ctx), tensorMarkdown(ctx), () => <TensorChapter ctx={ctx} />),
     chapter("Entanglement", entanglementSubtitle(ctx), entanglementLatex(ctx), entanglementMarkdown(ctx), () => <EntanglementChapter ctx={ctx} />),
@@ -100,6 +101,34 @@ export function buildPhysicsReport({
     chapter("Research Notes", researchSubtitle(ctx), researchLatex(ctx), researchMarkdown(ctx), () => <ResearchChapter ctx={ctx} />),
   ];
   return chapters.map((section, index) => ({ ...section, number: String(index + 1) }));
+}
+
+function GateStackingChapter({ ctx }: { ctx: PhysicsContext }): JSX.Element {
+  const stacked = ctx.gates.filter((gate) => (gate.stackCount ?? 1) > 1);
+  return (
+    <ArticleChapter>
+      <Lead>
+        Gate stacking means QuantumLab treats repeated gates at one circuit location as one effective unitary power. {stacked.length ? `This circuit has ${stacked.length} stacked placement${stacked.length === 1 ? "" : "s"}.` : "This circuit has no stacked placements yet."}
+      </Lead>
+      {stacked.length ? (
+        <>
+          <ul>
+            {stacked.map((gate) => (
+              <li key={gate.id}>
+                {gate.gateType}^{gate.stackCount ?? 1} on q[{gate.qubitTargets.join(", ")}]: {stackPhysicsInterpretation(gate)}
+              </li>
+            ))}
+          </ul>
+          <Equation math={"U_{eff}=U^n=\\underbrace{U\\cdot U\\cdots U}_{n\\text{ times}}"} />
+        </>
+      ) : (
+        <p>Drag the same gate onto the same qubit or control-target pair to compose repeated evolution in place.</p>
+      )}
+      <Conclusion>
+        A stack is physical composition, not visual compression: the second operation can undo, reinforce, or continue the first depending on the unitary.
+      </Conclusion>
+    </ArticleChapter>
+  );
 }
 
 function chapter(
@@ -612,6 +641,11 @@ function initialSubtitle(ctx: PhysicsContext): string {
   return `prepared as |${ctx.initialBasisState}>`;
 }
 
+function stackingSubtitle(ctx: PhysicsContext): string {
+  const count = ctx.gates.filter((gate) => (gate.stackCount ?? 1) > 1).length;
+  return count ? `${count} stacked operator${count === 1 ? "" : "s"} composed as U^n` : "no stacked operators";
+}
+
 function superpositionSubtitle(ctx: PhysicsContext): string {
   return `${ctx.support.length} populated basis component${ctx.support.length === 1 ? "" : "s"} after simulation`;
 }
@@ -658,6 +692,13 @@ function basisLatex(ctx: PhysicsContext): string[] {
 
 function initialLatex(ctx: PhysicsContext): string[] {
   return [`|\\psi_0\\rangle=|${ctx.initialBasisState}\\rangle`, "\\langle\\psi_0|\\psi_0\\rangle=1"];
+}
+
+function stackingLatex(ctx: PhysicsContext): string[] {
+  const stacked = ctx.gates.filter((gate) => (gate.stackCount ?? 1) > 1);
+  return stacked.length
+    ? ["U_{eff}=U^n", ...stacked.map((gate) => `${gate.gateType}_{eff}=${gate.gateType}^{${gate.stackCount ?? 1}}`)]
+    : ["U_{eff}=U"];
 }
 
 function superpositionLatex(ctx: PhysicsContext): string[] {
@@ -707,6 +748,12 @@ function basisMarkdown(ctx: PhysicsContext): string {
 
 function initialMarkdown(ctx: PhysicsContext): string {
   return `The circuit begins in |${ctx.initialBasisState}> as a pure computational basis state. No superposition exists initially, so computational-basis measurement is deterministic.`;
+}
+
+function stackingMarkdown(ctx: PhysicsContext): string {
+  const stacked = ctx.gates.filter((gate) => (gate.stackCount ?? 1) > 1);
+  if (!stacked.length) return "No gate stacks are present.";
+  return stacked.map((gate) => `${gate.gateType}^${gate.stackCount ?? 1}: ${stackPhysicsInterpretation(gate)}`).join(" ");
 }
 
 function superpositionMarkdown(ctx: PhysicsContext): string {

@@ -40,7 +40,10 @@ export interface GateMath {
   label: string;
   symbol: string;
   localMatrix: ComplexMatrix;
+  effectiveLocalMatrix: ComplexMatrix;
   fullMatrix: ComplexMatrix;
+  stackCount: number;
+  stackPowers: ComplexMatrix[];
   equation: string;
   derivation: string[];
   eigenvalues: string[];
@@ -235,16 +238,21 @@ export function noiseKrausLatex(channel: NoiseChannelType, p: number, t1Us: numb
 
 function gateMath(placement: GatePlacement, numQubits: number): GateMath {
   const localMatrix = localGateMatrix(placement.gateType, placement.params.theta ?? Math.PI / 2);
+  const stackCount = Math.max(1, placement.stackCount ?? 1);
+  const effectiveLocalMatrix = matrixPower(localMatrix, stackCount);
   const fullMatrix =
     placement.gateType === "M"
       ? identity(1 << numQubits)
-      : fullUnitary(localMatrix, placement.qubitTargets, numQubits);
+      : fullUnitary(effectiveLocalMatrix, placement.qubitTargets, numQubits);
   const symbol = gateSymbol(placement);
   return {
     label: gateLabel(placement),
     symbol,
     localMatrix,
+    effectiveLocalMatrix,
     fullMatrix,
+    stackCount,
+    stackPowers: powersThrough(localMatrix, stackCount),
     equation: gateEquation(placement),
     derivation: gateDerivation(placement),
     eigenvalues: gateEigenvalues(placement),
@@ -284,6 +292,24 @@ function localGateMatrix(type: GateType, theta: number): ComplexMatrix {
     case "M":
       return identity(2);
   }
+}
+
+function matrixPower(matrix: ComplexMatrix, n: number): ComplexMatrix {
+  let result = identity(matrix.length);
+  for (let i = 0; i < n; i += 1) {
+    result = matMul(matrix, result);
+  }
+  return result;
+}
+
+function powersThrough(matrix: ComplexMatrix, n: number): ComplexMatrix[] {
+  const powers: ComplexMatrix[] = [];
+  let result = identity(matrix.length);
+  for (let i = 1; i <= n; i += 1) {
+    result = matMul(matrix, result);
+    powers.push(result);
+  }
+  return powers;
 }
 
 function fullUnitary(gate: ComplexMatrix, targets: number[], numQubits: number): ComplexMatrix {
@@ -438,6 +464,14 @@ function zeroMatrix(rows: number, cols: number): ComplexMatrix {
 
 function matVec(matrix: ComplexMatrix, vector: Complex[]): Complex[] {
   return matrix.map((row) => row.map((value, col) => mul(value, vector[col] ?? ZERO)).reduce(add, ZERO));
+}
+
+function matMul(a: ComplexMatrix, b: ComplexMatrix): ComplexMatrix {
+  return a.map((row) =>
+    (b[0] ?? []).map((_, col) =>
+      row.map((value, k) => mul(value, b[k]?.[col] ?? ZERO)).reduce(add, ZERO),
+    ),
+  );
 }
 
 function bitsOf(index: number, width: number): number[] {

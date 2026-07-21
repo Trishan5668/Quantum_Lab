@@ -81,6 +81,7 @@ function serializeCircuitV2(state: Pick<CircuitState, "numQubits" | "gates" | "i
       qubit_targets: g.qubitTargets,
       params: g.params.theta !== undefined ? { theta: g.params.theta } : {},
       time_step: g.timeStep,
+      stack_count: g.stackCount ?? 1,
     })),
   };
 }

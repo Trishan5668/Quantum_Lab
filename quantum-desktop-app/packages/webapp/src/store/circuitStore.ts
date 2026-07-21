@@ -42,6 +42,7 @@ interface CircuitActions {
   randomizeInitialBasisState: () => void;
   addGate: (gateType: GateType, qubitTargets: number[], timeStep: number, theta?: number) => void;
   removeGate: (id: string) => void;
+  decrementGateStack: (id: string) => void;
   updateGateParams: (id: string, params: Partial<GatePlacement["params"]>) => void;
   moveGate: (id: string, newTimeStep: number, newQubitTargets?: number[]) => void;
   clearCircuit: () => void;
@@ -114,6 +115,7 @@ interface RawV2Step {
   qubit_targets: number[];
   params: Record<string, number>;
   time_step: number;
+  stack_count?: number;
   state_after?: StateSnapshot;
   density_after?: {
     amplitudes?: ComplexAmplitude[];
@@ -148,6 +150,7 @@ export function normalizeV2ToSimulationResult(resultV2: SimulationResultV2): Sim
     qubit_targets: step.qubit_targets,
     params: step.params ?? {},
     time_step: step.time_step,
+    stack_count: step.stack_count ?? 1,
     state_after: snapshotFromV2Step(step, resultV2.num_qubits),
     probabilities: step.probabilities,
   }));
@@ -279,17 +282,34 @@ export const useCircuitStore = create<Store>((set, get) => ({
   addGate: (gateType, qubitTargets, timeStep, theta) =>
     set((s) => {
       if (qubitTargets.some((q) => q < 0 || q >= s.numQubits)) return s;
+      const params = theta !== undefined ? { theta } : {};
+      const existing = s.gates.find((g) =>
+        isSameGateLocation(g, gateType, qubitTargets, timeStep, params),
+      );
+      if (existing) {
+        return {
+          gates: s.gates.map((g) =>
+            g.id === existing.id ? { ...g, stackCount: (g.stackCount ?? 1) + 1 } : g,
+          ),
+          results: null,
+          resultsV2: null,
+          metrics: null,
+          currentStep: 0,
+        };
+      }
       const placement: GatePlacement = {
         id: uuidv4(),
         gateType,
         qubitTargets,
-        params: theta !== undefined ? { theta } : {},
+        params,
         timeStep,
+        stackCount: 1,
       };
       return {
         gates: [...s.gates, placement],
         results: null,
         resultsV2: null,
+        metrics: null,
         currentStep: 0,
       };
     }),
@@ -302,6 +322,22 @@ export const useCircuitStore = create<Store>((set, get) => ({
       currentStep: 0,
     })),
 
+  decrementGateStack: (id) =>
+    set((s) => {
+      const gate = s.gates.find((g) => g.id === id);
+      if (!gate) return s;
+      const nextCount = (gate.stackCount ?? 1) - 1;
+      return {
+        gates: nextCount <= 0
+          ? s.gates.filter((g) => g.id !== id)
+          : s.gates.map((g) => (g.id === id ? { ...g, stackCount: nextCount } : g)),
+        results: null,
+        resultsV2: null,
+        metrics: null,
+        currentStep: 0,
+      };
+    }),
+
   updateGateParams: (id, params) =>
     set((s) => ({
       gates: s.gates.map((g) =>
@@ -312,20 +348,30 @@ export const useCircuitStore = create<Store>((set, get) => ({
     })),
 
   moveGate: (id, newTimeStep, newQubitTargets) =>
-    set((s) => ({
-      gates: s.gates.map((g) =>
-        g.id === id
-          ? {
-              ...g,
-              timeStep: newTimeStep,
-              ...(newQubitTargets ? { qubitTargets: newQubitTargets } : {}),
-            }
-          : g,
-      ),
-      results: null,
-      resultsV2: null,
-      currentStep: 0,
-    })),
+    set((s) => {
+      const moving = s.gates.find((g) => g.id === id);
+      if (!moving) return s;
+      const moved = {
+        ...moving,
+        timeStep: newTimeStep,
+        ...(newQubitTargets ? { qubitTargets: newQubitTargets } : {}),
+      };
+      const target = s.gates.find((g) =>
+        g.id !== id &&
+        isSameGateLocation(g, moved.gateType, moved.qubitTargets, moved.timeStep, moved.params),
+      );
+      return {
+        gates: target
+          ? s.gates
+              .filter((g) => g.id !== id)
+              .map((g) => g.id === target.id ? { ...g, stackCount: (g.stackCount ?? 1) + (moving.stackCount ?? 1) } : g)
+          : s.gates.map((g) => (g.id === id ? moved : g)),
+        results: null,
+        resultsV2: null,
+        metrics: null,
+        currentStep: 0,
+      };
+    }),
 
   clearCircuit: () =>
     set((s) => ({
@@ -344,7 +390,7 @@ export const useCircuitStore = create<Store>((set, get) => ({
       numQubits: preset.numQubits,
       initialBasisState: nextBasis,
       selectedBasisState: nextBasis,
-      gates: preset.gates.map((g) => ({ ...g, id: uuidv4() })),
+      gates: preset.gates.map((g) => ({ ...g, id: uuidv4(), stackCount: g.stackCount ?? 1 })),
       simulationMode: preset.simulationMode ?? "statevector",
       noiseEnabled: preset.noiseEnabled ?? false,
       fidelityTarget: preset.fidelityTarget ?? "none",
@@ -367,7 +413,7 @@ export const useCircuitStore = create<Store>((set, get) => ({
       numQubits: saved.numQubits,
       initialBasisState: nextBasis,
       selectedBasisState: nextBasis,
-      gates: saved.gates,
+      gates: saved.gates.map((g) => ({ ...g, stackCount: g.stackCount ?? 1 })),
       simulationMode: saved.simulationMode,
       noiseEnabled: saved.noiseEnabled,
       results: saved.results ?? basisStateResult(saved.numQubits, nextBasis),
@@ -521,6 +567,33 @@ export function selectCurrentState(s: CircuitState): {
 
 export function selectDensityData(s: CircuitState) {
   return s.resultsV2?.final_density ?? null;
+}
+
+function isSameGateLocation(
+  gate: GatePlacement,
+  gateType: GateType,
+  qubitTargets: number[],
+  timeStep: number,
+  params: Partial<GatePlacement["params"]>,
+): boolean {
+  return (
+    gate.gateType === gateType &&
+    gate.timeStep === timeStep &&
+    sameTargets(gate.qubitTargets, qubitTargets) &&
+    sameParams(gate.params, params)
+  );
+}
+
+function sameTargets(a: number[], b: number[]): boolean {
+  return a.length === b.length && a.every((value, index) => value === b[index]);
+}
+
+function sameParams(a: Partial<GatePlacement["params"]>, b: Partial<GatePlacement["params"]>): boolean {
+  const thetaA = a.theta;
+  const thetaB = b.theta;
+  if (thetaA === undefined && thetaB === undefined) return true;
+  if (thetaA === undefined || thetaB === undefined) return false;
+  return Math.abs(thetaA - thetaB) < 1e-12;
 }
 
 export const MAX_QUBITS_CONST = MAX_QUBITS;

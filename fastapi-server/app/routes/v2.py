@@ -43,6 +43,7 @@ def _circuit_from_in(payload: CircuitV2In) -> CircuitDefinition:
             qubit_targets=list(g.qubit_targets),
             params=dict(g.params),
             time_step=g.time_step,
+            stack_count=g.stack_count,
         )
         for g in payload.gates
     ]

@@ -7,6 +7,18 @@ import { Button } from "../ui/Button";
 const PAD_LEFT = 56;
 const COL_W = 64;
 const ROW_H = 44;
+const SUPERSCRIPTS: Record<string, string> = {
+  "0": "⁰",
+  "1": "¹",
+  "2": "²",
+  "3": "³",
+  "4": "⁴",
+  "5": "⁵",
+  "6": "⁶",
+  "7": "⁷",
+  "8": "⁸",
+  "9": "⁹",
+};
 
 export function CircuitDiagram(): JSX.Element {
   const numQubits = useCircuitStore((s) => s.numQubits);
@@ -121,7 +133,7 @@ export function CircuitDiagram(): JSX.Element {
                     fontSize={12}
                     fontWeight="600"
                   >
-                    {g.gateType}
+                    {stackedGateLabel(g.gateType, g.stackCount ?? 1)}
                   </text>
                   {g.params.theta !== undefined && (
                     <text
@@ -148,6 +160,18 @@ export function CircuitDiagram(): JSX.Element {
                 <circle cx={x} cy={yt} r={10} fill="#12141a" stroke="#dc2626" strokeWidth={1.5} />
                 <line x1={x - 7} y1={yt} x2={x + 7} y2={yt} stroke="#dc2626" strokeWidth={1.5} />
                 <line x1={x} y1={yt - 7} x2={x} y2={yt + 7} stroke="#dc2626" strokeWidth={1.5} />
+                {(g.stackCount ?? 1) > 1 && (
+                  <text
+                    x={x + 10}
+                    y={yc - 8}
+                    fill="#a78bfa"
+                    fontFamily="'JetBrains Mono', monospace"
+                    fontSize={10}
+                    fontWeight="600"
+                  >
+                    {stackCountText(g.stackCount ?? 1)}
+                  </text>
+                )}
               </g>
             );
           })}
@@ -155,4 +179,15 @@ export function CircuitDiagram(): JSX.Element {
       </div>
     </PanelSection>
   );
+}
+
+function stackedGateLabel(gateType: string, stackCount: number): string {
+  return stackCount <= 1 ? gateType : `${gateType}${stackCountText(stackCount)}`;
+}
+
+function stackCountText(stackCount: number): string {
+  return String(stackCount)
+    .split("")
+    .map((digit) => SUPERSCRIPTS[digit] ?? digit)
+    .join("");
 }

@@ -15,6 +15,7 @@ from __future__ import annotations
 
 from collections.abc import Callable
 from dataclasses import dataclass, field
+from functools import lru_cache
 from time import perf_counter
 from typing import Any, Literal, overload
 
@@ -57,6 +58,7 @@ class GatePlacement:
     qubit_targets: list[int]
     params: dict[str, float] = field(default_factory=dict)
     time_step: int = 0
+    stack_count: int = 1
 
 
 @dataclass(frozen=True)
@@ -70,6 +72,10 @@ class CircuitDefinition:
                 f"num_qubits must be in [1, 8], got {self.num_qubits}"
             )
         for g in self.gates:
+            if g.stack_count < 1:
+                raise SimulationError(
+                    f"gate {g.id} stack_count must be >= 1, got {g.stack_count}"
+                )
             for q in g.qubit_targets:
                 if not (0 <= q < self.num_qubits):
                     raise QubitIndexError(
@@ -85,6 +91,7 @@ class StepResult:
     qubit_targets: list[int]
     params: dict[str, float]
     time_step: int
+    stack_count: int
     state_after: StateVector
     probabilities: np.ndarray
 
@@ -95,6 +102,7 @@ class StepResult:
             "qubit_targets": list(self.qubit_targets),
             "params": dict(self.params),
             "time_step": self.time_step,
+            "stack_count": self.stack_count,
             "state_after": self.state_after.to_dict(),
             "probabilities": [float(p) for p in self.probabilities],
         }
@@ -107,6 +115,7 @@ class DensityStepResult:
     qubit_targets: list[int]
     params: dict[str, float]
     time_step: int
+    stack_count: int
     density_after: DensityMatrix
     probabilities: np.ndarray
     purity: float
@@ -118,6 +127,7 @@ class DensityStepResult:
             "qubit_targets": list(self.qubit_targets),
             "params": dict(self.params),
             "time_step": self.time_step,
+            "stack_count": self.stack_count,
             "density_after": self.density_after.to_dict(),
             "probabilities": [float(p) for p in self.probabilities],
             "purity": self.purity,
@@ -215,6 +225,26 @@ def _resolve_gate(placement: GatePlacement) -> GateMatrix | None:
     raise InvalidGateError(f"unknown gate type: {gt!r}")
 
 
+@lru_cache(maxsize=128)
+def _cached_matrix_power(matrix_key: bytes, shape: tuple[int, int], n: int) -> GateMatrix:
+    matrix = np.frombuffer(matrix_key, dtype=np.complex128).reshape(shape)
+    result = np.eye(shape[0], dtype=np.complex128)
+    for _ in range(n):
+        result = matrix @ result
+    return result.copy()
+
+
+def _effective_gate(placement: GatePlacement) -> GateMatrix | None:
+    gate = _resolve_gate(placement)
+    if gate is None:
+        return None
+    n = max(1, int(placement.stack_count))
+    if n == 1:
+        return gate
+    contiguous = np.ascontiguousarray(gate, dtype=np.complex128)
+    return _cached_matrix_power(contiguous.tobytes(), contiguous.shape, n)
+
+
 def _noise_wires(
     placement: GatePlacement, noise: NoiseConfig, num_qubits: int
 ) -> list[int]:
@@ -227,7 +257,7 @@ def _noise_wires(
 
 def run_step(state: StateVector, placement: GatePlacement) -> StepResult:
     """Apply a single placement to ``state`` and return a structured result."""
-    gate = _resolve_gate(placement)
+    gate = _effective_gate(placement)
     if gate is None:
         new_state = state
     else:
@@ -238,6 +268,7 @@ def run_step(state: StateVector, placement: GatePlacement) -> StepResult:
         qubit_targets=list(placement.qubit_targets),
         params=dict(placement.params),
         time_step=placement.time_step,
+        stack_count=placement.stack_count,
         state_after=new_state,
         probabilities=new_state.probabilities(),
     )
@@ -249,7 +280,7 @@ def run_density_step(
     noise: NoiseConfig | None = None,
 ) -> DensityStepResult:
     """Apply a gate (and optional noise) to a density matrix."""
-    gate = _resolve_gate(placement)
+    gate = _effective_gate(placement)
     new_density = density
     if gate is not None:
         new_density = new_density.apply_unitary(gate, placement.qubit_targets)
@@ -263,6 +294,7 @@ def run_density_step(
         qubit_targets=list(placement.qubit_targets),
         params=dict(placement.params),
         time_step=placement.time_step,
+        stack_count=placement.stack_count,
         density_after=new_density,
         probabilities=new_density.probabilities(),
         purity=new_density.purity(),

@@ -26,6 +26,7 @@ class GatePlacementIn(BaseModel):
     qubit_targets: list[int] = Field(..., min_length=1, max_length=2)
     params: dict[str, float] = Field(default_factory=dict)
     time_step: int = Field(default=0, ge=0)
+    stack_count: int = Field(default=1, ge=1)
 
 
 class CircuitIn(BaseModel):

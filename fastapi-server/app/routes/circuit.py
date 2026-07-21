@@ -33,6 +33,7 @@ def _circuit_from_in(payload: CircuitIn) -> CircuitDefinition:
             qubit_targets=list(g.qubit_targets),
             params=dict(g.params),
             time_step=g.time_step,
+            stack_count=g.stack_count,
         )
         for g in payload.gates
     ]
@@ -71,6 +72,7 @@ async def step(payload: StepRequest) -> dict[str, object]:
         qubit_targets=list(payload.placement.qubit_targets),
         params=dict(payload.placement.params),
         time_step=payload.placement.time_step,
+        stack_count=payload.placement.stack_count,
     )
     step_result = run_step(state, placement)
     out = StepOut.model_validate(step_result.to_dict())

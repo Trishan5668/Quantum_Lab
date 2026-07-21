@@ -18,6 +18,18 @@ const WIRE_LEFT_PAD = 64;
 const COLUMN_WIDTH = 88;
 const ROW_HEIGHT = 64;
 const MAX_VISIBLE_COLUMNS = 14;
+const SUPERSCRIPTS: Record<string, string> = {
+  "0": "⁰",
+  "1": "¹",
+  "2": "²",
+  "3": "³",
+  "4": "⁴",
+  "5": "⁵",
+  "6": "⁶",
+  "7": "⁷",
+  "8": "⁸",
+  "9": "⁹",
+};
 
 export function CircuitCanvas(): JSX.Element {
   const numQubits = useCircuitStore((s) => s.numQubits);
@@ -302,6 +314,7 @@ function PlacedGate({
 }): JSX.Element {
   const meta = gateMeta(placement.gateType);
   const removeGate = useCircuitStore((s) => s.removeGate);
+  const decrementGateStack = useCircuitStore((s) => s.decrementGateStack);
   const updateGateParams = useCircuitStore((s) => s.updateGateParams);
   const [editing, setEditing] = useState(false);
   const { attributes, listeners, setNodeRef, isDragging } = useDraggable({
@@ -316,7 +329,8 @@ function PlacedGate({
   });
   const left = WIRE_LEFT_PAD + placement.timeStep * COLUMN_WIDTH + COLUMN_WIDTH / 2 - 28;
   const dimmed = stepMode && stepOrder >= currentStep;
-  const labelMain = placement.gateType;
+  const stackCount = placement.stackCount ?? 1;
+  const labelMain = stackedGateLabel(placement.gateType, stackCount);
   return (
     <div
       className={`group absolute top-1/2 z-10 -translate-y-1/2 ${dimmed ? "opacity-30" : "opacity-100"} ${
@@ -329,6 +343,19 @@ function PlacedGate({
         {...listeners}
         {...attributes}
         type="button"
+        title={`${placement.gateType} applied ${stackCount} consecutive time${stackCount === 1 ? "" : "s"}`}
+        onContextMenu={(e) => {
+          e.preventDefault();
+          decrementGateStack(placement.id);
+        }}
+        onWheel={(e) => {
+          e.preventDefault();
+          if (e.deltaY < 0) {
+            useCircuitStore.getState().addGate(placement.gateType, placement.qubitTargets, placement.timeStep, placement.params.theta);
+          } else {
+            decrementGateStack(placement.id);
+          }
+        }}
         onClick={(e) => {
           // Only treat as click when no drag occurred (PointerSensor activation
           // distance gates real drags; click events still fire on plain taps).
@@ -387,6 +414,7 @@ function CnotControlChip({
   stepOrder: number;
 }): JSX.Element {
   const removeGate = useCircuitStore((s) => s.removeGate);
+  const decrementGateStack = useCircuitStore((s) => s.decrementGateStack);
   const { attributes, listeners, setNodeRef, isDragging } = useDraggable({
     id: `placement-${placement.id}`,
     data: {
@@ -399,6 +427,7 @@ function CnotControlChip({
   });
   const left = WIRE_LEFT_PAD + placement.timeStep * COLUMN_WIDTH + COLUMN_WIDTH / 2 - 8;
   const dimmed = stepMode && stepOrder >= currentStep;
+  const stackCount = placement.stackCount ?? 1;
   return (
     <div
       className={`group absolute top-1/2 z-10 -translate-y-1/2 ${dimmed ? "opacity-30" : "opacity-100"} ${
@@ -411,6 +440,19 @@ function CnotControlChip({
         {...listeners}
         {...attributes}
         type="button"
+        title={`${placement.gateType} applied ${stackCount} consecutive time${stackCount === 1 ? "" : "s"}`}
+        onContextMenu={(e) => {
+          e.preventDefault();
+          decrementGateStack(placement.id);
+        }}
+        onWheel={(e) => {
+          e.preventDefault();
+          if (e.deltaY < 0) {
+            useCircuitStore.getState().addGate(placement.gateType, placement.qubitTargets, placement.timeStep);
+          } else {
+            decrementGateStack(placement.id);
+          }
+        }}
         className="block h-4 w-4 cursor-grab rounded-full active:cursor-grabbing"
         style={{
           backgroundColor: "var(--gate-cnot)",
@@ -427,6 +469,11 @@ function CnotControlChip({
       >
         ×
       </button>
+      {stackCount > 1 && (
+        <span className="absolute left-3 top-1/2 -translate-y-1/2 rounded bg-bg-base px-1 font-mono text-[10px] text-accent-glow ring-1 ring-border">
+          {stackCountText(stackCount)}
+        </span>
+      )}
     </div>
   );
 }
@@ -488,4 +535,15 @@ function CnotConnectors({ gates }: { gates: GatePlacement[] }): JSX.Element {
       })}
     </svg>
   );
+}
+
+function stackedGateLabel(gateType: GateType, stackCount: number): string {
+  return stackCount <= 1 ? gateType : `${gateType}${stackCountText(stackCount)}`;
+}
+
+function stackCountText(stackCount: number): string {
+  return String(stackCount)
+    .split("")
+    .map((digit) => SUPERSCRIPTS[digit] ?? digit)
+    .join("");
 }

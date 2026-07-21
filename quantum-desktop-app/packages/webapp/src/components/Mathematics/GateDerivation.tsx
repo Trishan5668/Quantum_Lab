@@ -15,6 +15,20 @@ export function GateDerivation({ step, level }: GateDerivationProps): JSX.Elemen
     <div className="space-y-3">
       <LatexBlock label="Gate definition" math={gate.equation} compact />
       <LatexBlock label="Gate matrix" math={`${gate.symbol}=${matrixToLatex(gate.localMatrix)}`} compact />
+      {gate.stackCount > 1 && (
+        <div className="space-y-2">
+          <p className="font-mono text-[10px] uppercase tracking-[0.14em] text-text-muted">Gate Stacking</p>
+          <LatexBlock label="Effective operator" math={`U_{eff}=U^{${gate.stackCount}}=${matrixToLatex(gate.effectiveLocalMatrix)}`} compact />
+          <div className="grid gap-2">
+            {gate.stackPowers.map((power, index) => (
+              <LatexBlock key={index} label={`U^${index + 1}`} math={`U^{${index + 1}}=${matrixToLatex(power)}`} compact />
+            ))}
+          </div>
+          <p className="text-xs leading-5 text-text-secondary">
+            {stackExplanation(step.placement.gateType, gate.stackCount)}
+          </p>
+        </div>
+      )}
       {level !== "beginner" && (
         <div className="space-y-2">
           <p className="font-mono text-[10px] uppercase tracking-[0.14em] text-text-muted">Construction</p>
@@ -39,6 +53,13 @@ export function GateDerivation({ step, level }: GateDerivationProps): JSX.Elemen
       )}
     </div>
   );
+}
+
+function stackExplanation(gateType: string, stackCount: number): string {
+  if (stackCount === 2 && ["H", "X", "Y", "Z", "CNOT"].includes(gateType)) {
+    return `${gateType} is self-inverse here, so applying it twice gives the identity and returns the state to its previous value.`;
+  }
+  return `${gateType} is applied ${stackCount} consecutive times as repeated matrix multiplication. Parameterized gates keep the same parameter each time; QuantumLab does not simplify the angle automatically.`;
 }
 
 function Info({ label, value }: { label: string; value: string }): JSX.Element {

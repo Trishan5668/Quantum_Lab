@@ -22,6 +22,7 @@ export interface GatePlacement {
   qubitTargets: number[];
   params: GateParams;
   timeStep: number;
+  stackCount?: number;
 }
 
 export interface CircuitState {
@@ -64,6 +65,7 @@ export interface StepResult {
   qubit_targets: number[];
   params: Record<string, number>;
   time_step: number;
+  stack_count?: number;
   state_after: StateSnapshot;
   probabilities: number[];
 }
