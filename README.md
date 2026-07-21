@@ -155,6 +155,16 @@ Electron shell  --renders-->  React webapp  --HTTP/SSE-->  FastAPI bridge  --Pyt
 - Every API response is wrapped in `{ data, error }`. Errors use proper
   HTTP status codes — never a 200 with an error in the body.
 
+## AI-Assisted Development
+
+QuantumLab was designed and directed by Trishan Ghosh.
+
+During development, AI tools including OpenAI Codex and GPT-5.5/5.6 were used as engineering assistants for code generation, debugging, refactoring, documentation, test creation, UI iteration, and architectural discussion.
+
+All quantum simulation logic, feature decisions, mathematical verification, product direction, and final code review were performed by the project author. AI-generated code was reviewed, modified, tested, and integrated manually before inclusion in the project.
+
+QuantumLab's core quantum mathematics, gate implementations, density matrix operations, noise models, and educational content were validated independently to ensure correctness.
+
 ## Project rules
 
 These rules are enforced in code and in review:
