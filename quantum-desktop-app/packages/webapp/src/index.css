@@ -271,6 +271,41 @@ textarea {
   background: rgba(239, 68, 68, 0.08);
 }
 
+.workspace-tab {
+  display: inline-flex;
+  min-height: 1.625rem;
+  align-items: center;
+  gap: 0.35rem;
+  border-radius: 0.25rem;
+  padding: 0.25rem 0.5rem;
+  font-family: "JetBrains Mono", ui-monospace, monospace;
+  font-size: 0.625rem;
+  color: var(--text-muted);
+  transition: background-color 150ms, color 150ms;
+}
+
+.workspace-tab:hover {
+  color: var(--text-secondary);
+}
+
+.workspace-tab.is-active {
+  background: rgba(124, 58, 237, 0.2);
+  color: var(--accent-glow);
+}
+
+.workspace-tab select {
+  border: 0;
+  background: transparent;
+  color: inherit;
+  font: inherit;
+  outline: none;
+}
+
+.workspace-tab option {
+  background: var(--bg-surface);
+  color: var(--text-primary);
+}
+
 .btn-spinner {
   width: 0.625rem;
   height: 0.625rem;
@@ -674,6 +709,14 @@ textarea {
   text-align: left;
 }
 
+.math-copy-cluster {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: 0.25rem;
+  max-width: 13rem;
+}
+
 .math-proof {
   border-radius: var(--panel-radius);
   border: 1px solid var(--border);
@@ -802,6 +845,10 @@ textarea {
   align-items: start;
 }
 
+.report-layout-single {
+  grid-template-columns: 1fr;
+}
+
 .report-reader-compact .report-layout {
   grid-template-columns: 1fr;
 }
@@ -835,6 +882,11 @@ textarea {
 .report-toc-link:hover {
   background: rgba(28, 31, 42, 0.55);
   color: var(--text-secondary);
+}
+
+.report-toc-link.is-active {
+  background: rgba(20, 184, 166, 0.12);
+  color: var(--text-primary);
 }
 
 .report-sections {
@@ -916,6 +968,278 @@ textarea {
   display: grid;
   gap: 0.75rem;
   padding: 0.75rem;
+}
+
+.academic-report {
+  --academic-paper: #f8f6f0;
+  --academic-ink: #171923;
+  --academic-muted: #5e6470;
+  --academic-rule: #d9d2c5;
+  --academic-accent: #0f766e;
+}
+
+.academic-report .report-paper {
+  counter-reset: equation figure table;
+  display: grid;
+  gap: 1rem;
+  border-radius: 0.375rem;
+  background: var(--academic-paper);
+  color: var(--academic-ink);
+  padding: 1rem;
+}
+
+.academic-report .report-title-page {
+  page-break-after: always;
+}
+
+.report-title-row {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.report-metadata-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(9rem, 1fr));
+  gap: 0.5rem;
+  margin: 1rem 0 0;
+}
+
+.report-metadata-grid div {
+  border: 1px solid var(--academic-rule);
+  background: rgba(255, 252, 245, 0.72);
+  padding: 0.55rem 0.65rem;
+}
+
+.report-metadata-grid dt {
+  font-family: "JetBrains Mono", ui-monospace, monospace;
+  font-size: 0.62rem;
+  text-transform: uppercase;
+  color: var(--academic-muted);
+}
+
+.report-metadata-grid dd {
+  margin: 0.2rem 0 0;
+  overflow-wrap: anywhere;
+  font-size: 0.78rem;
+  color: var(--academic-ink);
+}
+
+.academic-sidebar {
+  min-width: 12rem;
+}
+
+.academic-nav-tabs {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.25rem;
+  margin-bottom: 0.5rem;
+}
+
+.academic-nav-tabs button {
+  border: 1px solid var(--border);
+  border-radius: 0.25rem;
+  background: rgba(10, 11, 15, 0.45);
+  padding: 0.3rem 0.35rem;
+  font-family: "JetBrains Mono", ui-monospace, monospace;
+  font-size: 0.58rem;
+  color: var(--text-muted);
+  text-align: left;
+}
+
+.academic-nav-tabs button.is-active {
+  border-color: rgba(20, 184, 166, 0.45);
+  background: rgba(20, 184, 166, 0.12);
+  color: var(--text-primary);
+}
+
+.academic-nav-list {
+  display: grid;
+  gap: 0.25rem;
+}
+
+.academic-nav-empty {
+  margin: 0.25rem 0;
+  font-size: 0.7rem;
+  color: var(--text-muted);
+}
+
+.report-generated-section {
+  border-top: 1px solid var(--academic-rule);
+  padding-top: 1rem;
+  page-break-inside: avoid;
+}
+
+.report-generated-section h3 {
+  margin: 0 0 0.75rem;
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: 1.1rem;
+  color: var(--academic-ink);
+}
+
+.academic-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.78rem;
+}
+
+.academic-table th,
+.academic-table td {
+  border-bottom: 1px solid var(--academic-rule);
+  padding: 0.45rem 0.5rem;
+  text-align: left;
+  vertical-align: top;
+}
+
+.academic-table th {
+  font-family: "JetBrains Mono", ui-monospace, monospace;
+  font-size: 0.66rem;
+  text-transform: uppercase;
+  color: var(--academic-muted);
+}
+
+.academic-reference-list {
+  margin: 0;
+  padding-left: 1.25rem;
+  font-size: 0.82rem;
+  line-height: 1.65;
+}
+
+.academic-json {
+  overflow: auto;
+  border: 1px solid var(--academic-rule);
+  background: #fffaf0;
+  padding: 0.75rem;
+  font-size: 0.68rem;
+  color: var(--academic-ink);
+}
+
+.academic-box,
+.academic-derivation {
+  border: 1px solid var(--academic-rule);
+  background: rgba(255, 250, 240, 0.75);
+  padding: 0.75rem;
+  page-break-inside: avoid;
+}
+
+.academic-box-definition,
+.academic-box-theorem,
+.academic-box-lemma,
+.academic-box-corollary {
+  border-left: 3px solid #0f766e;
+}
+
+.academic-box-remark,
+.academic-box-observation,
+.academic-box-example {
+  border-left: 3px solid #7c3aed;
+}
+
+.academic-box-proof,
+.academic-box-algorithm {
+  border-left: 3px solid #334155;
+}
+
+.academic-box-title,
+.academic-derivation summary {
+  margin: 0 0 0.5rem;
+  cursor: pointer;
+  font-family: "JetBrains Mono", ui-monospace, monospace;
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--academic-accent);
+}
+
+.academic-derivation > div,
+.academic-derivation > p {
+  margin: 0.5rem 0 0;
+}
+
+.academic-report .math-latex-block,
+.academic-report .physics-equation {
+  position: relative;
+  border-radius: 0;
+  border-color: var(--academic-rule);
+  background: rgba(255, 250, 240, 0.8);
+  color: var(--academic-ink);
+  page-break-inside: avoid;
+}
+
+.academic-report .math-latex-block::after,
+.academic-report .physics-equation::after {
+  counter-increment: equation;
+  content: "(" counter(equation) ")";
+  align-self: center;
+  padding-left: 0.5rem;
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: 0.8rem;
+  color: var(--academic-muted);
+}
+
+.academic-report .physics-figure {
+  counter-increment: figure;
+}
+
+.academic-report .physics-figure figcaption::before {
+  content: "Figure " counter(figure) ". ";
+  font-weight: 700;
+  color: var(--academic-ink);
+}
+
+.academic-report table {
+  counter-increment: table;
+}
+
+.research-math-report {
+  display: grid;
+  gap: 0.75rem;
+}
+
+.research-math-block {
+  display: grid;
+  gap: 0.75rem;
+  font-size: 0.8125rem;
+  line-height: 1.65;
+  color: var(--text-secondary);
+}
+
+.academic-report .research-math-block {
+  color: var(--academic-ink);
+}
+
+.research-invariant-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(10rem, 1fr));
+  gap: 0.5rem;
+}
+
+.research-invariant-grid div {
+  min-width: 0;
+  border: 1px solid var(--academic-rule, var(--border));
+  border-radius: var(--panel-radius);
+  background: rgba(255, 250, 240, 0.72);
+  padding: 0.55rem 0.65rem;
+}
+
+.research-invariant-grid span {
+  display: block;
+  font-family: "JetBrains Mono", ui-monospace, monospace;
+  font-size: 0.62rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--academic-muted, var(--text-muted));
+}
+
+.research-invariant-grid strong {
+  display: block;
+  margin-top: 0.25rem;
+  overflow-wrap: anywhere;
+  font-family: "JetBrains Mono", ui-monospace, monospace;
+  font-size: 0.72rem;
+  color: var(--academic-ink, var(--text-primary));
 }
 
 .physics-textbook-block {
@@ -1364,6 +1688,76 @@ textarea {
 
   .report-section-summary {
     flex-direction: column;
+  }
+}
+
+@media print {
+  @page {
+    size: A4;
+    margin: 18mm 16mm;
+  }
+
+  body {
+    background: #fff !important;
+    color: #111 !important;
+  }
+
+  .platform-nav,
+  .platform-footer,
+  .report-tools,
+  .report-modal-header,
+  .report-toc,
+  .report-section-actions,
+  .report-toggle-toc,
+  .btn,
+  button {
+    display: none !important;
+  }
+
+  .report-modal,
+  .report-modal-panel,
+  .report-modal-body,
+  .report-reader,
+  .report-layout,
+  .report-sections,
+  .academic-report .report-paper {
+    position: static !important;
+    display: block !important;
+    width: auto !important;
+    height: auto !important;
+    overflow: visible !important;
+    border: 0 !important;
+    box-shadow: none !important;
+    background: #fff !important;
+    color: #111 !important;
+    padding: 0 !important;
+  }
+
+  .report-section,
+  .math-proof,
+  .academic-derivation {
+    break-inside: avoid;
+    border-color: #bbb !important;
+    box-shadow: none !important;
+  }
+
+  .report-section {
+    display: block;
+    margin-top: 1rem;
+  }
+
+  .report-section-summary {
+    border-bottom: 1px solid #bbb !important;
+    padding-inline: 0 !important;
+  }
+
+  .report-section-body {
+    padding-inline: 0 !important;
+  }
+
+  .math-latex-block,
+  .physics-equation {
+    break-inside: avoid;
   }
 }
 

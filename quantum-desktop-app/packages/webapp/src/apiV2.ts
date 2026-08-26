@@ -5,6 +5,7 @@ import type {
   GatePlacement,
   MetricsResult,
   NoiseChannelType,
+  ResearchVerification,
   SimulationMode,
   SimulationResultV2,
 } from "./types";
@@ -170,4 +171,32 @@ export async function fetchPurityFromDensity(
     density_real: density.real,
     density_imag: density.imag,
   });
+}
+
+export async function fetchResearchVerification(
+  state: Pick<CircuitState, "numQubits" | "gates" | "initialBasisState">,
+  options: RunCircuitV2Options,
+  result: SimulationResultV2 | null,
+): Promise<ResearchVerification> {
+  const body: Record<string, unknown> = {
+    ...serializeCircuitV2(state),
+    simulation: {
+      mode: options.simulationMode,
+      noise: {
+        enabled: options.noiseEnabled,
+        channel: options.noiseModel,
+        probability: options.noiseProbability,
+        t1_us: options.t1Us,
+        t2_us: options.t2Us,
+        gate_time_ns: options.gateTimeNs,
+      },
+    },
+    final_state: result?.final_state?.amplitudes ?? null,
+    measurement_probabilities: result?.final_state?.probabilities ?? [],
+  };
+  if (result?.final_density) {
+    body.density_real = result.final_density.real;
+    body.density_imag = result.final_density.imag;
+  }
+  return postV2<ResearchVerification>("/research/verify", body);
 }

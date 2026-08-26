@@ -11,8 +11,9 @@ import {
   type ComplexMatrix,
 } from "../Mathematics/mathDerivations";
 import type { ReportSection } from "../Reports/ReportReader";
-import type { GatePlacement, MetricsResult, SimulationResultV2, StateSnapshot } from "../../types";
+import type { GatePlacement, MetricsResult, ResearchVerification, SimulationResultV2, StateSnapshot } from "../../types";
 import { displayKet, normalizeBasisState } from "../../utils/basisState";
+import type { LearningMode } from "../../store/platformStore";
 
 
 function stackPhysicsInterpretation(
@@ -55,6 +56,8 @@ interface PhysicsContext {
   motif: CircuitMotif;
   support: ReturnType<typeof amplitudeRows>;
   quietBasisCount: number;
+  verification: ResearchVerification | null;
+  verificationError: string | null;
 }
 
 type CircuitMotif =
@@ -73,6 +76,9 @@ export function buildPhysicsReport({
   steps,
   resultsV2,
   metrics,
+  learningMode = "understand",
+  verification = null,
+  verificationError = null,
 }: {
   numQubits: number;
   initialBasisState?: string;
@@ -80,6 +86,9 @@ export function buildPhysicsReport({
   steps?: Parameters<typeof buildDerivation>[2];
   resultsV2: SimulationResultV2 | null;
   metrics: MetricsResult | null;
+  learningMode?: LearningMode;
+  verification?: ResearchVerification | null;
+  verificationError?: string | null;
 }): ReportSection[] {
   const selectedBasis = normalizeBasisState(numQubits, initialBasisState);
   const derivation = buildDerivation(numQubits, gates, steps, selectedBasis);
@@ -107,6 +116,8 @@ export function buildPhysicsReport({
     motif,
     support,
     quietBasisCount,
+    verification,
+    verificationError,
   };
 
   const chapters = [
@@ -123,7 +134,18 @@ export function buildPhysicsReport({
     chapter("Information-Theoretic Interpretation", informationSubtitle(ctx), informationLatex(ctx), informationMarkdown(ctx), () => <InformationChapter ctx={ctx} />),
     chapter("Research Notes", researchSubtitle(ctx), researchLatex(ctx), researchMarkdown(ctx), () => <ResearchChapter ctx={ctx} />),
   ];
-  return chapters.map((section, index) => ({ ...section, number: String(index + 1) }));
+  return filterPhysicsSections(chapters, learningMode).map((section, index) => ({ ...section, number: String(index + 1) }));
+}
+
+function filterPhysicsSections(sections: ReportSection[], mode: LearningMode): ReportSection[] {
+  if (mode === "research") return sections;
+  const allowed =
+    mode === "explore"
+      ? new Set(["Hilbert Space", "Computational Basis", "Initial State", "Measurement"])
+      : mode === "understand"
+        ? new Set(["Hilbert Space", "Computational Basis", "Initial State", "Gate Stacking", "Superposition", "Measurement", "Density Operators"])
+        : new Set(["Hilbert Space", "Initial State", "Gate Stacking", "Superposition", "Tensor Products", "Entanglement", "Measurement", "Information-Theoretic Interpretation"]);
+  return sections.filter((section) => allowed.has(section.title));
 }
 
 function GateStackingChapter({ ctx }: { ctx: PhysicsContext }): JSX.Element {
@@ -455,11 +477,13 @@ function InformationChapter({ ctx }: { ctx: PhysicsContext }): JSX.Element {
 }
 
 function ResearchChapter({ ctx }: { ctx: PhysicsContext }): JSX.Element {
+  const verified = ctx.verification?.status === "VERIFIED";
   return (
     <ArticleChapter>
       <Lead>
-        This generated report classifies the circuit as {motifLabel(ctx.motif)}. The classification comes from the actual final amplitudes, the gate sequence, and the reduced-state diagnostics.
+        This generated report classifies the circuit as {motifLabel(ctx.motif)}. The classification comes from the actual final amplitudes, the gate sequence, and the reduced-state diagnostics; {verified ? "the mathematical dataset for Research Mode is Wolfram verified." : "Wolfram verification is not available for at least part of this run, so this chapter treats native diagnostics as simulated rather than independently verified."}
       </Lead>
+      <VerificationPhysicsNote ctx={ctx} />
       <ResearchSummary ctx={ctx} />
       <p>
         {researchInterpretation(ctx)}
@@ -475,6 +499,17 @@ function ResearchChapter({ ctx }: { ctx: PhysicsContext }): JSX.Element {
         The circuit is not merely a sequence of operations; it is a small physical experiment about {motifLabel(ctx.motif)}.
       </Conclusion>
     </ArticleChapter>
+  );
+}
+
+function VerificationPhysicsNote({ ctx }: { ctx: PhysicsContext }): JSX.Element {
+  const status = ctx.verification?.status ?? "UNAVAILABLE";
+  const message = ctx.verification?.message ?? ctx.verificationError ?? "Wolfram verification is unavailable.";
+  return (
+    <aside className="physics-conclusion">
+      <strong>Research verification.</strong> {status}: {message}
+      {ctx.verification?.warnings?.length ? ` Warnings: ${ctx.verification.warnings.map((w) => w.message).join(" ")}` : ""}
+    </aside>
   );
 }
 

@@ -4,6 +4,7 @@ import { ApiClientError, streamExplain, type ExplainRequest } from "../../api";
 import { BACKEND_UNAVAILABLE_MESSAGE } from "../../config/api";
 
 import { useCircuitStore } from "../../store/circuitStore";
+import { usePlatformStore, type LearningMode } from "../../store/platformStore";
 
 import { gateMeta } from "../../types";
 
@@ -26,6 +27,7 @@ export function ELI15Panel(): JSX.Element {
   const results = useCircuitStore((s) => s.results);
 
   const numQubits = useCircuitStore((s) => s.numQubits);
+  const learningMode = usePlatformStore((s) => s.learningMode);
 
 
 
@@ -196,7 +198,7 @@ export function ELI15Panel(): JSX.Element {
 
     }
 
-    startStream("normal");
+    startStream(explainModeForLearning(learningMode));
 
     return () => {
 
@@ -204,7 +206,7 @@ export function ELI15Panel(): JSX.Element {
 
     };
 
-  }, [trigger?.step.gate_id, trigger, startStream]);
+  }, [trigger?.step.gate_id, trigger, startStream, learningMode]);
 
 
 
@@ -436,6 +438,12 @@ function zeroState(n: number): { real: number; imag: number }[] {
 
   }));
 
+}
+
+function explainModeForLearning(mode: LearningMode): ExplainRequest["mode"] {
+  if (mode === "explore" || mode === "intuition") return "hint";
+  if (mode === "research") return "deep";
+  return "normal";
 }
 
 

@@ -64,8 +64,6 @@ export default function SettingsPage(): JSX.Element {
               <option value="explore">Explore</option>
               <option value="understand">Understand</option>
               <option value="intuition">Intuition</option>
-              <option value="mathematics">Math</option>
-              <option value="physics">Physics</option>
               <option value="research">Research</option>
             </select>
           </label>
@@ -139,4 +137,3 @@ function Toggle({
     </label>
   );
 }
-

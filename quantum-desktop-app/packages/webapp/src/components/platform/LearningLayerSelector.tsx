@@ -1,29 +1,44 @@
 import { usePlatformStore, LEARNING_LAYERS } from "../../store/platformStore";
 
 export function LearningLayerSelector(): JSX.Element {
-  const layer = usePlatformStore((s) => s.learningLayer);
-  const setLayer = usePlatformStore((s) => s.setLearningLayer);
+  const learningMode = usePlatformStore((s) => s.learningMode);
+  const setLearningMode = usePlatformStore((s) => s.setLearningMode);
+  const activePanel = usePlatformStore((s) => s.activeWorkspacePanel);
+  const setActivePanel = usePlatformStore((s) => s.setActiveWorkspacePanel);
+  const selected = LEARNING_LAYERS.find((layer) => layer.id === learningMode) ?? LEARNING_LAYERS[0];
 
   return (
     <div
-      className="hidden items-center gap-0.5 rounded-md border border-border bg-bg-elevated/60 p-0.5 sm:flex"
-      role="group"
-      aria-label="Learning depth"
+      className="hidden items-center gap-1 rounded-md border border-border bg-bg-elevated/60 p-0.5 sm:flex"
+      aria-label="Workspace mode"
     >
-      {LEARNING_LAYERS.map((l) => (
-        <button
-          key={l.id}
-          type="button"
-          onClick={() => setLayer(l.id)}
-          aria-pressed={layer === l.id}
-          title={`${l.tagline}: ${l.description}`}
-          className={`rounded px-2 py-1 font-mono text-[10px] transition-colors ${
-            layer === l.id
-              ? "bg-accent-quantum/20 text-accent-glow"
-              : "text-text-muted hover:text-text-secondary"
-          }`}
+      <label className={`workspace-tab ${activePanel === "learning" ? "is-active" : ""}`}>
+        <span>Learning</span>
+        <select
+          value={learningMode}
+          onChange={(event) => {
+            setLearningMode(event.target.value as typeof learningMode);
+            setActivePanel("learning");
+          }}
+          title={`${selected.tagline}: ${selected.description}`}
+          aria-label="Learning mode"
         >
-          {l.label}
+          {LEARNING_LAYERS.map((layer) => (
+            <option key={layer.id} value={layer.id}>
+              {layer.label}
+            </option>
+          ))}
+        </select>
+      </label>
+      {(["math", "physics"] as const).map((panel) => (
+        <button
+          key={panel}
+          type="button"
+          onClick={() => setActivePanel(panel)}
+          aria-pressed={activePanel === panel}
+          className={`workspace-tab ${activePanel === panel ? "is-active" : ""}`}
+        >
+          {panel === "math" ? "Math" : "Physics"}
         </button>
       ))}
     </div>

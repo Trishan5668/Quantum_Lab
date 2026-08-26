@@ -108,6 +108,27 @@ export interface MetricsResult {
   purity: PurityMetric | null;
 }
 
+export type ResearchVerificationStatus = "VERIFIED" | "DISCREPANCY" | "UNAVAILABLE" | "SIMULATED";
+
+export interface ResearchVerificationWarning {
+  severity?: string;
+  message: string;
+  difference?: number;
+  affectedCalculation?: string;
+  quantumLab?: unknown;
+  wolfram?: unknown;
+}
+
+export interface ResearchVerification {
+  status: ResearchVerificationStatus;
+  source: string;
+  message: string;
+  query_hash: string;
+  structured_input?: unknown;
+  calculations: Record<string, unknown>;
+  warnings: ResearchVerificationWarning[];
+}
+
 export interface ApiError {
   code: string;
   message: string;

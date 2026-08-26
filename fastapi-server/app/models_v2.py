@@ -38,6 +38,13 @@ class CircuitV2In(BaseModel):
     simulation: SimulationConfigIn = Field(default_factory=SimulationConfigIn)
 
 
+class ResearchVerifyRequest(CircuitV2In):
+    final_state: list[ComplexAmplitude] | None = None
+    density_real: list[list[float]] | None = None
+    density_imag: list[list[float]] | None = None
+    measurement_probabilities: list[float] = Field(default_factory=list)
+
+
 class DensityMatrixOut(BaseModel):
     num_qubits: int
     dim: int

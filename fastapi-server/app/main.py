@@ -16,6 +16,7 @@ from app.exceptions import (
 from app.models import HealthOut, envelope
 from app.routes.circuit import router as circuit_router
 from app.routes.explain import router as explain_router
+from app.routes.research import router as research_router
 from app.routes.v2 import router as v2_router
 from app.routes.visualize import router as visualize_router
 from quantumlab.exceptions import QuantumLabError
@@ -58,6 +59,7 @@ def create_app() -> FastAPI:
     app.include_router(visualize_router)
     app.include_router(explain_router)
     app.include_router(v2_router)
+    app.include_router(research_router)
 
     app.add_exception_handler(QuantumLabError, quantumlab_exception_handler)
     app.add_exception_handler(Exception, unexpected_exception_handler)

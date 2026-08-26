@@ -1,19 +1,29 @@
 import { create } from "zustand";
 
-export type LearningLayer = "explore" | "understand" | "intuition" | "mathematics" | "physics" | "research";
+export type LearningMode = "explore" | "understand" | "intuition" | "research";
+export type WorkspacePanel = "learning" | "math" | "physics";
+export type LearningLayer = LearningMode;
 
 interface PlatformState {
+  learningMode: LearningMode;
+  activeWorkspacePanel: WorkspacePanel;
+  setLearningMode: (mode: LearningMode) => void;
+  setActiveWorkspacePanel: (panel: WorkspacePanel) => void;
   learningLayer: LearningLayer;
   setLearningLayer: (layer: LearningLayer) => void;
 }
 
 export const usePlatformStore = create<PlatformState>((set) => ({
+  learningMode: "explore",
+  activeWorkspacePanel: "learning",
   learningLayer: "explore",
-  setLearningLayer: (layer) => set({ learningLayer: layer }),
+  setLearningMode: (mode) => set({ learningMode: mode, learningLayer: mode }),
+  setActiveWorkspacePanel: (panel) => set({ activeWorkspacePanel: panel }),
+  setLearningLayer: (layer) => set({ learningMode: layer, learningLayer: layer }),
 }));
 
 export const LEARNING_LAYERS: {
-  id: LearningLayer;
+  id: LearningMode;
   label: string;
   tagline: string;
   description: string;
@@ -35,18 +45,6 @@ export const LEARNING_LAYERS: {
     label: "Intuition",
     tagline: "Plain English",
     description: "Phase, interference, measurement, entanglement, and decoherence explained clearly.",
-  },
-  {
-    id: "mathematics",
-    label: "Math",
-    tagline: "Whiteboard derivations",
-    description: "Gate matrices, tensor products, row-column multiplication, and proof mode.",
-  },
-  {
-    id: "physics",
-    label: "Physics",
-    tagline: "Principles behind the circuit",
-    description: "Hilbert space, superposition, interference, entanglement, measurement, and information flow.",
   },
   {
     id: "research",

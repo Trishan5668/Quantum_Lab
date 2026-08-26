@@ -23,35 +23,38 @@ import {
   ENVIRONMENT_LABEL,
   frontendUrl,
 } from "../config/api";
-import { usePlatformStore, type LearningLayer } from "../store/platformStore";
+import { usePlatformStore, type LearningMode, type WorkspacePanel } from "../store/platformStore";
 import { UserMenu } from "../auth/UserMenu";
 import { useCircuitPersistence } from "../auth/useCircuitPersistence";
 import { CREATOR } from "../config/attribution";
 
 type HealthStatus = "checking" | "ok" | "down";
 
-function panelVisible(layer: LearningLayer, panel: string): boolean {
+function panelVisible(mode: LearningMode, activePanel: WorkspacePanel, panel: string): boolean {
+  if (activePanel === "math") return panel === "mathematics";
+  if (activePanel === "physics") return panel === "physics";
   switch (panel) {
     case "statevector":
-      return layer === "understand" || layer === "intuition" || layer === "research";
+      return mode === "understand" || mode === "intuition" || mode === "research";
     case "bloch":
     case "probability":
-      return layer === "explore" || layer === "understand" || layer === "intuition" || layer === "research";
+      return mode === "explore" || mode === "understand" || mode === "intuition" || mode === "research";
     case "density":
     case "metrics":
     case "noise":
-      return layer === "research";
+      return mode === "research";
     case "mathematics":
-      return layer === "mathematics" || layer === "research";
+      return mode === "research";
     case "physics":
-      return layer === "physics" || layer === "research";
+      return mode === "intuition" || mode === "research";
     default:
       return true;
   }
 }
 
 export default function SimulatorPage(): JSX.Element {
-  const learningLayer = usePlatformStore((s) => s.learningLayer);
+  const learningMode = usePlatformStore((s) => s.learningMode);
+  const activeWorkspacePanel = usePlatformStore((s) => s.activeWorkspacePanel);
   const [health, setHealth] = useState<HealthStatus>("checking");
   const [healthVersion, setHealthVersion] = useState("");
   const [diagnosticsOpen, setDiagnosticsOpen] = useState(false);
@@ -140,7 +143,7 @@ export default function SimulatorPage(): JSX.Element {
               <div className="sidebar-scroll">
                 <GatePalette />
               </div>
-              {panelVisible(learningLayer, "noise") && <NoiseSettings />}
+              {panelVisible(learningMode, activeWorkspacePanel, "noise") && <NoiseSettings />}
               <SidebarCreator />
             </aside>
 
@@ -156,13 +159,13 @@ export default function SimulatorPage(): JSX.Element {
 
             <aside className="sidebar-right border-l border-border bg-bg-surface/60">
               <div className="sidebar-scroll">
-                {panelVisible(learningLayer, "mathematics") && <MathematicsPanel />}
-                {panelVisible(learningLayer, "physics") && <PhysicsPanel />}
-                {panelVisible(learningLayer, "statevector") && <StateVectorPanel />}
-                {panelVisible(learningLayer, "bloch") && <BlochSpherePanel />}
-                {panelVisible(learningLayer, "probability") && <ProbabilityChart />}
-                {panelVisible(learningLayer, "density") && <DensityHeatmap />}
-                {panelVisible(learningLayer, "metrics") && <MetricsPanel />}
+                {panelVisible(learningMode, activeWorkspacePanel, "mathematics") && <MathematicsPanel />}
+                {panelVisible(learningMode, activeWorkspacePanel, "physics") && <PhysicsPanel />}
+                {panelVisible(learningMode, activeWorkspacePanel, "statevector") && <StateVectorPanel />}
+                {panelVisible(learningMode, activeWorkspacePanel, "bloch") && <BlochSpherePanel />}
+                {panelVisible(learningMode, activeWorkspacePanel, "probability") && <ProbabilityChart />}
+                {panelVisible(learningMode, activeWorkspacePanel, "density") && <DensityHeatmap />}
+                {panelVisible(learningMode, activeWorkspacePanel, "metrics") && <MetricsPanel />}
               </div>
             </aside>
           </main>
