@@ -61,7 +61,6 @@ def operator_dataset(num_qubits: int, placements: list[GatePlacement]) -> list[d
 
 
 def wolfram_language_payload(structured_input: dict[str, Any]) -> str:
-    """Create a Wolfram Alpha-compatible research query."""
     density = (
         structured_input.get("density_matrix")
         or structured_input.get("densityMatrix")
@@ -79,11 +78,9 @@ def wolfram_language_payload(structured_input: dict[str, Any]) -> str:
     )
 
     if matrix is not None:
-        return f"matrix calculator for {_matrix_expr(matrix)}"
+        return _matrix_expr(matrix)
 
-    final = _vector_expr(state_data)
-    return f"vector calculator for {final}"
-
+    return _vector_expr(state_data)
 
 def _vector_expr(values: Any) -> str:
     if not isinstance(values, list) or not values:
