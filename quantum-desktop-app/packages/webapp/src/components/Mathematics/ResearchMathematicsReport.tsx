@@ -51,6 +51,7 @@ export function ResearchMathematicsReport(props: ResearchMathematicsReportProps)
     let cancelled = false;
     setVerification(null);
     setVerificationError(null);
+    console.log("RESEARCH RESULTS V2:", props.resultsV2);
     fetchResearchVerification(
       { numQubits: props.numQubits, gates: props.gates, initialBasisState: props.initialBasisState },
       {
