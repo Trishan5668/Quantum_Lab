@@ -61,21 +61,27 @@ def operator_dataset(num_qubits: int, placements: list[GatePlacement]) -> list[d
 
 
 def wolfram_language_payload(structured_input: dict[str, Any]) -> str:
-    """Create a Wolfram Alpha-compatible research query.
+    """Create a Wolfram Alpha-compatible research query."""
+    density = (
+        structured_input.get("density_matrix")
+        or structured_input.get("densityMatrix")
+    )
 
-    Wolfram Alpha does not know QuantumLab-specific symbols such as
-    ``QuantumLabResearchVerify``. This query stays in ordinary mathematical
-    language while carrying the structured circuit/state data needed for a
-    full Research Mathematics analysis in a single request.
-    """
-    density = structured_input.get("densityMatrix")
-    matrix = _density_matrix_from_data(density) or _density_matrix_from_state(
-    structured_input.get("finalState", [])
-)
+    state_data = (
+        structured_input.get("final_state")
+        or structured_input.get("finalState")
+        or []
+    )
+
+    matrix = (
+        _density_matrix_from_data(density)
+        or _density_matrix_from_state(state_data)
+    )
+
     if matrix is not None:
-        return _matrix_expr(matrix)
+        return f"matrix calculator for {_matrix_expr(matrix)}"
 
-    final = _vector_expr(structured_input.get("finalState", []))
+    final = _vector_expr(state_data)
     return f"vector calculator for {final}"
 
 
