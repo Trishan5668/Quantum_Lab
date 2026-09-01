@@ -2,7 +2,7 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import { BlockMath } from "react-katex";
 import { ApiV2ClientError, fetchAIChat, fetchResearchVerification, type AIChatContextRequest } from "../../apiV2";
 import { useCircuitStore } from "../../store/circuitStore";
-import { usePlatformStore } from "../../store/platformStore";
+import { usePlatformStore, type LearningMode } from "../../store/platformStore";
 import type { AIChatMessage, ResearchVerification } from "../../types";
 import { buildPhysicsReport } from "../Physics/physicsReport";
 import { MarkdownText } from "../ui/MarkdownText";
@@ -77,7 +77,7 @@ export function AIAssistantPane(): JSX.Element {
     const includeDensity = density && density.dim <= 16;
     const wolframStatus = verification?.status === "SIMULATED" ? "UNAVAILABLE" : verification?.status;
     return {
-      learning_mode: learningMode,
+      learning_mode: aiLearningMode(learningMode),
       circuit: {
         num_qubits: numQubits,
         initial_basis_state: initialBasisState,
@@ -137,7 +137,7 @@ export function AIAssistantPane(): JSX.Element {
       const response = await fetchAIChat(message, context);
       setMessages((current) => [...current, { role: "assistant", content: response.answer }]);
     } catch (reason) {
-      const detail = reason instanceof ApiV2ClientError ? reason.message : "QuantumLab AI could not respond. Please try again.";
+      const detail = chatErrorMessage(reason);
       setError(detail);
     } finally {
       setLoading(false);
@@ -191,4 +191,30 @@ export function AIAssistantPane(): JSX.Element {
 function AssistantText({ text }: { text: string }): JSX.Element {
   const blocks = text.split(/\$\$([\s\S]*?)\$\$/);
   return <>{blocks.map((block, index) => index % 2 === 1 ? <BlockMath key={index} math={block.trim()} /> : block.trim() ? <MarkdownText key={index} text={block} /> : null)}</>;
+}
+
+function aiLearningMode(mode: LearningMode): AIChatContextRequest["learning_mode"] {
+  switch (mode) {
+    case "explore":
+      return "explore";
+    case "understand":
+      return "understand";
+    case "intuition":
+      return "intuition";
+    case "research":
+      return "research";
+  }
+}
+
+function chatErrorMessage(reason: unknown): string {
+  if (!(reason instanceof ApiV2ClientError)) {
+    return "QuantumLab AI could not respond. Please try again.";
+  }
+  if (reason.status === 422) {
+    return "The current circuit context could not be accepted. Please reload QuantumLab and try again.";
+  }
+  if (reason.code === "AIAuthenticationError") {
+    return "QuantumLab AI is not authorized with its provider. Please contact the administrator.";
+  }
+  return reason.message;
 }
