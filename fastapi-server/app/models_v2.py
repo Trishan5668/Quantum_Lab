@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-from typing import Literal
+from typing import Any, Literal
 
 from pydantic import BaseModel, Field
 
@@ -43,6 +43,47 @@ class ResearchVerifyRequest(CircuitV2In):
     density_real: list[list[float]] | None = None
     density_imag: list[list[float]] | None = None
     measurement_probabilities: list[float] = Field(default_factory=list)
+
+
+class AIChatMessageIn(BaseModel):
+    role: Literal["user", "assistant"]
+    content: str = Field(..., min_length=1, max_length=8000)
+
+
+class AIChatSimulationContextIn(BaseModel):
+    mode: Literal["statevector", "density"] = "statevector"
+    noise: NoiseConfigIn = Field(default_factory=NoiseConfigIn)
+    final_state: list[ComplexAmplitude] | None = None
+    measurement_probabilities: list[float] = Field(default_factory=list)
+    density_real: list[list[float]] | None = None
+    density_imag: list[list[float]] | None = None
+    metrics: dict[str, Any] = Field(default_factory=dict)
+
+
+class AIChatWolframContextIn(BaseModel):
+    status: Literal["VERIFIED", "DISCREPANCY", "UNAVAILABLE", "PENDING"] = "PENDING"
+    message: str | None = Field(default=None, max_length=2000)
+    results: dict[str, Any] = Field(default_factory=dict)
+
+
+class AIChatContextIn(BaseModel):
+    learning_mode: Literal["explore", "understand", "intuition", "research"]
+    circuit: CircuitV2In
+    simulation: AIChatSimulationContextIn = Field(default_factory=AIChatSimulationContextIn)
+    mathematics: dict[str, Any] = Field(default_factory=dict)
+    physics: dict[str, Any] = Field(default_factory=dict)
+    wolfram: AIChatWolframContextIn = Field(default_factory=AIChatWolframContextIn)
+
+
+class AIChatRequest(BaseModel):
+    message: str = Field(..., min_length=1, max_length=8000)
+    history: list[AIChatMessageIn] = Field(default_factory=list, max_length=12)
+    context: AIChatContextIn
+
+
+class AIChatOut(BaseModel):
+    answer: str
+    model: str
 
 
 class DensityMatrixOut(BaseModel):

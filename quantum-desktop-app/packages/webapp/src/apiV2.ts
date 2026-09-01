@@ -1,4 +1,6 @@
 import type {
+  AIChatMessage,
+  AIChatResponse,
   ApiEnvelope,
   CircuitState,
   DensityMatrixData,
@@ -199,4 +201,25 @@ export async function fetchResearchVerification(
     body.density_imag = result.final_density.imag;
   }
   return postV2<ResearchVerification>("/research/verify", body);
+}
+
+export interface AIChatContextRequest {
+  learning_mode: "explore" | "understand" | "intuition" | "research";
+  circuit: Record<string, unknown>;
+  simulation: Record<string, unknown>;
+  mathematics: Record<string, unknown>;
+  physics: Record<string, unknown>;
+  wolfram: {
+    status: "VERIFIED" | "DISCREPANCY" | "UNAVAILABLE" | "PENDING";
+    message?: string | null;
+    results?: Record<string, unknown>;
+  };
+}
+
+export async function fetchAIChat(
+  message: string,
+  history: AIChatMessage[],
+  context: AIChatContextRequest,
+): Promise<AIChatResponse> {
+  return postV2<AIChatResponse>("/ai/chat", { message, history, context });
 }

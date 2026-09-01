@@ -12,6 +12,7 @@ import { DensityHeatmap } from "../components/Visualizations/DensityHeatmap";
 import { MetricsPanel } from "../components/Visualizations/MetricsPanel";
 import { MathematicsPanel } from "../components/Mathematics/MathematicsPanel";
 import { PhysicsPanel } from "../components/Physics/PhysicsPanel";
+import { AIAssistantPane } from "../components/AI/AIAssistantPane";
 import { LearningLayerSelector } from "../components/platform/LearningLayerSelector";
 import { PageMeta } from "../components/platform/PageMeta";
 import { fetchHealth } from "../api";
@@ -160,6 +161,7 @@ export default function SimulatorPage(): JSX.Element {
                 {panelVisible(learningMode, activeWorkspacePanel, "metrics") && <MetricsPanel />}
               </div>
             </aside>
+            <AIAssistantPane />
           </main>
         </CircuitDndProvider>
       </div>

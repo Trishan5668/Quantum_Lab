@@ -129,6 +129,16 @@ export interface ResearchVerification {
   warnings: ResearchVerificationWarning[];
 }
 
+export interface AIChatMessage {
+  role: "user" | "assistant";
+  content: string;
+}
+
+export interface AIChatResponse {
+  answer: string;
+  model: string;
+}
+
 export interface ApiError {
   code: string;
   message: string;
