@@ -13,6 +13,7 @@ import {
 import { displayKet, generateBasisStates } from "../../utils/basisState";
 import { BasisStateSelectionModal } from "./BasisStateSelectionModal";
 import { ThetaInput, formatTheta } from "./ThetaControls";
+import { exportCircuitPng } from "./circuitExport";
 
 const WIRE_LEFT_PAD = 64;
 const COLUMN_WIDTH = 88;
@@ -78,6 +79,14 @@ export function CircuitCanvas(): JSX.Element {
               className="rounded border border-accent-quantum/40 bg-accent-quantum/10 px-2 py-0.5 font-mono text-[10px] text-accent-glow hover:bg-accent-quantum/20 disabled:cursor-not-allowed disabled:opacity-30"
             >
               + Qubit
+            </button>
+            <button
+              type="button"
+              onClick={() => exportCircuitPng({ numQubits, gates })}
+              className="rounded border border-border px-2 py-0.5 font-mono text-[10px] text-text-secondary hover:border-accent-quantum/40 hover:text-accent-glow"
+              aria-label="Export circuit as PNG"
+            >
+              Export PNG
             </button>
           </div>
         </div>

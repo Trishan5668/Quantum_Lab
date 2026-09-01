@@ -421,25 +421,6 @@ textarea {
   overflow: hidden;
 }
 
-.circuit-diagram-pane {
-  height: 100%;
-  min-height: 0;
-}
-
-.circuit-diagram-pane .panel-body {
-  display: flex;
-  min-height: 0;
-  flex: 1;
-  flex-direction: column;
-}
-
-.circuit-diagram-viewport {
-  min-height: 0;
-  flex: 1;
-  overflow: auto;
-  overscroll-behavior: contain;
-}
-
 .circuit-canvas-shell {
   display: flex;
   height: 100%;

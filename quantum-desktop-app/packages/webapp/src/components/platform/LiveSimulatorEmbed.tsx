@@ -1,7 +1,6 @@
 import { useEffect } from "react";
 import { Link } from "react-router-dom";
 import { CircuitCanvas } from "../CircuitBuilder/CircuitCanvas";
-import { CircuitDiagram } from "../CircuitBuilder/CircuitDiagram";
 import { CircuitDndProvider } from "../CircuitBuilder/CircuitDndProvider";
 import { Toolbar } from "../CircuitBuilder/Toolbar";
 import { ProbabilityChart } from "../Visualizations/ProbabilityChart";
@@ -51,10 +50,7 @@ export function LiveSimulatorEmbed(): JSX.Element {
             </div>
           </div>
           <div className="live-simulator-side min-h-0 overflow-hidden border-l border-border/60">
-            <div className="max-h-[9rem] min-h-0 overflow-hidden">
-              <CircuitDiagram />
-            </div>
-            <div className="min-h-0 flex-1 overflow-hidden border-t border-border/60">
+            <div className="h-full min-h-0 overflow-hidden">
               <ProbabilityChart compact />
             </div>
           </div>

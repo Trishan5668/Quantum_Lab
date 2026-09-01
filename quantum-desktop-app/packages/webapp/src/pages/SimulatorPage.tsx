@@ -2,7 +2,6 @@ import { useCallback, useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { GatePalette } from "../components/CircuitBuilder/GatePalette";
 import { CircuitCanvas } from "../components/CircuitBuilder/CircuitCanvas";
-import { CircuitDiagram } from "../components/CircuitBuilder/CircuitDiagram";
 import { CircuitDndProvider } from "../components/CircuitBuilder/CircuitDndProvider";
 import { Toolbar } from "../components/CircuitBuilder/Toolbar";
 import { NoiseSettings } from "../components/CircuitBuilder/NoiseSettings";
@@ -11,7 +10,6 @@ import { BlochSpherePanel } from "../components/Visualizations/BlochSpherePanel"
 import { ProbabilityChart } from "../components/Visualizations/ProbabilityChart";
 import { DensityHeatmap } from "../components/Visualizations/DensityHeatmap";
 import { MetricsPanel } from "../components/Visualizations/MetricsPanel";
-import { ELI15Panel } from "../components/ELI15Panel/ELI15Panel";
 import { MathematicsPanel } from "../components/Mathematics/MathematicsPanel";
 import { PhysicsPanel } from "../components/Physics/PhysicsPanel";
 import { LearningLayerSelector } from "../components/platform/LearningLayerSelector";
@@ -147,14 +145,8 @@ export default function SimulatorPage(): JSX.Element {
               <SidebarCreator />
             </aside>
 
-            <section className="center-column grid min-h-0 grid-rows-[1fr_13rem_auto] overflow-hidden border-border bg-bg-base/20">
-              <div className="min-h-0 overflow-hidden">
-                <CircuitCanvas />
-              </div>
-              <div className="min-h-0 overflow-hidden">
-                <CircuitDiagram />
-              </div>
-              <ELI15Panel />
+            <section className="center-column min-h-0 overflow-hidden border-border bg-bg-base/20">
+              <CircuitCanvas />
             </section>
 
             <aside className="sidebar-right border-l border-border bg-bg-surface/60">
