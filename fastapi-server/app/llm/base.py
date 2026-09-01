@@ -68,6 +68,22 @@ class ProviderTimeoutError(LlmError):
     """Raised when an upstream provider does not respond before timeout."""
 
 
+class ProviderNoChoicesError(UpstreamProviderError):
+    """Raised when a successful completion response contains no choices."""
+
+
+class ProviderMalformedResponseError(UpstreamProviderError):
+    """Raised when a successful completion response has an invalid shape."""
+
+
+class ProviderTruncatedResponseError(UpstreamProviderError):
+    """Raised when generation ends at its token limit before a final answer."""
+
+
+class ProviderNoFinalAnswerError(UpstreamProviderError):
+    """Raised when a valid completion contains no user-facing final content."""
+
+
 @dataclass(frozen=True)
 class ComplexAmplitude:
     """JSON-friendly complex number used by the request body."""

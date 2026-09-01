@@ -11,7 +11,9 @@ from app.llm.base import (
     AuthenticationError,
     ConfigurationError,
     MissingApiKeyError,
+    ProviderNoFinalAnswerError,
     ProviderTimeoutError,
+    ProviderTruncatedResponseError,
     RateLimitError,
     UpstreamProviderError,
     get_chat_provider,
@@ -123,6 +125,50 @@ async def test_timeout_and_malformed_response_are_unavailable() -> None:
     )
     with pytest.raises(UpstreamProviderError):
         await malformed.chat(_request())
+
+
+@pytest.mark.asyncio
+async def test_reasoning_response_uses_final_content_and_classifies_truncation() -> None:
+    responses = iter(
+        [
+            httpx.Response(
+                200,
+                json={
+                    "usage": {"completion_tokens": 120},
+                    "choices": [
+                        {
+                            "finish_reason": "stop",
+                            "message": {"content": "Final answer.", "reasoning": "internal only"},
+                        }
+                    ],
+                },
+            ),
+            httpx.Response(
+                200,
+                json={
+                    "choices": [
+                        {
+                            "finish_reason": "length",
+                            "message": {"content": None, "reasoning_content": "internal only"},
+                        }
+                    ]
+                },
+            ),
+            httpx.Response(
+                200,
+                json={"choices": [{"finish_reason": "stop", "message": {"content": None, "reasoning": "internal only"}}]},
+            ),
+        ]
+    )
+    client = FeatherlessChatProvider(
+        api_key="key",
+        client_factory=_factory(httpx.MockTransport(lambda _: next(responses))),
+    )
+    assert await client.chat(_request()) == "Final answer."
+    with pytest.raises(ProviderTruncatedResponseError):
+        await client.chat(_request())
+    with pytest.raises(ProviderNoFinalAnswerError):
+        await client.chat(_request())
 
 
 @pytest.mark.asyncio

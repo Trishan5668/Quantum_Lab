@@ -14,7 +14,11 @@ from app.llm.base import (
     AuthenticationError,
     ConfigurationError,
     MissingApiKeyError,
+    ProviderMalformedResponseError,
+    ProviderNoChoicesError,
+    ProviderNoFinalAnswerError,
     ProviderTimeoutError,
+    ProviderTruncatedResponseError,
     RateLimitError,
     UpstreamProviderError,
 )
@@ -27,6 +31,7 @@ DEFAULT_MODEL: Final[str] = "deepseek-ai/DeepSeek-V4-Flash"
 BASE_URL: Final[str] = "https://api.featherless.ai/v1"
 CHAT_COMPLETIONS_URL: Final[str] = f"{BASE_URL}/chat/completions"
 MAX_CONTEXT_CHARS: Final[int] = 24000
+MAX_OUTPUT_TOKENS: Final[int] = 1600
 
 SYSTEM_PROMPT: Final[str] = """You are QuantumLab AI, an assistant embedded in a quantum computing simulator.
 
@@ -59,7 +64,10 @@ class FeatherlessChatProvider:
             "model": self.model,
             "messages": build_messages(request),
             "temperature": 0.25,
-            "max_tokens": 900,
+            "max_tokens": MAX_OUTPUT_TOKENS,
+            # DeepSeek V4 defaults to non-thinking mode. Keep it explicit so
+            # the chat budget is reserved for a user-facing final answer.
+            "chat_template_kwargs": {"thinking": False},
         }
         headers = {
             "Authorization": f"Bearer {self._api_key}",
@@ -112,13 +120,10 @@ class FeatherlessChatProvider:
 
         try:
             response_data = response.json()
-            content = response_data["choices"][0]["message"]["content"]
-        except (KeyError, IndexError, TypeError, ValueError) as exc:
-            logger.warning("AI provider malformed response provider=%s model=%s", PROVIDER_NAME, self.model)
-            raise UpstreamProviderError("Featherless returned a malformed chat response.") from exc
-        if not isinstance(content, str) or not content.strip():
-            raise UpstreamProviderError("Featherless returned an empty chat response.")
-        return content.strip()
+        except ValueError as exc:
+            logger.warning("AI provider malformed JSON provider=%s model=%s", PROVIDER_NAME, self.model)
+            raise ProviderMalformedResponseError("Featherless returned malformed JSON.") from exc
+        return _extract_final_answer(response_data, response, self.model)
 
 
 def build_messages(request: AIChatRequest) -> list[dict[str, str]]:
@@ -149,3 +154,74 @@ def _safe_error_body(body: str, api_key: str) -> str:
     safe = re.sub(r"(?i)bearer\\s+[^\\s\"']+", "Bearer [REDACTED]", safe)
     safe = re.sub(r"(?i)(api[_-]?key[=:\\s]+)[^,\\s\"'}]+", r"\\1[REDACTED]", safe)
     return safe
+
+
+def _extract_final_answer(response_data: Any, response: httpx.Response, model: str) -> str:
+    if not isinstance(response_data, dict):
+        logger.warning("AI provider malformed completion provider=%s model=%s root_type=%s", PROVIDER_NAME, model, type(response_data).__name__)
+        raise ProviderMalformedResponseError("Featherless returned a malformed chat response.")
+
+    choices = response_data.get("choices")
+    if not isinstance(choices, list):
+        _log_completion_metadata(response_data, response, model, None, None)
+        raise ProviderMalformedResponseError("Featherless returned a malformed choices field.")
+    if not choices:
+        _log_completion_metadata(response_data, response, model, 0, None)
+        raise ProviderNoChoicesError("Featherless returned no completion choices.")
+
+    choice = choices[0]
+    if not isinstance(choice, dict):
+        _log_completion_metadata(response_data, response, model, len(choices), None)
+        raise ProviderMalformedResponseError("Featherless returned a malformed completion choice.")
+    message = choice.get("message")
+    if not isinstance(message, dict):
+        _log_completion_metadata(response_data, response, model, len(choices), choice)
+        raise ProviderMalformedResponseError("Featherless returned a completion without an assistant message.")
+
+    _log_completion_metadata(response_data, response, model, len(choices), choice)
+    content = message.get("content")
+    if isinstance(content, str) and content.strip():
+        return content.strip()
+    if content is not None and not isinstance(content, str):
+        raise ProviderMalformedResponseError("Featherless returned a non-text assistant response.")
+
+    finish_reason = choice.get("finish_reason")
+    if finish_reason == "length":
+        raise ProviderTruncatedResponseError(
+            "Featherless reached the generation limit before producing a final answer. Please try again."
+        )
+    if "reasoning" in message or "reasoning_content" in message:
+        raise ProviderNoFinalAnswerError(
+            "Featherless completed internal reasoning without a user-facing final answer. Please try again."
+        )
+    raise ProviderNoFinalAnswerError("Featherless completed without a user-facing final answer. Please try again.")
+
+
+def _log_completion_metadata(
+    response_data: dict[str, Any],
+    response: httpx.Response,
+    model: str,
+    choices_length: int | None,
+    choice: dict[str, Any] | None,
+) -> None:
+    message = choice.get("message") if isinstance(choice, dict) else None
+    message = message if isinstance(message, dict) else None
+    content = message.get("content") if message else None
+    content_state = "text" if isinstance(content, str) and content.strip() else "empty" if isinstance(content, str) else "null_or_missing"
+    usage = response_data.get("usage")
+    safe_usage = {key: value for key, value in usage.items() if isinstance(value, (int, float))} if isinstance(usage, dict) else None
+    logger.warning(
+        "AI provider completion metadata provider=%s model=%s status=%s content_type=%s choices_length=%s finish_reason=%s choice_keys=%s message_keys=%s content_state=%s reasoning_exists=%s reasoning_content_exists=%s usage=%s",
+        PROVIDER_NAME,
+        model,
+        response.status_code,
+        response.headers.get("content-type", "unknown"),
+        choices_length,
+        choice.get("finish_reason") if choice else None,
+        sorted(choice.keys()) if choice else None,
+        sorted(message.keys()) if message else None,
+        content_state,
+        bool(message and "reasoning" in message),
+        bool(message and "reasoning_content" in message),
+        safe_usage,
+    )

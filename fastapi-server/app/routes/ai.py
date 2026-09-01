@@ -9,7 +9,11 @@ from app.llm import (
     AuthenticationError,
     ConfigurationError,
     MissingApiKeyError,
+    ProviderMalformedResponseError,
+    ProviderNoChoicesError,
+    ProviderNoFinalAnswerError,
     ProviderTimeoutError,
+    ProviderTruncatedResponseError,
     RateLimitError,
     UpstreamProviderError,
     get_chat_provider,
@@ -35,6 +39,14 @@ async def chat(payload: AIChatRequest) -> dict[str, object] | JSONResponse:
         return _error(429, "AIRateLimited", str(exc))
     except ProviderTimeoutError as exc:
         return _error(504, "AITimeout", str(exc))
+    except ProviderTruncatedResponseError as exc:
+        return _error(502, "AIResponseTruncated", str(exc))
+    except ProviderNoChoicesError as exc:
+        return _error(502, "AINoChoices", str(exc))
+    except ProviderMalformedResponseError as exc:
+        return _error(502, "AIMalformedResponse", str(exc))
+    except ProviderNoFinalAnswerError as exc:
+        return _error(502, "AINoFinalAnswer", str(exc))
     except UpstreamProviderError as exc:
         return _error(502, "AIUpstreamError", str(exc))
     return envelope(AIChatOut(answer=answer, model=provider.model).model_dump())
