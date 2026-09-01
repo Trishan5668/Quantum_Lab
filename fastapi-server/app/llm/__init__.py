@@ -9,24 +9,30 @@ from __future__ import annotations
 
 from app.llm.base import (
     AuthenticationError,
+    ChatProvider,
     ConfigurationError,
     ExplanationProvider,
     ExplanationRequest,
     LlmError,
     MissingApiKeyError,
+    ProviderTimeoutError,
     RateLimitError,
     UpstreamProviderError,
+    get_chat_provider,
     get_provider,
 )
 
 __all__ = [
     "AuthenticationError",
+    "ChatProvider",
     "ConfigurationError",
     "ExplanationProvider",
     "ExplanationRequest",
     "LlmError",
     "MissingApiKeyError",
+    "ProviderTimeoutError",
     "RateLimitError",
     "UpstreamProviderError",
+    "get_chat_provider",
     "get_provider",
 ]

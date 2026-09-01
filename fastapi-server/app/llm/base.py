@@ -25,13 +25,19 @@ from __future__ import annotations
 import os
 from collections.abc import AsyncIterator
 from dataclasses import dataclass, field
-from typing import Literal, Protocol, runtime_checkable
+from typing import TYPE_CHECKING, Literal, Protocol, runtime_checkable
+
+if TYPE_CHECKING:
+    from app.models_v2 import AIChatRequest
 
 ProviderName = Literal["gemini", "local"]
 """Names of all supported provider backends."""
 
 
 SUPPORTED_PROVIDERS: tuple[ProviderName, ...] = ("gemini", "local")
+
+ChatProviderName = Literal["featherless"]
+SUPPORTED_CHAT_PROVIDERS: tuple[ChatProviderName, ...] = ("featherless",)
 
 
 class LlmError(Exception):
@@ -56,6 +62,10 @@ class RateLimitError(LlmError):
 
 class UpstreamProviderError(LlmError):
     """Raised for any other non-success upstream response."""
+
+
+class ProviderTimeoutError(LlmError):
+    """Raised when an upstream provider does not respond before timeout."""
 
 
 @dataclass(frozen=True)
@@ -114,6 +124,17 @@ class ExplanationProvider(Protocol):
         ...
 
 
+@runtime_checkable
+class ChatProvider(Protocol):
+    """Non-streaming provider contract for the circuit-aware AI chat route."""
+
+    model: str
+
+    async def chat(self, request: "AIChatRequest") -> str:
+        """Return one assistant response for the supplied QuantumLab context."""
+        ...
+
+
 def _resolve_provider_name(explicit: ProviderName | None) -> ProviderName:
     if explicit is not None:
         if explicit not in SUPPORTED_PROVIDERS:
@@ -168,3 +189,21 @@ def get_provider(name: ProviderName | None = None) -> ExplanationProvider:
     # unreachable, but keep an explicit raise to satisfy type narrowing
     # and make accidental enum extensions loud.
     raise ConfigurationError(f"unsupported provider after resolution: {resolved!r}")
+
+
+def get_chat_provider(name: ChatProviderName | None = None) -> ChatProvider:
+    """Resolve the provider used by ``POST /api/v2/ai/chat``.
+
+    This is intentionally separate from ``LLM_PROVIDER``: that setting still
+    controls the legacy Gemini/local ELI15 streaming endpoint.
+    """
+    configured = name or os.environ.get("AI_CHAT_PROVIDER", "featherless")
+    resolved = configured.strip().lower()
+    if resolved not in SUPPORTED_CHAT_PROVIDERS:
+        raise ConfigurationError(
+            f"unsupported AI_CHAT_PROVIDER={configured!r}. "
+            f"Supported values: {SUPPORTED_CHAT_PROVIDERS}"
+        )
+    from app.llm.featherless_provider import FeatherlessChatProvider
+
+    return FeatherlessChatProvider()

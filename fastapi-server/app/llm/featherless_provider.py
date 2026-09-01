@@ -1,23 +1,31 @@
-"""Featherless-backed conversational AI for the QuantumLab side pane."""
+"""OpenAI-compatible Featherless provider for QuantumLab AI chat."""
 
 from __future__ import annotations
 
 import json
+import logging
 import os
+import re
 from typing import Any, Final
 
 import httpx
 
 from app.llm.base import (
     AuthenticationError,
+    ConfigurationError,
     MissingApiKeyError,
+    ProviderTimeoutError,
     RateLimitError,
     UpstreamProviderError,
 )
 from app.models_v2 import AIChatRequest
 
+logger = logging.getLogger(__name__)
+
+PROVIDER_NAME: Final[str] = "featherless"
 DEFAULT_MODEL: Final[str] = "deepseek-ai/DeepSeek-V4-Flash"
-CHAT_COMPLETIONS_URL: Final[str] = "https://api.featherless.ai/v1/chat/completions"
+BASE_URL: Final[str] = "https://api.featherless.ai/v1"
+CHAT_COMPLETIONS_URL: Final[str] = f"{BASE_URL}/chat/completions"
 MAX_CONTEXT_CHARS: Final[int] = 24000
 
 SYSTEM_PROMPT: Final[str] = """You are QuantumLab AI, an assistant embedded in a quantum computing simulator.
@@ -29,8 +37,8 @@ Clearly distinguish QuantumLab simulation results, Wolfram-verified results, and
 Adapt to the supplied learning mode: Explore is concise and beginner-friendly; Understand is step-by-step with moderate mathematics; Intuition emphasizes physical meaning; Research uses formal quantum mechanics and quantum-information terminology, with equations only where the supplied context supports them. Use LaTex when useful. Refer to actual gates, qubits, states, and values in the supplied context. Do not claim to have calculated or verified anything beyond that context."""
 
 
-class FeatherlessChatClient:
-    """Small OpenAI-compatible Featherless client with safe error translation."""
+class FeatherlessChatProvider:
+    """Server-side Featherless chat provider using its OpenAI-compatible API."""
 
     def __init__(
         self,
@@ -45,12 +53,11 @@ class FeatherlessChatClient:
 
     async def chat(self, request: AIChatRequest) -> str:
         if not self._api_key:
-            raise MissingApiKeyError("QuantumLab AI is not configured. FEATHERLESS_API_KEY is not set.")
+            raise MissingApiKeyError("FEATHERLESS_API_KEY is not configured.")
 
-        messages = build_messages(request)
         payload = {
             "model": self.model,
-            "messages": messages,
+            "messages": build_messages(request),
             "temperature": 0.25,
             "max_tokens": 900,
         }
@@ -60,6 +67,7 @@ class FeatherlessChatClient:
             "HTTP-Referer": "https://quantumlab.app",
             "X-Title": "QuantumLab",
         }
+        logger.info("AI provider request provider=%s model=%s", PROVIDER_NAME, self.model)
         try:
             if self._client_factory is not None:
                 async with self._client_factory() as client:
@@ -68,24 +76,48 @@ class FeatherlessChatClient:
                 async with httpx.AsyncClient(timeout=httpx.Timeout(30.0)) as client:
                     response = await client.post(CHAT_COMPLETIONS_URL, headers=headers, json=payload)
         except httpx.TimeoutException as exc:
-            raise UpstreamProviderError("QuantumLab AI timed out. Please try again.") from exc
+            logger.warning("AI provider timeout provider=%s model=%s", PROVIDER_NAME, self.model)
+            raise ProviderTimeoutError("Featherless timed out while generating a response.") from exc
         except httpx.HTTPError as exc:
-            raise UpstreamProviderError("QuantumLab AI is temporarily unavailable. Please try again.") from exc
+            logger.warning("AI provider connection failure provider=%s model=%s error=%s", PROVIDER_NAME, self.model, type(exc).__name__)
+            raise UpstreamProviderError("Featherless connection failed. Please try again.") from exc
 
+        content_type = response.headers.get("content-type", "unknown")
+        logger.info(
+            "AI provider response provider=%s model=%s status=%s content_type=%s",
+            PROVIDER_NAME,
+            self.model,
+            response.status_code,
+            content_type,
+        )
         if response.status_code in (401, 403):
-            raise AuthenticationError("QuantumLab AI could not authenticate with its provider.")
+            _log_error_response(response, self._api_key, self.model)
+            raise AuthenticationError(
+                f"Featherless rejected the configured credentials or model access (HTTP {response.status_code})."
+            )
+        if response.status_code == 404:
+            _log_error_response(response, self._api_key, self.model)
+            raise ConfigurationError(
+                f"Featherless could not find the configured chat endpoint or model (HTTP 404, model {self.model})."
+            )
         if response.status_code == 429:
-            raise RateLimitError("QuantumLab AI is rate limited. Please try again shortly.")
+            _log_error_response(response, self._api_key, self.model)
+            raise RateLimitError("Featherless rate limited this request. Please try again shortly.")
+        if response.status_code >= 500:
+            _log_error_response(response, self._api_key, self.model)
+            raise UpstreamProviderError(f"Featherless upstream service error (HTTP {response.status_code}).")
         if response.is_error:
-            raise UpstreamProviderError("QuantumLab AI is temporarily unavailable. Please try again.")
+            _log_error_response(response, self._api_key, self.model)
+            raise UpstreamProviderError(f"Featherless rejected the request (HTTP {response.status_code}).")
 
         try:
-            payload_out = response.json()
-            content = payload_out["choices"][0]["message"]["content"]
+            response_data = response.json()
+            content = response_data["choices"][0]["message"]["content"]
         except (KeyError, IndexError, TypeError, ValueError) as exc:
-            raise UpstreamProviderError("QuantumLab AI returned an invalid response. Please try again.") from exc
+            logger.warning("AI provider malformed response provider=%s model=%s", PROVIDER_NAME, self.model)
+            raise UpstreamProviderError("Featherless returned a malformed chat response.") from exc
         if not isinstance(content, str) or not content.strip():
-            raise UpstreamProviderError("QuantumLab AI returned an empty response. Please try again.")
+            raise UpstreamProviderError("Featherless returned an empty chat response.")
         return content.strip()
 
 
@@ -99,3 +131,21 @@ def build_messages(request: AIChatRequest) -> list[dict[str, str]]:
     messages.extend(message.model_dump() for message in request.history[-12:])
     messages.append({"role": "user", "content": request.message})
     return messages
+
+
+def _log_error_response(response: httpx.Response, api_key: str, model: str) -> None:
+    logger.warning(
+        "AI provider upstream error provider=%s model=%s status=%s content_type=%s body=%s",
+        PROVIDER_NAME,
+        model,
+        response.status_code,
+        response.headers.get("content-type", "unknown"),
+        _safe_error_body(response.text, api_key),
+    )
+
+
+def _safe_error_body(body: str, api_key: str) -> str:
+    safe = body[:800].replace(api_key, "[REDACTED]")
+    safe = re.sub(r"(?i)bearer\\s+[^\\s\"']+", "Bearer [REDACTED]", safe)
+    safe = re.sub(r"(?i)(api[_-]?key[=:\\s]+)[^,\\s\"'}]+", r"\\1[REDACTED]", safe)
+    return safe

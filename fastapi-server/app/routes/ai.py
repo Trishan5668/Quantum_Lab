@@ -5,8 +5,15 @@ from __future__ import annotations
 from fastapi import APIRouter
 from fastapi.responses import JSONResponse
 
-from app.ai import FeatherlessChatClient
-from app.llm.base import AuthenticationError, MissingApiKeyError, RateLimitError, UpstreamProviderError
+from app.llm import (
+    AuthenticationError,
+    ConfigurationError,
+    MissingApiKeyError,
+    ProviderTimeoutError,
+    RateLimitError,
+    UpstreamProviderError,
+    get_chat_provider,
+)
 from app.models import envelope
 from app.models_v2 import AIChatOut, AIChatRequest
 
@@ -15,18 +22,22 @@ router = APIRouter(prefix="/api/v2/ai", tags=["ai"])
 
 @router.post("/chat", response_model=None)
 async def chat(payload: AIChatRequest) -> dict[str, object] | JSONResponse:
-    client = FeatherlessChatClient()
     try:
-        answer = await client.chat(payload)
-    except MissingApiKeyError as exc:
+        provider = get_chat_provider()
+        answer = await provider.chat(payload)
+    except MissingApiKeyError:
         return _error(503, "AIUnavailable", "QuantumLab AI is not configured on this server.")
-    except AuthenticationError:
-        return _error(502, "AIAuthenticationError", "QuantumLab AI could not authenticate with its provider.")
+    except ConfigurationError as exc:
+        return _error(502, "AIProviderConfigurationError", str(exc))
+    except AuthenticationError as exc:
+        return _error(502, "AIAuthenticationError", str(exc))
     except RateLimitError as exc:
         return _error(429, "AIRateLimited", str(exc))
+    except ProviderTimeoutError as exc:
+        return _error(504, "AITimeout", str(exc))
     except UpstreamProviderError as exc:
         return _error(502, "AIUpstreamError", str(exc))
-    return envelope(AIChatOut(answer=answer, model=client.model).model_dump())
+    return envelope(AIChatOut(answer=answer, model=provider.model).model_dump())
 
 
 def _error(status_code: int, code: str, message: str) -> JSONResponse:
