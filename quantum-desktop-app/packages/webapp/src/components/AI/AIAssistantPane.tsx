@@ -76,6 +76,13 @@ export function AIAssistantPane(): JSX.Element {
     const density = resultsV2?.final_density;
     const includeDensity = density && density.dim <= 16;
     const wolframStatus = verification?.status === "SIMULATED" ? "UNAVAILABLE" : verification?.status;
+    const metricContext = {
+      ...(metrics ?? {}),
+      simulation_purity: resultsV2?.purity ?? null,
+      mixed_state: resultsV2?.mixed_state ?? null,
+      noise_enabled: resultsV2?.noise_enabled ?? noiseEnabled,
+      noise_channel: resultsV2?.noise_channel ?? (noiseEnabled ? noiseModel : null),
+    };
     return {
       learning_mode: aiLearningMode(learningMode),
       circuit: {
@@ -97,11 +104,11 @@ export function AIAssistantPane(): JSX.Element {
         measurement_probabilities: (resultsV2 ?? results)?.final_state?.probabilities ?? [],
         density_real: includeDensity ? density.real : null,
         density_imag: includeDensity ? density.imag : null,
-        metrics,
+        metrics: metricContext,
       },
       mathematics: {
         source: "QuantumLab mathematical report data",
-        metrics,
+        metrics: metricContext,
         circuit_unitary: "not serialized by the current report",
         density_matrix_included: Boolean(includeDensity),
       },
@@ -211,7 +218,7 @@ function chatErrorMessage(reason: unknown): string {
     return "QuantumLab AI could not respond. Please try again.";
   }
   if (reason.status === 422) {
-    return "The current circuit context could not be accepted. Please reload QuantumLab and try again.";
+    return "QuantumLab AI could not validate the current circuit context. Please try your question again.";
   }
   if (reason.code === "AIAuthenticationError") {
     return "QuantumLab AI is not authorized with its provider. Please contact the administrator.";
