@@ -16,7 +16,6 @@ const QUICK_QUESTIONS = [
   "Explain the physics",
   "What does the Wolfram verification mean?",
 ];
-const HISTORY_LIMIT = 10;
 
 export function AIAssistantPane(): JSX.Element {
   const numQubits = useCircuitStore((s) => s.numQubits);
@@ -135,7 +134,7 @@ export function AIAssistantPane(): JSX.Element {
     setError(null);
     setLoading(true);
     try {
-      const response = await fetchAIChat(message, messages.slice(-HISTORY_LIMIT), context);
+      const response = await fetchAIChat(message, context);
       setMessages((current) => [...current, { role: "assistant", content: response.answer }]);
     } catch (reason) {
       const detail = reason instanceof ApiV2ClientError ? reason.message : "QuantumLab AI could not respond. Please try again.";

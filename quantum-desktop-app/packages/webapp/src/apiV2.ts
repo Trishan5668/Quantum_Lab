@@ -1,5 +1,4 @@
 import type {
-  AIChatMessage,
   AIChatResponse,
   ApiEnvelope,
   CircuitState,
@@ -205,7 +204,18 @@ export async function fetchResearchVerification(
 
 export interface AIChatContextRequest {
   learning_mode: "explore" | "understand" | "intuition" | "research";
-  circuit: Record<string, unknown>;
+  circuit: {
+    num_qubits: number;
+    initial_basis_state: string;
+    gates: Array<{
+      id: string;
+      gate_type: GatePlacement["gateType"];
+      qubit_targets: number[];
+      params: GatePlacement["params"];
+      time_step: number;
+      stack_count: number;
+    }>;
+  };
   simulation: Record<string, unknown>;
   mathematics: Record<string, unknown>;
   physics: Record<string, unknown>;
@@ -218,8 +228,7 @@ export interface AIChatContextRequest {
 
 export async function fetchAIChat(
   message: string,
-  history: AIChatMessage[],
   context: AIChatContextRequest,
 ): Promise<AIChatResponse> {
-  return postV2<AIChatResponse>("/ai/chat", { message, history, context });
+  return postV2<AIChatResponse>("/ai/chat", { message, context });
 }
