@@ -148,7 +148,7 @@ class PurityOut(BaseModel):
     interpretation: str
 
 
-EditorLanguageId = Literal["qiskit", "qsharp"]
+EditorLanguageId = Literal["qiskit", "pennylane", "qsharp"]
 
 
 class EditorRunIn(BaseModel):

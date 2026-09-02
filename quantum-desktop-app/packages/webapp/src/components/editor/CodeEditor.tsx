@@ -6,6 +6,7 @@ import type { EditorLanguageId } from "../../store/editorStore";
 
 const MONACO_LANGUAGE: Record<EditorLanguageId, string> = {
   qiskit: "python",
+  pennylane: "python",
   qsharp: "qsharp",
 };
 

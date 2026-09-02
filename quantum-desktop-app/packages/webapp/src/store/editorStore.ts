@@ -1,9 +1,10 @@
 import { create } from "zustand";
 
-export type EditorLanguageId = "qiskit" | "qsharp";
+export type EditorLanguageId = "qiskit" | "pennylane" | "qsharp";
 
 export const EDITOR_LANGUAGES: Array<{ id: EditorLanguageId; label: string }> = [
   { id: "qiskit", label: "Python / Qiskit" },
+  { id: "pennylane", label: "Python / PennyLane" },
   { id: "qsharp", label: "Q#" },
 ];
 
@@ -15,6 +16,18 @@ qc.h(0)
 qc.cx(0, 1)
 
 print(qc)
+`,
+  pennylane: `import pennylane as qml
+
+dev = qml.device("default.qubit", wires=2)
+
+@qml.qnode(dev)
+def bell_circuit():
+    qml.Hadamard(wires=0)
+    qml.CNOT(wires=[0, 1])
+    return qml.probs()
+
+print(bell_circuit())
 `,
   qsharp: `operation Main() : Unit {
     use qs = Qubit[2];
@@ -51,6 +64,7 @@ export const useEditorStore = create<EditorStore>((set) => ({
   language: "qiskit",
   codeByLanguage: {
     qiskit: initialCode("qiskit"),
+    pennylane: initialCode("pennylane"),
     qsharp: initialCode("qsharp"),
   },
   outputState: "idle",

@@ -7,7 +7,7 @@ import { PageMeta } from "../components/platform/PageMeta";
 import { SimulatorNavLink } from "../components/platform/WorkspaceNavLinks";
 import { Button } from "../components/ui/Button";
 import { runEditorCode } from "../apiV2";
-import { ApiV2ClientError } from "../apiV2";
+import { ApiV2ClientError, type EditorLanguageId as ApiEditorLanguageId } from "../apiV2";
 import { useCircuitPersistence } from "../auth/useCircuitPersistence";
 import { UserMenu } from "../auth/UserMenu";
 import {
@@ -36,7 +36,7 @@ export default function EditorPage(): JSX.Element {
     if (!code.trim() || running) return;
     setRunning();
     try {
-      const result = await runEditorCode(language, code);
+      const result = await runEditorCode(language as ApiEditorLanguageId, code);
       if (result.status === "success") {
         setSuccess(result.stdout, result.stderr);
       } else {
