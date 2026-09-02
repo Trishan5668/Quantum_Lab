@@ -145,6 +145,124 @@ textarea {
   word-break: break-word;
 }
 
+.code-report-surface .code-report-lead {
+  font-size: 0.95rem;
+  line-height: 1.65;
+  color: var(--text-secondary);
+}
+
+.code-report-article {
+  display: grid;
+  gap: 0.85rem;
+  font-size: 0.9rem;
+  line-height: 1.65;
+  color: var(--text-secondary);
+}
+
+.code-report-subheading {
+  margin: 0.25rem 0 0;
+  font-family: "JetBrains Mono", ui-monospace, monospace;
+  font-size: 0.65rem;
+  text-transform: uppercase;
+  letter-spacing: 0.16em;
+  color: var(--accent-measure);
+}
+
+.code-report-meta {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.82rem;
+}
+
+.code-report-meta th,
+.code-report-meta td {
+  border: 1px solid var(--border);
+  padding: 0.45rem 0.6rem;
+  text-align: left;
+  vertical-align: top;
+}
+
+.code-report-meta th {
+  width: 9rem;
+  color: var(--text-muted);
+  font-weight: 500;
+}
+
+.code-report-source {
+  position: relative;
+  border: 1px solid var(--border);
+  border-radius: 0.5rem;
+  background: #0a0b0f;
+  overflow: hidden;
+}
+
+.code-report-source-label {
+  border-bottom: 1px solid var(--border);
+  padding: 0.35rem 0.65rem;
+  font-family: "JetBrains Mono", ui-monospace, monospace;
+  font-size: 0.62rem;
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+  color: var(--accent-measure);
+}
+
+.code-report-source pre {
+  margin: 0;
+  padding: 0.85rem 0.9rem 2.5rem;
+  overflow: auto;
+  font-family: "JetBrains Mono", ui-monospace, monospace;
+  font-size: 0.78rem;
+  line-height: 1.55;
+  color: #e2e8f0;
+}
+
+.code-report-source .btn {
+  position: absolute;
+  right: 0.5rem;
+  bottom: 0.5rem;
+}
+
+.code-report-source-compact pre {
+  padding-bottom: 0.85rem;
+}
+
+.code-report-output {
+  margin: 0;
+  border: 1px solid var(--border);
+  border-radius: 0.45rem;
+  background: rgba(10, 11, 15, 0.85);
+  padding: 0.75rem 0.85rem;
+  overflow: auto;
+  font-family: "JetBrains Mono", ui-monospace, monospace;
+  font-size: 0.76rem;
+  line-height: 1.5;
+  color: var(--text-secondary);
+}
+
+.code-report-error {
+  color: #fca5a5;
+  border-color: rgba(248, 113, 113, 0.35);
+}
+
+.code-report-block {
+  border: 1px solid var(--border);
+  border-radius: 0.45rem;
+  padding: 0.55rem 0.7rem;
+  background: rgba(18, 20, 26, 0.55);
+}
+
+.code-report-block summary {
+  cursor: pointer;
+  font-family: "JetBrains Mono", ui-monospace, monospace;
+  font-size: 0.72rem;
+  color: var(--text-primary);
+}
+
+.code-report-equation {
+  overflow-x: auto;
+  padding: 0.35rem 0;
+}
+
 .app-main-grid {
   display: grid;
   min-height: 0;

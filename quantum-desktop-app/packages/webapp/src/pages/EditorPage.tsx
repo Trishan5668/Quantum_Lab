@@ -1,7 +1,8 @@
-import { useCallback } from "react";
+import { useCallback, useState } from "react";
 import { Link } from "react-router-dom";
 import { CircuitPreview } from "../components/editor/CircuitPreview";
 import { CodeEditor } from "../components/editor/CodeEditor";
+import { EditorCodeReportModal } from "../components/editor/EditorCodeReportModal";
 import { OutputPane } from "../components/editor/OutputPane";
 import { PageMeta } from "../components/platform/PageMeta";
 import { SimulatorNavLink } from "../components/platform/WorkspaceNavLinks";
@@ -29,6 +30,7 @@ export default function EditorPage(): JSX.Element {
   const setSuccess = useEditorStore((s) => s.setSuccess);
   const setError = useEditorStore((s) => s.setError);
   const { saveStatus } = useCircuitPersistence();
+  const [reportOpen, setReportOpen] = useState(false);
 
   const running = outputState === "running";
 
@@ -80,6 +82,9 @@ export default function EditorPage(): JSX.Element {
                 {saveStatus === "saving" ? "Saving..." : saveStatus === "saved" ? "Saved ✓" : saveStatus}
               </span>
             )}
+            <Button variant="secondary" onClick={() => setReportOpen(true)} aria-label="Generate code report">
+              Get Report
+            </Button>
             <SimulatorNavLink />
             <label className="hidden items-center gap-2 font-mono text-[10px] uppercase tracking-[0.15em] text-text-muted sm:flex">
               <span>Select Language</span>
@@ -121,6 +126,7 @@ export default function EditorPage(): JSX.Element {
           </section>
         </div>
       </div>
+      <EditorCodeReportModal open={reportOpen} onClose={() => setReportOpen(false)} />
     </>
   );
 }
