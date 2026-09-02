@@ -752,10 +752,7 @@ function singleGateMatrixLatex(gateType: GatePlacement["gateType"]): string {
       return String.raw`Z=\begin{pmatrix}1&0\\0&-1\end{pmatrix}`;
     case "CNOT":
       return String.raw`\mathrm{CNOT}=\begin{pmatrix}1&0&0&0\\0&1&0&0\\0&0&0&1\\0&0&1&0\end{pmatrix}`;
-    case "T":
-      return String.raw`T=\begin{pmatrix}1&0\\0&e^{i\pi/4}\end{pmatrix}`;
-    case "S":
-      return String.raw`S=\begin{pmatrix}1&0\\0&i\end{pmatrix}`;
+    
     default:
       return `${gateMeta(gateType).label}`;
   }
