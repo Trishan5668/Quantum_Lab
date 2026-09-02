@@ -74,7 +74,7 @@ export function buildCodeReport(input: BuildCodeReportInput): ReportSection[] {
       "Abstract / Overview",
       "Executive summary of the quantum program",
       abstractMarkdown(input, analysis, circuitLabel, executionLabel),
-      abstractLatex(input, analysis),
+      abstractLatex(input),
       () => <AbstractChapter input={input} analysis={analysis} circuitLabel={circuitLabel} executionLabel={executionLabel} />,
       true,
     ),
@@ -608,7 +608,7 @@ function abstractMarkdown(
   return `QuantumLab code report for ${languageLabel}. Circuit: ${circuitLabel}. Execution: ${executionLabel}. ${analysis.lineCount} lines.`;
 }
 
-function abstractLatex(input: BuildCodeReportInput, analysis: CodeAnalysis): string[] {
+function abstractLatex(input: BuildCodeReportInput): string[] {
   if (input.gates.length === 0) return [];
   return [compositeOperatorLatex(input.gates)];
 }
