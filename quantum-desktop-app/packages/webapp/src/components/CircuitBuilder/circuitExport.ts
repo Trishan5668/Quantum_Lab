@@ -61,6 +61,20 @@ export function exportCircuitPng({
   image.src = url;
 }
 
+export function renderCircuitSvg({
+  numQubits,
+  gates,
+}: {
+  numQubits: number;
+  gates: GatePlacement[];
+}): string {
+  const maxStep = gates.reduce((max, gate) => Math.max(max, gate.timeStep), -1);
+  const cols = Math.max(maxStep + 2, 4);
+  const width = PAD_LEFT + cols * COL_W + 16;
+  const height = numQubits * ROW_H + 32;
+  return circuitSvgMarkup({ numQubits, gates, cols, width, height });
+}
+
 function circuitSvgMarkup({
   numQubits,
   gates,

@@ -14,6 +14,7 @@ import { MathematicsPanel } from "../components/Mathematics/MathematicsPanel";
 import { PhysicsPanel } from "../components/Physics/PhysicsPanel";
 import { AIAssistantPane } from "../components/AI/AIAssistantPane";
 import { LearningLayerSelector } from "../components/platform/LearningLayerSelector";
+import { EditorNavLink } from "../components/platform/WorkspaceNavLinks";
 import { PageMeta } from "../components/platform/PageMeta";
 import { fetchHealth } from "../api";
 import {
@@ -118,6 +119,7 @@ export default function SimulatorPage(): JSX.Element {
           </div>
           <div className="flex items-center gap-2">
             <SaveIndicator status={saveStatus} lastSavedAt={lastSavedAt} />
+            <EditorNavLink />
             <LearningLayerSelector />
             <HealthBadge
               status={health}

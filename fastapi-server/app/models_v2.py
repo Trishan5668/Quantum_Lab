@@ -4,7 +4,7 @@ from __future__ import annotations
 
 from typing import Any, Literal
 
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, Field, field_validator
 
 from app.models import ComplexAmplitude, GatePlacementIn, StateOut
 
@@ -146,3 +146,26 @@ class PurityRequest(BaseModel):
 class PurityOut(BaseModel):
     purity: float
     interpretation: str
+
+
+EditorLanguageId = Literal["qiskit", "qsharp"]
+
+
+class EditorRunIn(BaseModel):
+    language: EditorLanguageId
+    code: str = Field(..., min_length=1, max_length=32768)
+
+    @field_validator("code")
+    @classmethod
+    def code_not_blank(cls, value: str) -> str:
+        if not value.strip():
+            raise ValueError("Code cannot be empty.")
+        return value
+
+
+class EditorRunOut(BaseModel):
+    language: EditorLanguageId
+    status: Literal["success", "error"]
+    stdout: str
+    stderr: str
+    execution_time_ms: float

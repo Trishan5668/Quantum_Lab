@@ -18,7 +18,8 @@ COPY ../quantum-simulator-core /srv/quantum-simulator-core
 COPY . /srv/fastapi-server
 
 RUN pip install -e /srv/quantum-simulator-core \
- && pip install -e /srv/fastapi-server
+ && pip install -e /srv/fastapi-server \
+ && python -c "import qiskit; from qdk import qsharp; qsharp.init(); print('editor runtimes ok')"
 
 EXPOSE 8765
 

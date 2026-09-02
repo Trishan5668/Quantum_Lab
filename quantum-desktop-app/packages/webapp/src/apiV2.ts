@@ -232,3 +232,20 @@ export async function fetchAIChat(
 ): Promise<AIChatResponse> {
   return postV2<AIChatResponse>("/ai/chat", { message, context });
 }
+
+export type EditorLanguageId = "qiskit" | "qsharp";
+
+export interface EditorRunResult {
+  language: EditorLanguageId;
+  status: "success" | "error";
+  stdout: string;
+  stderr: string;
+  execution_time_ms: number;
+}
+
+export async function runEditorCode(
+  language: EditorLanguageId,
+  code: string,
+): Promise<EditorRunResult> {
+  return postV2<EditorRunResult>("/editor/run", { language, code });
+}

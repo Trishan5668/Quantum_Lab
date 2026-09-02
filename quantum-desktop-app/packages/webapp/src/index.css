@@ -46,7 +46,8 @@ body,
   min-height: 100%;
 }
 
-#root:has(.app-shell) {
+#root:has(.app-shell),
+#root:has(.editor-shell) {
   overflow: hidden;
 }
 
@@ -100,6 +101,48 @@ textarea {
   height: 100%;
   min-height: 0;
   overflow: hidden;
+}
+
+.editor-shell {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  min-height: 0;
+  overflow: hidden;
+}
+
+.editor-main-grid {
+  display: grid;
+  min-height: 0;
+  flex: 1;
+  grid-template-columns: minmax(220px, 320px) minmax(0, 1fr);
+  grid-template-rows: minmax(0, 1fr);
+}
+
+@media (max-width: 900px) {
+  .editor-main-grid {
+    grid-template-columns: 1fr;
+    grid-template-rows: minmax(180px, 240px) minmax(0, 1fr);
+  }
+}
+
+.editor-circuit-column,
+.editor-code-column {
+  min-height: 0;
+}
+
+.editor-circuit-preview svg {
+  max-width: 100%;
+  height: auto;
+}
+
+.editor-output-pane {
+  max-height: 35vh;
+}
+
+.editor-output-text {
+  white-space: pre-wrap;
+  word-break: break-word;
 }
 
 .app-main-grid {

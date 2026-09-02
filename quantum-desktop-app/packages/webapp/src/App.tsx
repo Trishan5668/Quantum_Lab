@@ -10,6 +10,7 @@ import { PlatformLayout } from "./components/platform/PlatformLayout";
 
 const LandingPage = lazy(() => import("./pages/LandingPage"));
 const SimulatorPage = lazy(() => import("./pages/SimulatorPage"));
+const EditorPage = lazy(() => import("./pages/EditorPage"));
 const LearnPage = lazy(() => import("./pages/LearnPage"));
 const AlgorithmsPage = lazy(() => import("./pages/AlgorithmsPage"));
 const DocsPage = lazy(() => import("./pages/DocsPage"));
@@ -52,6 +53,7 @@ function AppRoutes(): JSX.Element {
           <Route path="history" element={<HistoryPage />} />
         </Route>
         <Route path="app" element={<SimulatorPage />} />
+        <Route path="app/editor" element={<EditorPage />} />
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
     </Suspense>
