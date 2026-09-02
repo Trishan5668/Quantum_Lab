@@ -164,11 +164,11 @@ export function ReportReader({ title, subtitle, sections, compact = false, metad
     [normalizedQuery, sections],
   );
   const markdown = useMemo(
-    () => reportMarkdown(title, subtitle, sections, resolvedMetadata, reportId, reportHash, equations, notation, references, figures, tables, appendices),
+    () => reportMarkdown(title, subtitle, sections, resolvedMetadata, reportId, reportHash, notation, references, figures, tables, appendices),
     [appendices, equations, figures, notation, references, reportHash, reportId, resolvedMetadata, sections, subtitle, tables, title],
   );
   const latex = useMemo(
-    () => reportLatex(title, subtitle, sections, resolvedMetadata, reportId, reportHash, equations, notation, references, appendices),
+    () => reportLatex(title, subtitle, sections, resolvedMetadata, reportId, reportHash, notation, references, appendices),
     [appendices, equations, notation, references, reportHash, reportId, resolvedMetadata, sections, subtitle, title],
   );
   const printableHtml = useMemo(() => reportHtml(title, subtitle, markdown), [markdown, subtitle, title]);
@@ -663,7 +663,7 @@ function ExportButton({ label, filename, content, type = "text/plain;charset=utf
 function flattenEquations(sections: ReportSection[]): EquationEntry[] {
   let count = 0;
   return sections.flatMap((section) =>
-    section.latex.map((latex) => {
+    section.id === "code-source" ? [] : section.latex.map((latex) => {
       count += 1;
       return {
         id: `eq-${count}`,
@@ -704,12 +704,15 @@ function inferTables(sections: ReportSection[]): NumberedArtifact[] {
 }
 
 function buildAppendices(sections: ReportSection[], metadata: ReportMetadata): NumberedArtifact[] {
+  const math = sections.find((section) => section.id === "code-math");
+  const evolution = sections.find((section) => section.id === "code-evolution");
+  const circuit = sections.find((section) => section.id === "code-circuit");
   const appendices = [
-    ["A", "Gate matrices", "Collected local and embedded gate matrices appearing in the report."],
+    ["A", "Gate matrices", math?.latex.join("\n\n") || "No gate matrix data is available."],
     ["B", "Basis ordering", `Computational basis ordering for ${metadata.qubitCount ?? "the"} qubit register and initial state ${metadata.initialState ?? "not specified"}.`],
-    ["C", "State vector evolution", "Stepwise simulator state snapshots and amplitude support."],
-    ["D", "Circuit operator", "Complete ordered product defining the circuit-level operator."],
-    ["E", "Additional derivations", "Supplementary derivations, proof blocks, and section-local formulae."],
+    ["C", "State vector evolution", evolution?.markdown || "No state-vector evolution data is available."],
+    ["D", "Circuit operator", circuit?.latex.join("\n\n") || "No circuit-operator data is available."],
+    ["E", "Additional derivations", sections.filter((section) => section.latex.length > 0).map((section) => `${section.title}: ${section.latex.join(" ; ")}`).join("\n\n") || "No additional derivation data is available."],
   ];
   return appendices
     .filter(([letter]) => letter !== "D" || sections.some((section) => /circuit unitary|operator/i.test(section.title)))
@@ -723,14 +726,13 @@ function reportMarkdown(
   metadata: ReportMetadata,
   reportId: string,
   reportHash: string,
-  equations: EquationEntry[],
   notation: typeof NOTATION,
   references: ReportReference[],
   figures: NumberedArtifact[],
   tables: NumberedArtifact[],
   appendices: NumberedArtifact[],
 ): string {
-  const equationMap = new Map(equations.map((equation) => [equation.latex, equation.number]));
+  let equationNumber = 0;
   return [
     `# ${title}`,
     subtitle ?? "",
@@ -743,7 +745,10 @@ function reportMarkdown(
       `## ${section.number}. ${section.title}`,
       section.subtitle ? `_${section.subtitle}_` : "",
       section.markdown,
-      ...section.latex.map((equation) => `\n\\[\n${equation}\n\\]\\hfill (${equationMap.get(equation) ?? "?"})`),
+      ...(section.id === "code-source" ? [] : section.latex.map((equation) => {
+        equationNumber += 1;
+        return `\n\\[\n${equation}\n\\]\\hfill (${equationNumber})`;
+      })),
     ].filter(Boolean).join("\n\n")),
     "## Figures",
     figures.map((figure) => `- Figure ${figure.number}. ${figure.title}: ${figure.description}`).join("\n"),
@@ -771,12 +776,11 @@ function reportLatex(
   metadata: ReportMetadata,
   reportId: string,
   reportHash: string,
-  equations: EquationEntry[],
   notation: typeof NOTATION,
   references: ReportReference[],
   appendices: NumberedArtifact[],
 ): string {
-  const equationMap = new Map(equations.map((equation) => [equation.latex, equation.number]));
+  let equationNumber = 0;
   return [
     "\\documentclass[11pt]{article}",
     "\\usepackage[margin=1in]{geometry}",
@@ -807,13 +811,17 @@ function reportLatex(
     ...sections.map((section) => [
       `\\section{${escapeLatex(section.title)}}`,
       section.subtitle ? `\\textit{${escapeLatex(section.subtitle)}}` : "",
-      escapeLatex(section.markdown),
-      ...section.latex.map((equation) => [
-        "\\begin{equation}",
-        equation,
-        `\\tag{${equationMap.get(equation) ?? "?"}}\\label{eq:${equationMap.get(equation) ?? "x"}}`,
-        "\\end{equation}",
-      ].join("\n")),
+      section.id === "code-source" ? escapeLatex("The source code is reproduced verbatim below.") : escapeLatex(section.markdown),
+      ...section.latex.map((equation) => {
+        if (section.id === "code-source") return equation;
+        equationNumber += 1;
+        return [
+          "\\begin{equation}",
+          equation,
+          `\\tag{${equationNumber}}\\label{eq:${reportId}-${equationNumber}}`,
+          "\\end{equation}",
+        ].join("\n");
+      }),
     ].filter(Boolean).join("\n\n")),
     "\\appendix",
     ...appendices.map((appendix) => `\\section{${escapeLatex(appendix.title)}}\n${escapeLatex(appendix.description)}`),
@@ -831,17 +839,43 @@ function reportHtml(title: string, subtitle: string | undefined, markdown: strin
     "<head>",
     "<meta charset=\"utf-8\" />",
     `<title>${escapeHtml(title)}</title>`,
-    "<style>body{font-family:Georgia,'Times New Roman',serif;max-width:760px;margin:40px auto;line-height:1.65;color:#111}pre{white-space:pre-wrap;background:#f5f5f5;padding:1rem}h1,h2,h3{page-break-after:avoid}.math{font-family:serif}@page{size:A4;margin:20mm}a{color:#0645ad}</style>",
+    "<style>body{font-family:Georgia,'Times New Roman',serif;max-width:760px;margin:40px auto;line-height:1.65;color:#111}pre{white-space:pre-wrap;background:#f5f5f5;padding:1rem}code{font-family:ui-monospace,SFMono-Regular,Consolas,monospace}h1,h2,h3{page-break-after:avoid}.math{font-family:serif}@page{size:A4;margin:20mm}a{color:#0645ad}</style>",
     "<script>window.MathJax={tex:{inlineMath:[[\"$\",\"$\"],[\"\\\\(\",\"\\\\)\"]]}};</script>",
     "<script async src=\"https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js\"></script>",
     "</head>",
     "<body>",
     `<h1>${escapeHtml(title)}</h1>`,
     subtitle ? `<p><em>${escapeHtml(subtitle)}</em></p>` : "",
-    markdown.split("\n").map((line) => `<p>${escapeHtml(line)}</p>`).join("\n"),
+    markdownToHtml(markdown),
     "</body>",
     "</html>",
   ].join("\n");
+}
+
+function markdownToHtml(markdown: string): string {
+  const lines = markdown.split("\n");
+  const output: string[] = [];
+  let inCode = false;
+  let codeLines: string[] = [];
+  for (const line of lines) {
+    if (line.startsWith("```")) {
+      if (inCode) {
+        output.push(`<pre><code>${escapeHtml(codeLines.join("\n"))}</code></pre>`);
+        codeLines = [];
+      }
+      inCode = !inCode;
+    } else if (inCode) {
+      codeLines.push(line);
+    } else if (line.startsWith("# ")) {
+      output.push(`<h1>${escapeHtml(line.slice(2))}</h1>`);
+    } else if (line.startsWith("## ")) {
+      output.push(`<h2>${escapeHtml(line.slice(3))}</h2>`);
+    } else if (line.trim()) {
+      output.push(`<p>${escapeHtml(line)}</p>`);
+    }
+  }
+  if (inCode) output.push(`<pre><code>${escapeHtml(codeLines.join("\n"))}</code></pre>`);
+  return output.join("\n");
 }
 
 function metadataMarkdown(metadata: ReportMetadata, reportId: string, reportHash: string): string {

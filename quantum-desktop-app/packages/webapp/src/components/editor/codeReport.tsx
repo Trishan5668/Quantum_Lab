@@ -98,8 +98,8 @@ export function buildCodeReport(input: BuildCodeReportInput): ReportSection[] {
       "source",
       "Source Code",
       "Original program as written in the editor",
-      "The source code is reproduced verbatim below.",
-      [],
+      sourceMarkdown(input),
+      [sourceLatex(input)],
       () => <SourceChapter code={input.code} language={input.language} />,
       true,
     ),
@@ -183,19 +183,17 @@ export function buildCodeReport(input: BuildCodeReportInput): ReportSection[] {
     ),
   );
 
-  if (input.outputState !== "idle") {
-    sections.push(
-      section(
-        "execution",
-        "Execution Results",
-        "Captured stdout and runtime outcome",
-        executionMarkdown(input),
-        [],
-        () => <ExecutionChapter input={input} />,
-        true,
-      ),
-    );
-  }
+  sections.push(
+    section(
+      "execution",
+      "Execution Results",
+      "Captured stdout and runtime outcome",
+      executionMarkdown(input),
+      [],
+      () => <ExecutionChapter input={input} />,
+      true,
+    ),
+  );
 
   sections.push(
     section(
@@ -703,7 +701,27 @@ function implementationNotes(input: BuildCodeReportInput, analysis: CodeAnalysis
 }
 
 function executionMarkdown(input: BuildCodeReportInput): string {
-  return `status=${input.outputState}; stdout=${input.outputText}; stderr=${input.errorText}`;
+  const output = input.outputState === "idle" || input.outputState === "running"
+    ? "Not executed"
+    : input.outputText || "(empty)";
+  const error = input.outputState === "error"
+    ? input.errorText || "(no stderr captured)"
+    : input.errorText || "(none)";
+  return [`Status: ${input.outputState}`, "Stdout:", output, "Stderr:", error].join("\n");
+}
+
+function sourceMarkdown(input: BuildCodeReportInput): string {
+  const longestFence = input.code
+    .split("\n")
+    .filter((line) => line.trimStart().startsWith("`"))
+    .reduce((maximum, line) => Math.max(maximum, line.match(/^`+/)?.[0].length ?? 0), 0);
+  const fenceLength = Math.max(3, longestFence + 1);
+  const fence = "`".repeat(fenceLength);
+  return `The source code is reproduced verbatim below.\n\n${fence}${input.language === "qsharp" ? "qsharp" : "python"}\n${input.code}\n${fence}`;
+}
+
+function sourceLatex(input: BuildCodeReportInput): string {
+  return `\\begin{verbatim}\n${input.code}\n\\end{verbatim}`;
 }
 
 function limitationsMarkdown(input: BuildCodeReportInput, analysis: CodeAnalysis): string {
