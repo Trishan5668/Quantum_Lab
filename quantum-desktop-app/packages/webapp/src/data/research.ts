@@ -18,7 +18,7 @@ export const RESEARCH_TOPICS: ResearchTopic[] = [
 - **Depolarizing** — uniform Pauli errors
 - **Bit / phase flip** — discrete error models
 
-Apply noise in Research mode to evolve density matrices and track purity loss.`,
+Apply noise to evolve density matrices and track purity loss.`,
     references: [
       "Nielsen & Chuang, Quantum Computation and Quantum Information, Ch. 8",
       "Preskill, Quantum Information Theory lecture notes",
@@ -44,7 +44,7 @@ For n qubits, exhaustive tomography requires 3ⁿ − 1 independent parameters. 
 
 **Entanglement entropy** S(ρ_A) = −Tr(ρ_A log₂ ρ_A) quantifies bipartite entanglement.
 
-Use the Metrics panel in Research mode to compute entropy and fidelity against reference states.`,
+Use the Metrics panel to compute entropy and fidelity against reference states.`,
     references: [
       "Nielsen & Chuang, Ch. 11",
       "quantum-education-content/density-matrices.md",

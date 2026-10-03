@@ -47,7 +47,6 @@ function AlgorithmDetail({ id }: { id: string }): JSX.Element {
   const algo = getAlgorithm(id);
   const navigate = useNavigate();
   const loadPreset = useCircuitStore((s) => s.loadPreset);
-  const setLayer = usePlatformStore((s) => s.setLearningLayer);
   const setActivePanel = usePlatformStore((s) => s.setActiveWorkspacePanel);
 
   if (!algo) {
@@ -67,7 +66,6 @@ function AlgorithmDetail({ id }: { id: string }): JSX.Element {
       gates: algo.gates,
       fidelityTarget: algo.fidelityTarget,
     });
-    setLayer("research");
     setActivePanel("learning");
     void navigate("/app");
   };

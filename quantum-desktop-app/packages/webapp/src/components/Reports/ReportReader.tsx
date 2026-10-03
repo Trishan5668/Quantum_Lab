@@ -25,7 +25,6 @@ export interface ReportMetadata {
   quantumLabVersion?: string;
   authorName?: string;
   authorId?: string;
-  learningMode?: string;
   circuitJson?: unknown;
   gateSequence?: string[];
   backendVersion?: string;
@@ -521,7 +520,6 @@ function TitlePage({
     ["Qubits", valueOrDash(metadata.qubitCount)],
     ["Gates", valueOrDash(metadata.gateCount)],
     ["Initial state", metadata.initialState ?? "not specified"],
-    ["Learning mode", metadata.learningMode ?? "not specified"],
     ["QuantumLab version", metadata.quantumLabVersion ?? pkg.version],
     ["Author", metadata.authorName ?? "Unsigned local user"],
     ["Report ID", reportId],

@@ -2,7 +2,6 @@ import { useMemo } from "react";
 import { useAuth } from "../../auth/AuthProvider";
 import { useCircuitStore } from "../../store/circuitStore";
 import type { GatePlacement } from "../../types";
-import { FullscreenReport } from "../Reports/ReportReader";
 import { PanelPlaceholder, PanelSection } from "../ui/PanelSection";
 import { AmplitudeTable } from "./AmplitudeTable";
 import { DensityDerivation } from "./DensityDerivation";
@@ -14,7 +13,6 @@ import { ProofTree } from "./ProofTree";
 import { StateEvolution } from "./StateEvolution";
 import { buildDerivation, noiseKrausLatex, vectorToLatex } from "./mathDerivations";
 import { basisIndex, displayKet, normalizeBasisState } from "../../utils/basisState";
-import { usePlatformStore, type LearningMode } from "../../store/platformStore";
 import { ResearchMathematicsReport } from "./ResearchMathematicsReport";
 
 type Difficulty = "beginner" | "intermediate" | "advanced" | "research";
@@ -32,14 +30,8 @@ export function MathematicsPanel(): JSX.Element {
   const t1Us = useCircuitStore((s) => s.t1Us);
   const t2Us = useCircuitStore((s) => s.t2Us);
   const gateTimeNs = useCircuitStore((s) => s.gateTimeNs);
-  const learningMode = usePlatformStore((s) => s.learningMode);
   const { profile, user } = useAuth();
-  const difficulty = difficultyForLearning(learningMode);
 
-  const derivation = useMemo(
-    () => buildDerivation(numQubits, gates, results?.steps, initialBasisState),
-    [numQubits, gates, results?.steps, initialBasisState],
-  );
   const metadata = useMemo(
     () => ({
       reportKind: "Research Mathematics",
@@ -51,7 +43,6 @@ export function MathematicsPanel(): JSX.Element {
       noiseModel: noiseEnabled ? `${noiseModel} p=${noiseProbability}` : "Ideal",
       authorName: profile?.name ?? user?.displayName ?? user?.email ?? undefined,
       authorId: profile?.uid ?? user?.uid,
-      learningMode,
       circuitJson: {
         numQubits,
         initialBasisState,
@@ -63,81 +54,29 @@ export function MathematicsPanel(): JSX.Element {
       gateSequence: gates.map((gate) => `${gate.gateType}${gate.stackCount && gate.stackCount > 1 ? `^${gate.stackCount}` : ""} q[${gate.qubitTargets.join(",")}] @t${gate.timeStep}`),
       backendVersion: resultsV2 ? "v2" : results ? "v1" : "not run",
     }),
-    [gates, initialBasisState, learningMode, noiseEnabled, noiseModel, noiseProbability, numQubits, profile?.name, profile?.uid, results, resultsV2, user?.displayName, user?.email, user?.uid],
+    [gates, initialBasisState, noiseEnabled, noiseModel, noiseProbability, numQubits, profile?.name, profile?.uid, results, resultsV2, user?.displayName, user?.email, user?.uid],
   );
-
-  if (learningMode === "research") {
-    return (
-      <PanelSection
-        title="Mathematics"
-        subtitle="Research-grade derivation, operator formalism, and publication exports"
-      >
-        <ResearchMathematicsReport
-          numQubits={numQubits}
-          initialBasisState={initialBasisState}
-          gates={gates}
-          resultSteps={results?.steps}
-          resultsV2={resultsV2}
-          metrics={metrics}
-          simulationMode={resultsV2?.simulation_mode ?? "statevector"}
-          noiseEnabled={noiseEnabled}
-          noiseModel={noiseModel}
-          noiseProbability={noiseProbability}
-          t1Us={t1Us}
-          t2Us={t2Us}
-          gateTimeNs={gateTimeNs}
-          metadata={metadata}
-        />
-      </PanelSection>
-    );
-  }
 
   return (
     <PanelSection
       title="Mathematics"
-      subtitle="Every amplitude change, matrix product, and probability rule"
-      actions={
-        <>
-          <FullscreenReport
-            label="Mathematics fullscreen"
-            title="QuantumLab Mathematics"
-            subtitle={`Learning mode: ${learningMode}`}
-          >
-            <div className="report-reader report-reader-compact">
-              <MathematicsPanelBody
-                numQubits={numQubits}
-                initialBasisState={initialBasisState}
-                gates={gates}
-                resultsV2={resultsV2}
-                metrics={metrics}
-                noiseEnabled={noiseEnabled}
-                noiseModel={noiseModel}
-                noiseProbability={noiseProbability}
-                t1Us={t1Us}
-                t2Us={t2Us}
-                gateTimeNs={gateTimeNs}
-                difficulty={difficulty}
-                derivation={derivation}
-              />
-            </div>
-          </FullscreenReport>
-        </>
-      }
+      subtitle="Research-grade derivation, operator formalism, and publication exports"
     >
-      <MathematicsPanelBody
+      <ResearchMathematicsReport
         numQubits={numQubits}
         initialBasisState={initialBasisState}
         gates={gates}
+        resultSteps={results?.steps}
         resultsV2={resultsV2}
         metrics={metrics}
+        simulationMode={resultsV2?.simulation_mode ?? "statevector"}
         noiseEnabled={noiseEnabled}
         noiseModel={noiseModel}
         noiseProbability={noiseProbability}
         t1Us={t1Us}
         t2Us={t2Us}
         gateTimeNs={gateTimeNs}
-        difficulty={difficulty}
-        derivation={derivation}
+        metadata={metadata}
       />
     </PanelSection>
   );
@@ -149,14 +88,7 @@ function circuitName(gates: GatePlacement[]): string {
   return `${labels}${gates.length > 4 ? "-..." : ""} Circuit`;
 }
 
-function difficultyForLearning(mode: LearningMode): Difficulty {
-  if (mode === "explore") return "beginner";
-  if (mode === "understand") return "intermediate";
-  if (mode === "intuition") return "advanced";
-  return "research";
-}
-
-function MathematicsPanelBody({
+export function MathematicsPanelBody({
   numQubits,
   initialBasisState,
   gates,

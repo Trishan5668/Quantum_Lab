@@ -1,19 +1,14 @@
 import type { GatePlacement, SimulationMode, SimulationResult, SimulationResultV2 } from "../types";
-import type { LearningLayer } from "../store/platformStore";
-
-export type ExplanationLevel = LearningLayer;
 export type PreferredNotation = "dirac" | "matrix" | "bloch";
 export type SaveStatus = "idle" | "saving" | "saved" | "offline" | "error";
 
 export interface UserPreferences {
   theme: "dark" | "light";
   defaultSimulationMode: SimulationMode;
-  defaultExplanationLevel: ExplanationLevel;
   preferredNotation: PreferredNotation;
   autoSave: boolean;
   showAdvancedMathematics: boolean;
   showPhysicsReport: boolean;
-  researchMode: boolean;
 }
 
 export interface QuantumLabUser {
@@ -32,7 +27,6 @@ export interface QuantumLabUser {
   preferences: UserPreferences;
   theme: UserPreferences["theme"];
   defaultSimulationMode: SimulationMode;
-  defaultExplanationLevel: ExplanationLevel;
   totalSimulationsRun: number;
   mostUsedGate: string;
   favoriteSimulationMode: SimulationMode;

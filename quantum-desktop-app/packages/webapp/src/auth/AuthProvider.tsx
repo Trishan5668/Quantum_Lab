@@ -151,7 +151,6 @@ export function AuthProvider({ children }: { children: ReactNode }): JSX.Element
         preferences,
         theme: preferences.theme,
         defaultSimulationMode: preferences.defaultSimulationMode,
-        defaultExplanationLevel: preferences.defaultExplanationLevel,
       };
       setProfile(nextProfile);
       document.documentElement.dataset.theme = preferences.theme;
@@ -199,4 +198,3 @@ export function useAuth(): AuthContextValue {
   if (!value) throw new Error("useAuth must be used inside AuthProvider");
   return value;
 }
-

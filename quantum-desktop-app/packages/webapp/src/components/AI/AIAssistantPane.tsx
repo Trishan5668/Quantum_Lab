@@ -2,7 +2,6 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import { BlockMath } from "react-katex";
 import { ApiV2ClientError, fetchAIChat, fetchResearchVerification, type AIChatContextRequest } from "../../apiV2";
 import { useCircuitStore } from "../../store/circuitStore";
-import { usePlatformStore, type LearningMode } from "../../store/platformStore";
 import type { AIChatMessage, ResearchVerification } from "../../types";
 import { buildPhysicsReport } from "../Physics/physicsReport";
 import { MarkdownText } from "../ui/MarkdownText";
@@ -31,7 +30,6 @@ export function AIAssistantPane(): JSX.Element {
   const t1Us = useCircuitStore((s) => s.t1Us);
   const t2Us = useCircuitStore((s) => s.t2Us);
   const gateTimeNs = useCircuitStore((s) => s.gateTimeNs);
-  const learningMode = usePlatformStore((s) => s.learningMode);
   const [messages, setMessages] = useState<AIChatMessage[]>([]);
   const [draft, setDraft] = useState("");
   const [loading, setLoading] = useState(false);
@@ -41,10 +39,6 @@ export function AIAssistantPane(): JSX.Element {
   const chatEndRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    if (learningMode !== "research") {
-      setVerification(null);
-      return;
-    }
     let cancelled = false;
     fetchResearchVerification(
       { numQubits, gates, initialBasisState },
@@ -56,7 +50,7 @@ export function AIAssistantPane(): JSX.Element {
       if (!cancelled) setVerification(null);
     });
     return () => { cancelled = true; };
-  }, [gateTimeNs, gates, initialBasisState, learningMode, noiseEnabled, noiseModel, noiseProbability, numQubits, resultsV2, simulationMode, t1Us, t2Us]);
+  }, [gateTimeNs, gates, initialBasisState, noiseEnabled, noiseModel, noiseProbability, numQubits, resultsV2, simulationMode, t1Us, t2Us]);
 
   useEffect(() => {
     chatEndRef.current?.scrollIntoView({ block: "end" });
@@ -70,7 +64,6 @@ export function AIAssistantPane(): JSX.Element {
       steps: results?.steps,
       resultsV2,
       metrics,
-      learningMode,
       verification,
     });
     const density = resultsV2?.final_density;
@@ -84,7 +77,7 @@ export function AIAssistantPane(): JSX.Element {
       noise_channel: resultsV2?.noise_channel ?? (noiseEnabled ? noiseModel : null),
     };
     return {
-      learning_mode: aiLearningMode(learningMode),
+      learning_mode: "research",
       circuit: {
         num_qubits: numQubits,
         initial_basis_state: initialBasisState,
@@ -122,12 +115,12 @@ export function AIAssistantPane(): JSX.Element {
         })),
       },
       wolfram: {
-        status: learningMode === "research" ? wolframStatus ?? "PENDING" : "UNAVAILABLE",
-        message: learningMode === "research" ? verification?.message ?? "Wolfram verification is pending." : "Wolfram verification is only used in Research Mode.",
+        status: wolframStatus ?? "PENDING",
+        message: verification?.message ?? "Wolfram verification is pending.",
         results: verification?.calculations ?? {},
       },
     };
-  }, [gateTimeNs, gates, initialBasisState, learningMode, metrics, noiseEnabled, noiseModel, noiseProbability, numQubits, results, resultsV2, simulationMode, t1Us, t2Us, verification]);
+  }, [gateTimeNs, gates, initialBasisState, metrics, noiseEnabled, noiseModel, noiseProbability, numQubits, results, resultsV2, simulationMode, t1Us, t2Us, verification]);
 
   const summary = `${numQubits} qubit${numQubits === 1 ? "" : "s"}${gates.length ? ` | ${gates.map((gate) => gate.gateType).join(" -> ")}` : " | initial state"}`;
   const verificationStatus = context.wolfram.status;
@@ -200,18 +193,6 @@ function AssistantText({ text }: { text: string }): JSX.Element {
   return <>{blocks.map((block, index) => index % 2 === 1 ? <BlockMath key={index} math={block.trim()} /> : block.trim() ? <MarkdownText key={index} text={block} /> : null)}</>;
 }
 
-function aiLearningMode(mode: LearningMode): AIChatContextRequest["learning_mode"] {
-  switch (mode) {
-    case "explore":
-      return "explore";
-    case "understand":
-      return "understand";
-    case "intuition":
-      return "intuition";
-    case "research":
-      return "research";
-  }
-}
 
 function chatErrorMessage(reason: unknown): string {
   if (!(reason instanceof ApiV2ClientError)) {

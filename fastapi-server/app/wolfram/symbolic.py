@@ -1,4 +1,4 @@
-"""Structured circuit conversion for Wolfram Research Mode."""
+"""Structured circuit conversion for Wolfram verification."""
 
 from __future__ import annotations
 

@@ -2,7 +2,6 @@ import { useMemo } from "react";
 import { useAuth } from "../../auth/AuthProvider";
 import { useCircuitStore } from "../../store/circuitStore";
 import { selectCurrentCode, useEditorStore } from "../../store/editorStore";
-import { usePlatformStore } from "../../store/platformStore";
 import { ReportReader } from "../Reports/ReportReader";
 import {
   buildCodeReport,
@@ -25,7 +24,6 @@ export function EditorCodeReportModal({ open, onClose }: EditorCodeReportModalPr
   const numQubits = useCircuitStore((s) => s.numQubits);
   const initialBasisState = useCircuitStore((s) => s.initialBasisState);
   const gates = useCircuitStore((s) => s.gates);
-  const learningMode = usePlatformStore((s) => s.learningMode);
   const { profile, user } = useAuth();
 
   const reportInput = useMemo(
@@ -38,7 +36,6 @@ export function EditorCodeReportModal({ open, onClose }: EditorCodeReportModalPr
       outputState,
       outputText,
       errorText,
-      learningMode,
       authorName: profile?.name ?? user?.displayName ?? user?.email ?? undefined,
       authorId: profile?.uid ?? user?.uid,
     }),
@@ -48,7 +45,6 @@ export function EditorCodeReportModal({ open, onClose }: EditorCodeReportModalPr
       gates,
       initialBasisState,
       language,
-      learningMode,
       numQubits,
       outputState,
       outputText,

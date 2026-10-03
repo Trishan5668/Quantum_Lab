@@ -51,23 +51,6 @@ export default function SettingsPage(): JSX.Element {
             </select>
           </label>
           <label>
-            Default explanation level
-            <select
-              value={preferences.defaultExplanationLevel}
-              onChange={(event) =>
-                setPreferences({
-                  ...preferences,
-                  defaultExplanationLevel: event.target.value as UserPreferences["defaultExplanationLevel"],
-                })
-              }
-            >
-              <option value="explore">Explore</option>
-              <option value="understand">Understand</option>
-              <option value="intuition">Intuition</option>
-              <option value="research">Research</option>
-            </select>
-          </label>
-          <label>
             Preferred notation
             <select
               value={preferences.preferredNotation}
@@ -108,11 +91,6 @@ export default function SettingsPage(): JSX.Element {
             label="Show physics report"
             checked={preferences.showPhysicsReport}
             onChange={(showPhysicsReport) => setPreferences({ ...preferences, showPhysicsReport })}
-          />
-          <Toggle
-            label="Research mode"
-            checked={preferences.researchMode}
-            onChange={(researchMode) => setPreferences({ ...preferences, researchMode })}
           />
         </div>
         {status && <p className="settings-status">{status}</p>}

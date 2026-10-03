@@ -13,7 +13,6 @@ import {
 import type { ReportSection } from "../Reports/ReportReader";
 import type { GatePlacement, MetricsResult, ResearchVerification, SimulationResultV2, StateSnapshot } from "../../types";
 import { displayKet, normalizeBasisState } from "../../utils/basisState";
-import type { LearningMode } from "../../store/platformStore";
 
 
 function stackPhysicsInterpretation(
@@ -76,7 +75,6 @@ export function buildPhysicsReport({
   steps,
   resultsV2,
   metrics,
-  learningMode = "understand",
   verification = null,
   verificationError = null,
 }: {
@@ -86,7 +84,6 @@ export function buildPhysicsReport({
   steps?: Parameters<typeof buildDerivation>[2];
   resultsV2: SimulationResultV2 | null;
   metrics: MetricsResult | null;
-  learningMode?: LearningMode;
   verification?: ResearchVerification | null;
   verificationError?: string | null;
 }): ReportSection[] {
@@ -134,18 +131,7 @@ export function buildPhysicsReport({
     chapter("Information-Theoretic Interpretation", informationSubtitle(ctx), informationLatex(ctx), informationMarkdown(ctx), () => <InformationChapter ctx={ctx} />),
     chapter("Research Notes", researchSubtitle(ctx), researchLatex(ctx), researchMarkdown(ctx), () => <ResearchChapter ctx={ctx} />),
   ];
-  return filterPhysicsSections(chapters, learningMode).map((section, index) => ({ ...section, number: String(index + 1) }));
-}
-
-function filterPhysicsSections(sections: ReportSection[], mode: LearningMode): ReportSection[] {
-  if (mode === "research") return sections;
-  const allowed =
-    mode === "explore"
-      ? new Set(["Hilbert Space", "Computational Basis", "Initial State", "Measurement"])
-      : mode === "understand"
-        ? new Set(["Hilbert Space", "Computational Basis", "Initial State", "Gate Stacking", "Superposition", "Measurement", "Density Operators"])
-        : new Set(["Hilbert Space", "Initial State", "Gate Stacking", "Superposition", "Tensor Products", "Entanglement", "Measurement", "Information-Theoretic Interpretation"]);
-  return sections.filter((section) => allowed.has(section.title));
+  return chapters.map((section, index) => ({ ...section, number: String(index + 1) }));
 }
 
 function GateStackingChapter({ ctx }: { ctx: PhysicsContext }): JSX.Element {
@@ -481,7 +467,7 @@ function ResearchChapter({ ctx }: { ctx: PhysicsContext }): JSX.Element {
   return (
     <ArticleChapter>
       <Lead>
-        This generated report classifies the circuit as {motifLabel(ctx.motif)}. The classification comes from the actual final amplitudes, the gate sequence, and the reduced-state diagnostics; {verified ? "the mathematical dataset for Research Mode is Wolfram verified." : "Wolfram verification is not available for at least part of this run, so this chapter treats native diagnostics as simulated rather than independently verified."}
+        This generated report classifies the circuit as {motifLabel(ctx.motif)}. The classification comes from the actual final amplitudes, the gate sequence, and the reduced-state diagnostics; {verified ? "the mathematical dataset is Wolfram verified." : "Wolfram verification is not available for at least part of this run, so this chapter treats native diagnostics as simulated rather than independently verified."}
       </Lead>
       <VerificationPhysicsNote ctx={ctx} />
       <ResearchSummary ctx={ctx} />

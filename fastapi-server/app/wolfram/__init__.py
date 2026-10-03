@@ -1,7 +1,7 @@
-"""Wolfram-backed Research Mode verification.
+"""Wolfram-backed simulator verification.
 
 QuantumLab remains the simulator. This package owns the independent
-mathematical verification boundary used only by Research Mode.
+mathematical verification boundary used by the simulator.
 """
 
 from app.wolfram.verification import verify_research_payload

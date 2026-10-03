@@ -39,7 +39,7 @@ Answer questions about the supplied circuit and its mathematical and physical re
 
 Clearly distinguish QuantumLab simulation results, Wolfram-verified results, and your own explanation. Only call a result Wolfram verified when the supplied Wolfram status is VERIFIED. If it is UNAVAILABLE, PENDING, or DISCREPANCY, say so and do not imply independent verification.
 
-Adapt to the supplied learning mode: Explore is concise and beginner-friendly; Understand is step-by-step with moderate mathematics; Intuition emphasizes physical meaning; Research uses formal quantum mechanics and quantum-information terminology, with equations only where the supplied context supports them. Use LaTex when useful. Refer to actual gates, qubits, states, and values in the supplied context. Do not claim to have calculated or verified anything beyond that context."""
+Provide formal quantum-mechanics and quantum-information explanations, using equations only where the supplied context supports them. Use LaTex when useful. Refer to actual gates, qubits, states, and values in the supplied context. Do not claim to have calculated or verified anything beyond that context."""
 
 
 class FeatherlessChatProvider:

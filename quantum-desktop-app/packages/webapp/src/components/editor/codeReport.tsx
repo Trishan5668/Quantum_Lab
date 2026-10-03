@@ -3,7 +3,6 @@ import { BlockMath, InlineMath } from "react-katex";
 import { LatexBlock } from "../Mathematics/LatexBlock";
 import type { ReportMetadata, ReportSection } from "../Reports/ReportReader";
 import { EDITOR_LANGUAGES, type EditorLanguageId, type OutputState } from "../../store/editorStore";
-import type { LearningMode } from "../../store/platformStore";
 import type { GatePlacement } from "../../types";
 import { gateMeta } from "../../types";
 import {
@@ -24,7 +23,6 @@ interface BuildCodeReportInput {
   outputState: OutputState;
   outputText: string;
   errorText: string;
-  learningMode: LearningMode;
   authorName?: string;
   authorId?: string;
 }
@@ -39,7 +37,6 @@ export function buildCodeReportMetadata(input: BuildCodeReportInput): ReportMeta
     initialState: `|${input.initialBasisState}>`,
     authorName: input.authorName,
     authorId: input.authorId,
-    learningMode: input.learningMode,
     generatedAt: new Date().toISOString(),
     circuitJson: {
       numQubits: input.numQubits,
@@ -222,49 +219,10 @@ export function buildCodeReport(input: BuildCodeReportInput): ReportSection[] {
     ),
   );
 
-  return filterCodeSections(sections, input.learningMode).map((item, index) => ({
+  return sections.map((item, index) => ({
     ...item,
     number: String(index + 1),
   }));
-}
-
-function filterCodeSections(sections: ReportSection[], mode: LearningMode): ReportSection[] {
-  if (mode === "research") return sections;
-  const allowed =
-    mode === "explore"
-      ? new Set([
-          "Abstract / Overview",
-          "Source Code",
-          "Quantum Algorithm / Circuit Interpretation",
-          "Execution Results",
-          "Conclusion",
-        ])
-      : mode === "understand"
-        ? new Set([
-            "Abstract / Overview",
-            "Program Objective",
-            "Source Code",
-            "Code Architecture",
-            "Quantum Algorithm / Circuit Interpretation",
-            "Mathematical Formulation",
-            "Execution Results",
-            "Conclusion",
-          ])
-        : new Set([
-            "Abstract / Overview",
-            "Program Objective",
-            "Source Code",
-            "Code Architecture",
-            "Line-by-Line / Block-by-Block Explanation",
-            "Quantum Algorithm / Circuit Interpretation",
-            "Mathematical Formulation",
-            "State Evolution",
-            "Measurement / Output Analysis",
-            "Computational Complexity",
-            "Execution Results",
-            "Conclusion",
-          ]);
-  return sections.filter((section) => allowed.has(section.title));
 }
 
 function section(
@@ -312,7 +270,6 @@ function AbstractChapter({
           ["Language", languageLabel],
           ["Lines of code", String(analysis.lineCount)],
           ["Detected operations", analysis.detectedGates.join(", ") || "None identified in source"],
-          ["Learning mode", input.learningMode],
         ]}
       />
     </Article>

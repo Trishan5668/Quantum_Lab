@@ -24,12 +24,10 @@ import { enqueueCircuitSave, getQueuedCircuitSaves, removeQueuedCircuitSave } fr
 export const defaultPreferences: UserPreferences = {
   theme: "dark",
   defaultSimulationMode: "statevector",
-  defaultExplanationLevel: "explore",
   preferredNotation: "dirac",
   autoSave: true,
   showAdvancedMathematics: false,
   showPhysicsReport: true,
-  researchMode: false,
 };
 
 function requireDb() {
@@ -74,7 +72,6 @@ export async function ensureUserDocument(user: User): Promise<QuantumLabUser> {
       preferences: defaultPreferences,
       theme: defaultPreferences.theme,
       defaultSimulationMode: defaultPreferences.defaultSimulationMode,
-      defaultExplanationLevel: defaultPreferences.defaultExplanationLevel,
       totalSimulationsRun: 0,
       mostUsedGate: "None",
       favoriteSimulationMode: defaultPreferences.defaultSimulationMode,
@@ -112,7 +109,6 @@ export function normalizeUser(data: Record<string, unknown>): QuantumLabUser {
     preferences,
     theme: preferences.theme,
     defaultSimulationMode: preferences.defaultSimulationMode,
-    defaultExplanationLevel: preferences.defaultExplanationLevel,
     totalSimulationsRun: Number(data.totalSimulationsRun ?? 0),
     mostUsedGate: String(data.mostUsedGate ?? "None"),
     favoriteSimulationMode: (data.favoriteSimulationMode as SimulationMode) ?? preferences.defaultSimulationMode,
@@ -128,7 +124,6 @@ export async function updateUserPreferences(uid: string, preferences: UserPrefer
       preferences,
       theme: preferences.theme,
       defaultSimulationMode: preferences.defaultSimulationMode,
-      defaultExplanationLevel: preferences.defaultExplanationLevel,
       updatedAt: serverTimestamp(),
     },
     { merge: true },

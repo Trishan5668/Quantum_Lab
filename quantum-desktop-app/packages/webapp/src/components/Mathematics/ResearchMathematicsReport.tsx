@@ -115,7 +115,7 @@ function buildResearchMathSections(input: ResearchMathematicsReportProps & {
   );
   const ctx: ResearchContext = { ...input, finalDensity, referenceDensity, circuitUnitary };
   const sections = [
-    section("Research Verification", "Wolfram authority status for this Research Mode report", verificationSection(ctx), true),
+    section("Research Verification", "Wolfram authority status for this report", verificationSection(ctx), true),
     section("Initial State", "Computational-basis preparation and state-vector invariants", initialSection(ctx), true),
     section("Operator Definitions", "Local operator data, spectra, and powers", operatorDefinitionsSection(ctx)),
     section("Tensor Embeddings", "Explicit Kronecker embeddings into the register Hilbert space", tensorEmbeddingSection(ctx)),
@@ -358,7 +358,7 @@ function VerificationBanner({ verification, error }: { verification: ResearchVer
   const label = verification ? (verification.status === "VERIFIED" ? "Wolfram Verified" : verification.status === "DISCREPANCY" ? "Wolfram discrepancy" : "Wolfram verification unavailable") : error ? "Wolfram verification unavailable" : "Wolfram verification pending";
   return (
     <div className={`mb-3 rounded-md border px-3 py-2 text-xs ${status === "VERIFIED" ? "border-emerald-500/40 bg-emerald-500/10 text-emerald-100" : status === "DISCREPANCY" ? "border-amber-500/40 bg-amber-500/10 text-amber-100" : "border-slate-500/40 bg-slate-500/10 text-text-secondary"}`}>
-      <strong>Research Mode:</strong> {label}
+      <strong>Verification:</strong> {label}
     </div>
   );
 }

@@ -13,7 +13,6 @@ import { MetricsPanel } from "../components/Visualizations/MetricsPanel";
 import { MathematicsPanel } from "../components/Mathematics/MathematicsPanel";
 import { PhysicsPanel } from "../components/Physics/PhysicsPanel";
 import { AIAssistantPane } from "../components/AI/AIAssistantPane";
-import { LearningLayerSelector } from "../components/platform/LearningLayerSelector";
 import { EditorNavLink } from "../components/platform/WorkspaceNavLinks";
 import { PageMeta } from "../components/platform/PageMeta";
 import { fetchHealth } from "../api";
@@ -23,37 +22,34 @@ import {
   ENVIRONMENT_LABEL,
   frontendUrl,
 } from "../config/api";
-import { usePlatformStore, type LearningMode, type WorkspacePanel } from "../store/platformStore";
+import { usePlatformStore, type WorkspacePanel } from "../store/platformStore";
 import { UserMenu } from "../auth/UserMenu";
 import { useCircuitPersistence } from "../auth/useCircuitPersistence";
 import { CREATOR } from "../config/attribution";
 
 type HealthStatus = "checking" | "ok" | "down";
 
-function panelVisible(mode: LearningMode, activePanel: WorkspacePanel, panel: string): boolean {
+function panelVisible(activePanel: WorkspacePanel, panel: string): boolean {
   if (activePanel === "math") return panel === "mathematics";
   if (activePanel === "physics") return panel === "physics";
   switch (panel) {
     case "statevector":
-      return mode === "understand" || mode === "intuition" || mode === "research";
     case "bloch":
     case "probability":
-      return mode === "explore" || mode === "understand" || mode === "intuition" || mode === "research";
     case "density":
     case "metrics":
     case "noise":
-      return mode === "research";
+      return true;
     case "mathematics":
-      return mode === "research";
+      return true;
     case "physics":
-      return mode === "intuition" || mode === "research";
+      return true;
     default:
       return true;
   }
 }
 
 export default function SimulatorPage(): JSX.Element {
-  const learningMode = usePlatformStore((s) => s.learningMode);
   const activeWorkspacePanel = usePlatformStore((s) => s.activeWorkspacePanel);
   const [health, setHealth] = useState<HealthStatus>("checking");
   const [healthVersion, setHealthVersion] = useState("");
@@ -120,7 +116,6 @@ export default function SimulatorPage(): JSX.Element {
           <div className="flex items-center gap-2">
             <SaveIndicator status={saveStatus} lastSavedAt={lastSavedAt} />
             <EditorNavLink />
-            <LearningLayerSelector />
             <HealthBadge
               status={health}
               version={healthVersion}
@@ -144,7 +139,7 @@ export default function SimulatorPage(): JSX.Element {
               <div className="sidebar-scroll">
                 <GatePalette />
               </div>
-              {panelVisible(learningMode, activeWorkspacePanel, "noise") && <NoiseSettings />}
+              {panelVisible(activeWorkspacePanel, "noise") && <NoiseSettings />}
               <SidebarCreator />
             </aside>
 
@@ -154,13 +149,13 @@ export default function SimulatorPage(): JSX.Element {
 
             <aside className="sidebar-right border-l border-border bg-bg-surface/60">
               <div className="sidebar-scroll">
-                {panelVisible(learningMode, activeWorkspacePanel, "mathematics") && <MathematicsPanel />}
-                {panelVisible(learningMode, activeWorkspacePanel, "physics") && <PhysicsPanel />}
-                {panelVisible(learningMode, activeWorkspacePanel, "statevector") && <StateVectorPanel />}
-                {panelVisible(learningMode, activeWorkspacePanel, "bloch") && <BlochSpherePanel />}
-                {panelVisible(learningMode, activeWorkspacePanel, "probability") && <ProbabilityChart />}
-                {panelVisible(learningMode, activeWorkspacePanel, "density") && <DensityHeatmap />}
-                {panelVisible(learningMode, activeWorkspacePanel, "metrics") && <MetricsPanel />}
+                {panelVisible(activeWorkspacePanel, "mathematics") && <MathematicsPanel />}
+                {panelVisible(activeWorkspacePanel, "physics") && <PhysicsPanel />}
+                {panelVisible(activeWorkspacePanel, "statevector") && <StateVectorPanel />}
+                {panelVisible(activeWorkspacePanel, "bloch") && <BlochSpherePanel />}
+                {panelVisible(activeWorkspacePanel, "probability") && <ProbabilityChart />}
+                {panelVisible(activeWorkspacePanel, "density") && <DensityHeatmap />}
+                {panelVisible(activeWorkspacePanel, "metrics") && <MetricsPanel />}
               </div>
             </aside>
             <AIAssistantPane />

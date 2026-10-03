@@ -6,7 +6,6 @@ import type { ResearchVerification } from "../../types";
 import { FullscreenReport, ReportReader } from "../Reports/ReportReader";
 import { PanelPlaceholder, PanelSection } from "../ui/PanelSection";
 import { buildPhysicsReport } from "./physicsReport";
-import { usePlatformStore } from "../../store/platformStore";
 
 export function PhysicsPanel(): JSX.Element {
   const numQubits = useCircuitStore((s) => s.numQubits);
@@ -22,12 +21,10 @@ export function PhysicsPanel(): JSX.Element {
   const t1Us = useCircuitStore((s) => s.t1Us);
   const t2Us = useCircuitStore((s) => s.t2Us);
   const gateTimeNs = useCircuitStore((s) => s.gateTimeNs);
-  const learningMode = usePlatformStore((s) => s.learningMode);
   const { profile, user } = useAuth();
   const [verification, setVerification] = useState<ResearchVerification | null>(null);
   const [verificationError, setVerificationError] = useState<string | null>(null);
   useEffect(() => {
-    if (learningMode !== "research") return;
     let cancelled = false;
     setVerification(null);
     setVerificationError(null);
@@ -45,7 +42,7 @@ export function PhysicsPanel(): JSX.Element {
     return () => {
       cancelled = true;
     };
-  }, [gateTimeNs, gates, initialBasisState, learningMode, noiseEnabled, noiseModel, noiseProbability, numQubits, resultsV2, simulationMode, t1Us, t2Us]);
+  }, [gateTimeNs, gates, initialBasisState, noiseEnabled, noiseModel, noiseProbability, numQubits, resultsV2, simulationMode, t1Us, t2Us]);
   const sections = useMemo(
     () =>
       buildPhysicsReport({
@@ -55,11 +52,10 @@ export function PhysicsPanel(): JSX.Element {
         steps: results?.steps,
         resultsV2,
         metrics,
-        learningMode,
         verification,
         verificationError,
       }),
-    [gates, initialBasisState, learningMode, metrics, numQubits, results?.steps, resultsV2, verification, verificationError],
+    [gates, initialBasisState, metrics, numQubits, results?.steps, resultsV2, verification, verificationError],
   );
 
   const subtitle = results
@@ -76,7 +72,6 @@ export function PhysicsPanel(): JSX.Element {
       noiseModel: noiseEnabled ? `${noiseModel} p=${noiseProbability}` : "Ideal",
       authorName: profile?.name ?? user?.displayName ?? user?.email ?? undefined,
       authorId: profile?.uid ?? user?.uid,
-      learningMode,
       circuitJson: {
         numQubits,
         initialBasisState,
@@ -88,7 +83,7 @@ export function PhysicsPanel(): JSX.Element {
       gateSequence: gates.map((gate) => `${gate.gateType}${gate.stackCount && gate.stackCount > 1 ? `^${gate.stackCount}` : ""} q[${gate.qubitTargets.join(",")}] @t${gate.timeStep}`),
       backendVersion: resultsV2 ? "v2" : results ? "v1" : "not run",
     }),
-    [gates, initialBasisState, learningMode, noiseEnabled, noiseModel, noiseProbability, numQubits, profile?.name, profile?.uid, results, resultsV2, simulationMode, user?.displayName, user?.email, user?.uid],
+    [gates, initialBasisState, noiseEnabled, noiseModel, noiseProbability, numQubits, profile?.name, profile?.uid, results, resultsV2, simulationMode, user?.displayName, user?.email, user?.uid],
   );
 
   return (
@@ -96,9 +91,9 @@ export function PhysicsPanel(): JSX.Element {
       title="Physics"
       subtitle="Why the circuit behaves this way"
       actions={
-        <FullscreenReport label="Physics fullscreen" title="QuantumLab Physics Report" subtitle={`${subtitle} | Learning mode: ${learningMode}`}>
+        <FullscreenReport label="Physics fullscreen" title="QuantumLab Physics Report" subtitle={subtitle}>
           <div className="physics-report-surface physics-report-fullscreen">
-            <ReportReader title="QuantumLab Physics Report" subtitle={`${subtitle} | Learning mode: ${learningMode}`} sections={sections} metadata={metadata} />
+            <ReportReader title="QuantumLab Physics Report" subtitle={subtitle} sections={sections} metadata={metadata} />
           </div>
         </FullscreenReport>
       }
@@ -107,7 +102,7 @@ export function PhysicsPanel(): JSX.Element {
         <PanelPlaceholder>Run the circuit to bind this report to the latest simulator output.</PanelPlaceholder>
       )}
       <div className="physics-report-surface">
-        <ReportReader title="QuantumLab Physics Report" subtitle={`${subtitle} | Learning mode: ${learningMode}`} sections={sections} metadata={metadata} compact />
+        <ReportReader title="QuantumLab Physics Report" subtitle={subtitle} sections={sections} metadata={metadata} compact />
       </div>
     </PanelSection>
   );

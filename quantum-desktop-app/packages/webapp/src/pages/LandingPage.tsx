@@ -27,8 +27,8 @@ const FEATURES = [
     to: "/app",
   },
   {
-    title: "Research Mode",
-    description: "Density matrices, noise channels, fidelity, and entanglement entropy.",
+    title: "Advanced Analysis",
+    description: "Density matrices, noise channels, fidelity, and entanglement entropy by default.",
     to: "/research",
   },
   {
@@ -164,4 +164,3 @@ export default function LandingPage(): JSX.Element {
     </>
   );
 }
-

@@ -22,7 +22,7 @@ export default function ResearchPage(): JSX.Element {
         <SectionHeader
           eyebrow="Research"
           title="From simulation to science"
-          subtitle="Deep topics for researchers and advanced learners. Use Research mode in the simulator."
+          subtitle="Deep topics for researchers and advanced learners, available in the simulator by default."
         />
         <div className="grid gap-4 sm:grid-cols-2">
           {RESEARCH_TOPICS.map((topic) => (
@@ -36,7 +36,7 @@ export default function ResearchPage(): JSX.Element {
         </div>
         <div className="mt-8">
           <Link to="/app" className="btn btn-primary btn-md">
-            Open Simulator in Research Mode
+            Open Simulator
           </Link>
         </div>
       </div>
