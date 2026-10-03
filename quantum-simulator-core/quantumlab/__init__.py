@@ -7,6 +7,7 @@ from quantumlab.circuit import (
     CircuitResult,
     DensityCircuitResult,
     DensityStepResult,
+    MPSCircuitResult,
     GatePlacement,
     SimulationMode,
     StepResult,
@@ -44,6 +45,7 @@ from quantumlab.noise import (
     build_channel,
 )
 from quantumlab.state import StateVector
+from quantumlab.tensor_networks import MPS, MPSConfig, TruncationEvent
 
 __version__ = "2.0.0"
 
@@ -66,11 +68,15 @@ __all__ = [
     "CNOT",
     "I",
     "StateVector",
+    "MPS",
+    "MPSConfig",
+    "TruncationEvent",
     "DensityMatrix",
     "CircuitDefinition",
     "CircuitResult",
     "DensityCircuitResult",
     "DensityStepResult",
+    "MPSCircuitResult",
     "GatePlacement",
     "StepResult",
     "SimulationMode",

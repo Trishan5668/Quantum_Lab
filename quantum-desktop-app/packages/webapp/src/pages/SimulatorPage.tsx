@@ -10,6 +10,7 @@ import { BlochSpherePanel } from "../components/Visualizations/BlochSpherePanel"
 import { ProbabilityChart } from "../components/Visualizations/ProbabilityChart";
 import { DensityHeatmap } from "../components/Visualizations/DensityHeatmap";
 import { MetricsPanel } from "../components/Visualizations/MetricsPanel";
+import { TensorNetworkPanel } from "../components/Visualizations/TensorNetworkPanel";
 import { MathematicsPanel } from "../components/Mathematics/MathematicsPanel";
 import { PhysicsPanel } from "../components/Physics/PhysicsPanel";
 import { AIAssistantPane } from "../components/AI/AIAssistantPane";
@@ -156,6 +157,7 @@ export default function SimulatorPage(): JSX.Element {
                 {panelVisible(activeWorkspacePanel, "probability") && <ProbabilityChart />}
                 {panelVisible(activeWorkspacePanel, "density") && <DensityHeatmap />}
                 {panelVisible(activeWorkspacePanel, "metrics") && <MetricsPanel />}
+                <TensorNetworkPanel />
               </div>
             </aside>
             <AIAssistantPane />

@@ -431,6 +431,12 @@ export const useCircuitStore = create<Store>((set, get) => ({
     const { numQubits, gates, initialBasisState } = state;
     set({ isRunning: true, lastError: null, metrics: null });
     try {
+      if (state.simulationMode === "mps") {
+        if (state.noiseEnabled) throw new Error("Noise is not supported by the pure-state MPS backend.");
+        const result = await runCircuit({ numQubits, gates, initialBasisState }, "mps");
+        set({ results: result, resultsV2: null, isRunning: false, currentStep: result.steps.length });
+        return;
+      }
       if (!usesV2(state)) {
         const result: SimulationResult = await runCircuit({ numQubits, gates, initialBasisState });
         set({

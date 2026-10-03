@@ -1,6 +1,6 @@
 export type GateType = "H" | "X" | "Y" | "Z" | "RX" | "RY" | "RZ" | "CNOT" | "M";
 
-export type SimulationMode = "statevector" | "density";
+export type SimulationMode = "statevector" | "density" | "mps";
 
 export type NoiseChannelType =
   | "amplitude_damping"
@@ -75,6 +75,16 @@ export interface SimulationResult {
   execution_time_ms: number;
   steps: StepResult[];
   final_state: StateSnapshot;
+  tensor_network?: TensorNetworkMetadata;
+}
+
+export interface TensorNetworkMetadata {
+  backend: "mps";
+  bond_dimensions: number[];
+  max_bond_dimension: number;
+  estimated_memory_bytes: number;
+  cumulative_truncation_error: number;
+  entanglement_entropy: number[];
 }
 
 export interface SimulationResultV2 extends SimulationResult {

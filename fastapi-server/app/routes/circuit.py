@@ -12,6 +12,7 @@ from quantumlab.circuit import (
     run_step,
 )
 from quantumlab.state import StateVector
+from quantumlab.tensor_networks import MPS, MPSConfig
 
 from app.models import (
     CircuitIn,
@@ -53,7 +54,17 @@ def _initial_state_from_basis(payload: CircuitIn) -> StateVector:
 async def run(payload: CircuitIn) -> dict[str, object]:
     """Execute the full circuit and return per-step + final state."""
     circuit = _circuit_from_in(payload)
-    result = run_circuit(circuit, initial_state=_initial_state_from_basis(payload))
+    backend = payload.simulation_backend
+    if backend == "auto":
+        backend = "mps" if payload.num_qubits > 8 else "statevector"
+    if backend == "mps":
+        basis = payload.initial_basis_state or ("0" * payload.num_qubits)
+        if len(basis) != payload.num_qubits or any(bit not in "01" for bit in basis):
+            basis = "0" * payload.num_qubits
+        config = MPSConfig(max_bond_dimension=payload.max_bond_dimension, truncation_cutoff=payload.truncation_cutoff)
+        result = run_circuit(circuit, mode="mps", initial_mps=MPS.basis(basis, config))
+        return envelope(result.to_dict())
+    result = run_circuit(circuit, mode="density" if backend == "density" else "statevector", initial_state=_initial_state_from_basis(payload))
     out = CircuitRunOut.model_validate(result.to_dict())
     return envelope(out.model_dump())
 

@@ -11,7 +11,7 @@ export function SimulationModeToggle(): JSX.Element {
   return (
     <div className="flex flex-wrap items-center gap-1.5" role="group" aria-label="Simulation settings">
       <span className="font-mono text-[10px] uppercase tracking-widest text-text-muted">Mode</span>
-      {(["statevector", "density"] as SimulationMode[]).map((mode) => (
+      {(["statevector", "density", "mps"] as SimulationMode[]).map((mode) => (
         <button
           key={mode}
           type="button"
@@ -23,12 +23,12 @@ export function SimulationModeToggle(): JSX.Element {
               : "btn-secondary border-border text-text-secondary"
           }`}
           title={
-            mode === "statevector"
-              ? "Pure statevector simulation (default)"
-              : "Density matrix evolution"
+            mode === "statevector" ? "Pure statevector simulation (default)"
+              : mode === "density" ? "Density matrix evolution"
+              : "Matrix-product-state simulation with explicit truncation metadata"
           }
         >
-          {mode === "statevector" ? "Statevector" : "Density"}
+          {mode === "statevector" ? "Statevector" : mode === "density" ? "Density" : "MPS"}
         </button>
       ))}
       {noiseEnabled && (

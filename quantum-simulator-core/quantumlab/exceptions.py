@@ -29,3 +29,31 @@ class NormalizationError(QuantumLabError):
 
 class InvalidDensityMatrixError(QuantumLabError):
     """Raised when a density matrix fails structural or physical validation."""
+
+
+class TensorNetworkError(QuantumLabError):
+    """Base error for tensor-network execution."""
+
+
+class MPSShapeError(TensorNetworkError):
+    """Raised when MPS tensors do not have compatible virtual dimensions."""
+
+
+class MPSCanonicalizationError(TensorNetworkError):
+    """Raised when a requested canonical form cannot be obtained safely."""
+
+
+class MPSContractionError(TensorNetworkError):
+    """Raised for an invalid or unsafe tensor contraction."""
+
+
+class MPSNumericalError(TensorNetworkError):
+    """Raised for non-finite tensor-network numerical results."""
+
+
+class MPSMemoryError(TensorNetworkError):
+    """Raised before an MPS operation would exceed its memory budget."""
+
+
+class UnsupportedTensorNetworkOperation(TensorNetworkError):
+    """Raised when an operation needs a tensor-network representation not implemented."""

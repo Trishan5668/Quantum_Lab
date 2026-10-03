@@ -30,9 +30,12 @@ class GatePlacementIn(BaseModel):
 
 
 class CircuitIn(BaseModel):
-    num_qubits: int = Field(..., ge=1, le=8)
+    num_qubits: int = Field(..., ge=1, le=256)
     initial_basis_state: str | None = None
     gates: list[GatePlacementIn] = Field(default_factory=list)
+    simulation_backend: Literal["statevector", "density", "mps", "auto"] = "statevector"
+    max_bond_dimension: int = Field(default=256, ge=1, le=4096)
+    truncation_cutoff: float = Field(default=1e-10, ge=0)
 
 
 class StateOut(BaseModel):

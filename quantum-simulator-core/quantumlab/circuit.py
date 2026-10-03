@@ -30,11 +30,12 @@ from quantumlab.exceptions import (
 from quantumlab.gates import CNOT, RX, RY, RZ, GateMatrix, H, X, Y, Z
 from quantumlab.noise import NoiseConfig, apply_noise, build_channel
 from quantumlab.state import StateVector
+from quantumlab.tensor_networks import MPS, MPSConfig
 
 GateType = Literal[
     "H", "X", "Y", "Z", "RX", "RY", "RZ", "CNOT", "M"
 ]
-SimulationMode = Literal["statevector", "density"]
+SimulationMode = Literal["statevector", "density", "mps"]
 
 _SINGLE_QUBIT_GATES: dict[str, GateMatrix] = {
     "H": H(),
@@ -66,10 +67,10 @@ class CircuitDefinition:
     num_qubits: int
     gates: list[GatePlacement]
 
-    def validate(self) -> None:
-        if self.num_qubits < 1 or self.num_qubits > 8:
+    def validate(self, max_qubits: int = 8) -> None:
+        if self.num_qubits < 1 or self.num_qubits > max_qubits:
             raise SimulationError(
-                f"num_qubits must be in [1, 8], got {self.num_qubits}"
+                f"num_qubits must be in [1, {max_qubits}], got {self.num_qubits}"
             )
         for g in self.gates:
             if g.stack_count < 1:
@@ -189,6 +190,30 @@ class DensityCircuitResult:
                 ],
             }
         return payload
+
+
+@dataclass
+class MPSCircuitResult:
+    """MPS result which never expands a large quantum state for transport."""
+
+    final_mps: MPS
+    execution_time_ms: float
+    num_qubits: int
+    simulation_mode: SimulationMode = "mps"
+
+    def to_dict(self) -> dict[str, Any]:
+        state: dict[str, Any] = {"num_qubits": self.num_qubits, "amplitudes": [], "probabilities": [], "basis_labels": []}
+        if self.num_qubits <= 12:
+            amplitudes = self.final_mps.to_statevector(max_qubits=12)
+            state = {
+                "num_qubits": self.num_qubits,
+                "amplitudes": [{"real": float(a.real), "imag": float(a.imag)} for a in amplitudes],
+                "probabilities": [float(abs(a) ** 2) for a in amplitudes],
+                "basis_labels": [f"|{i:0{self.num_qubits}b}>" for i in range(1 << self.num_qubits)],
+            }
+        return {"num_qubits": self.num_qubits, "execution_time_ms": self.execution_time_ms,
+                "simulation_mode": "mps", "steps": [], "final_state": state,
+                "tensor_network": self.final_mps.metadata()}
 
 
 def _resolve_gate(placement: GatePlacement) -> GateMatrix | None:
@@ -327,9 +352,23 @@ def run_circuit(
     mode: SimulationMode = "statevector",
     noise: NoiseConfig | None = None,
     initial_state: StateVector | None = None,
-) -> CircuitResult | DensityCircuitResult:
+    initial_mps: MPS | None = None,
+    mps_config: MPSConfig | None = None,
+) -> CircuitResult | DensityCircuitResult | MPSCircuitResult:
     """Execute the entire circuit, returning per-step and final results."""
-    circuit.validate()
+    circuit.validate(max_qubits=256 if mode == "mps" else 8)
+    if mode == "mps":
+        if noise is not None and noise.enabled:
+            raise SimulationError("noise channels are not supported by the pure-state MPS backend")
+        mps = initial_mps if initial_mps is not None else MPS.zero(circuit.num_qubits, mps_config)
+        if mps.num_qubits != circuit.num_qubits:
+            raise SimulationError("initial MPS qubit count does not match circuit")
+        t0 = perf_counter()
+        for placement in sorted(circuit.gates, key=lambda g: (g.time_step, g.id)):
+            gate = _effective_gate(placement)
+            if gate is not None:
+                mps.apply_gate(gate, placement.qubit_targets)
+        return MPSCircuitResult(mps, (perf_counter() - t0) * 1000.0, circuit.num_qubits)
     noise_cfg = noise or NoiseConfig()
     use_density = mode == "density" or noise_cfg.enabled
 
