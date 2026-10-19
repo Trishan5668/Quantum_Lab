@@ -31,6 +31,17 @@ jobs:
           cd quantum-simulator-core
           set -o pipefail
           python -m mypy quantumlab --show-error-codes --no-pretty 2>&1 | tee mypy-report.txt
+      - name: Surface typecheck diagnostics
+        if: failure()
+        run: |
+          cd quantum-simulator-core
+          python - <<'PY'
+          import pathlib
+          lines = pathlib.Path("mypy-report.txt").read_text(encoding="utf-8").splitlines()
+          for line in lines[:10]:
+              escaped = line.replace("%", "%25").replace("\r", "%0D").replace("\n", "%0A")
+              print(f"::error title=mypy::{escaped}")
+          PY
       - name: Upload typecheck diagnostics
         if: failure()
         uses: actions/upload-artifact@v4
