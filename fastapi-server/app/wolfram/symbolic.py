@@ -5,7 +5,6 @@ from __future__ import annotations
 from typing import Any
 
 import numpy as np
-
 from quantumlab._operators import full_unitary
 from quantumlab.circuit import GatePlacement, _effective_gate
 

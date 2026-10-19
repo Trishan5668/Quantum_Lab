@@ -1,0 +1,515 @@
+{
+  "analysis": {
+    "bracket": [
+      0.006,
+      0.007
+    ],
+    "claim_label": "REPRODUCED_WITHIN_DECLARED_MODEL",
+    "criteria": [
+      {
+        "detail": "bracket=[0.006, 0.007]",
+        "id": "bracket_exists",
+        "passed": true
+      },
+      {
+        "detail": "band=[0.0055, 0.0085]",
+        "id": "bracket_in_predeclared_band",
+        "passed": true
+      },
+      {
+        "detail": "Newcombe 95% intervals exclude zero with opposite signs",
+        "id": "refinement_significant",
+        "passed": true
+      },
+      {
+        "detail": "LER(d3,d5,d7) at p=0.004 = (0.01215, 0.008, 0.004)",
+        "evaluable": true,
+        "id": "ordering_below_threshold",
+        "passed": true
+      },
+      {
+        "detail": "LER(d3,d5,d7) at p=0.010 = (0.05885, 0.086, 0.10365)",
+        "evaluable": true,
+        "id": "ordering_above_threshold",
+        "passed": true
+      }
+    ],
+    "differences": {
+      "0.006": {
+        "d3_estimate": 0.024655,
+        "d5_estimate": 0.02255,
+        "difference": 0.0021049999999999992,
+        "interval_excludes_zero": true,
+        "interval_high": 0.003046292640066656,
+        "interval_low": 0.001164213283086462
+      },
+      "0.007": {
+        "d3_estimate": 0.03182,
+        "d5_estimate": 0.03485,
+        "difference": -0.003029999999999998,
+        "interval_excludes_zero": true,
+        "interval_high": -0.0019175499315913296,
+        "interval_low": -0.004142924068890725
+      }
+    },
+    "predeclared_band": [
+      0.0055,
+      0.0085
+    ],
+    "rationale": "The measured crossing is inside the pre-declared literature band, is statistically resolved at the refinement points, and both distance-ordering checks pass for the declared model.",
+    "scope": "Stim circuit-level depolarizing model with PyMatching MWPM; not a hardware result and not Fowler et al.'s exact gate model.",
+    "scores": {
+      "0.006": 0.0021049999999999992,
+      "0.007": -0.003029999999999998
+    },
+    "status": "REPRODUCED",
+    "within_predeclared_band": true
+  },
+  "analysis_version": "1.0.0",
+  "artifact_schema_version": "1.0",
+  "config_hash": "28c3bfae7e487fb5a01c0128cf9354827a802db925d07e931f5861092a75dabf",
+  "end_utc": "2026-10-19T16:09:34.001945+00:00",
+  "experiment_id": "20261019T160933Z-bc711864",
+  "notices": [
+    "Integrity verification does not establish scientific validity.",
+    "Reproduction is limited to the declared model class.",
+    "The exploratory pilot is not evidence."
+  ],
+  "provenance": {
+    "dirty": true,
+    "dirty_status_sha256": "fcae70c9d53942674ce24f6f0592b4917d74bbbc72ac96335776e1eace9ae135",
+    "source_revision": "100f8a3640d6a57484eec2e2b7effc93ce2ffc02"
+  },
+  "results": [
+    {
+      "circuit_sha256": "72e5be5e0223ef947610a762a9e61332845fca85188389959634bfb6ac5680e8",
+      "confidence_level": 0.95,
+      "dem_sha256": "9d4d0dcf20b002b680f90182e00abe8b029877069a44bf849f93ac8bfc893fe8",
+      "distance": 3,
+      "failures": 243,
+      "interval_high": 0.013764758778588793,
+      "interval_low": 0.010722610801352488,
+      "method": "wilson",
+      "p": 0.004,
+      "probability": 0.01215,
+      "seed": 3216191410,
+      "shots": 20000,
+      "stage": "coarse",
+      "trials": 20000
+    },
+    {
+      "circuit_sha256": "0670b3c37962732e37e0765b2c3f564fd0bd4ae3dea45dd8cea08b65ef495f91",
+      "confidence_level": 0.95,
+      "dem_sha256": "a67a47aafc5a37adc8067be8459f0db3f6e640611575c778aa78070b5971c59a",
+      "distance": 3,
+      "failures": 324,
+      "interval_high": 0.018044825388257767,
+      "interval_low": 0.014540988699629062,
+      "method": "wilson",
+      "p": 0.005,
+      "probability": 0.0162,
+      "seed": 1220475352,
+      "shots": 20000,
+      "stage": "coarse",
+      "trials": 20000
+    },
+    {
+      "circuit_sha256": "c97ad8462f4996b4449fdc38fbbf04835c565bced814f67f1effceaac6353325",
+      "confidence_level": 0.95,
+      "dem_sha256": "4dbac9da8a2b428168cdfb6c1a257efd764d2642434f8ca333a610cc18dd06f2",
+      "distance": 3,
+      "failures": 493,
+      "interval_high": 0.026891943816051842,
+      "interval_low": 0.022590624862486818,
+      "method": "wilson",
+      "p": 0.006,
+      "probability": 0.02465,
+      "seed": 866282110,
+      "shots": 20000,
+      "stage": "coarse",
+      "trials": 20000
+    },
+    {
+      "circuit_sha256": "2b439b8672238cd4ed91356ae1c5162cd3e56fb0fe5870af64f26520dd85123b",
+      "confidence_level": 0.95,
+      "dem_sha256": "49ca0a4c1f72351929f72539087fdbd9e1cce1a6b203115c4548ab1badc4526a",
+      "distance": 3,
+      "failures": 657,
+      "interval_high": 0.03541138960554603,
+      "interval_low": 0.030468029681672518,
+      "method": "wilson",
+      "p": 0.007,
+      "probability": 0.03285,
+      "seed": 1411275758,
+      "shots": 20000,
+      "stage": "coarse",
+      "trials": 20000
+    },
+    {
+      "circuit_sha256": "e3231a0a8002ddbe2916c167e744618b7418fa02c9d25d40ca334c5b06c5d72e",
+      "confidence_level": 0.95,
+      "dem_sha256": "d6391429f4d30499e68bcecf1e4fa85c72b3d19d426d6c44ca51874396319ac9",
+      "distance": 3,
+      "failures": 788,
+      "interval_high": 0.04218584596490328,
+      "interval_low": 0.036791057649980294,
+      "method": "wilson",
+      "p": 0.008,
+      "probability": 0.0394,
+      "seed": 1783860878,
+      "shots": 20000,
+      "stage": "coarse",
+      "trials": 20000
+    },
+    {
+      "circuit_sha256": "0ce98c7da3f5cc62f8277bda02dfb065d78d418b5285df7bb9d14a5c7fd7dd99",
+      "confidence_level": 0.95,
+      "dem_sha256": "12d1d16696c1f9a75c8aec9cc772c34d9a0cf14ba70a7b1de788828d41bedd31",
+      "distance": 3,
+      "failures": 1177,
+      "interval_high": 0.06219714157549847,
+      "interval_low": 0.05567229183680263,
+      "method": "wilson",
+      "p": 0.01,
+      "probability": 0.05885,
+      "seed": 1435474854,
+      "shots": 20000,
+      "stage": "coarse",
+      "trials": 20000
+    },
+    {
+      "circuit_sha256": "b82a2941427ae9fd4017fc554b524ef3e35ad38b7124e3f102880b30969c77fe",
+      "confidence_level": 0.95,
+      "dem_sha256": "c5a033e0b5b9459cfbea885aff150ae18921d519ff2c8f4031ed0d82244f14f6",
+      "distance": 5,
+      "failures": 160,
+      "interval_high": 0.009332595199818172,
+      "interval_low": 0.006856368279388781,
+      "method": "wilson",
+      "p": 0.004,
+      "probability": 0.008,
+      "seed": 3480252633,
+      "shots": 20000,
+      "stage": "coarse",
+      "trials": 20000
+    },
+    {
+      "circuit_sha256": "25c753d013b1e496d894ff07f15ac5c1602d3d12624da0bf1588652acce47e5f",
+      "confidence_level": 0.95,
+      "dem_sha256": "66dd1637d3b69d2b4e3a3f179f27b2966853224e3c1639c08515aac6b8ac3dee",
+      "distance": 5,
+      "failures": 284,
+      "interval_high": 0.01593551311038759,
+      "interval_low": 0.012651069121723665,
+      "method": "wilson",
+      "p": 0.005,
+      "probability": 0.0142,
+      "seed": 247177300,
+      "shots": 20000,
+      "stage": "coarse",
+      "trials": 20000
+    },
+    {
+      "circuit_sha256": "c6a39a20fd8ed7efa631d70b0b9d1557830b8d7ee37f08b9dbcc7ae07626aa31",
+      "confidence_level": 0.95,
+      "dem_sha256": "f2ad5b28083abaf6ce5d02646cffe54c8fe58d57be654a07a1a67a3b3e1c0b39",
+      "distance": 5,
+      "failures": 480,
+      "interval_high": 0.026214286505658362,
+      "interval_low": 0.02196853181975324,
+      "method": "wilson",
+      "p": 0.006,
+      "probability": 0.024,
+      "seed": 3085076402,
+      "shots": 20000,
+      "stage": "coarse",
+      "trials": 20000
+    },
+    {
+      "circuit_sha256": "a548e4b791140bcc9a343d3b11a0f80da7cf4c6022db8d4061bd43eb6748f6f4",
+      "confidence_level": 0.95,
+      "dem_sha256": "0a6f3ec6a3df97d2bd020f84b96059e25e3956e8eabbf4bb1da842aaba89cfd5",
+      "distance": 5,
+      "failures": 697,
+      "interval_high": 0.03748239527207925,
+      "interval_low": 0.03239625587091488,
+      "method": "wilson",
+      "p": 0.007,
+      "probability": 0.03485,
+      "seed": 3163359713,
+      "shots": 20000,
+      "stage": "coarse",
+      "trials": 20000
+    },
+    {
+      "circuit_sha256": "8f34dc02a15a20591349c892e7cf095bcb553ab3916823c0038650bd046a7649",
+      "confidence_level": 0.95,
+      "dem_sha256": "6aae5336ac0eb62466276c841e57474bfc3b4bb658a18888d6b94db6fca3bcd7",
+      "distance": 5,
+      "failures": 945,
+      "interval_high": 0.050278462719547334,
+      "interval_low": 0.04439542592925541,
+      "method": "wilson",
+      "p": 0.008,
+      "probability": 0.04725,
+      "seed": 2255818943,
+      "shots": 20000,
+      "stage": "coarse",
+      "trials": 20000
+    },
+    {
+      "circuit_sha256": "e459a9e41b11923ada45ab44f7a84621956cf24a4b188a6b00401b5869d8efe0",
+      "confidence_level": 0.95,
+      "dem_sha256": "43047914a2a0a262ee7e7b14fa97f78fb0d150177424f9433a42b5f7444dcb8b",
+      "distance": 5,
+      "failures": 1720,
+      "interval_high": 0.08996551925111038,
+      "interval_low": 0.08219348660334425,
+      "method": "wilson",
+      "p": 0.01,
+      "probability": 0.086,
+      "seed": 2900318896,
+      "shots": 20000,
+      "stage": "coarse",
+      "trials": 20000
+    },
+    {
+      "circuit_sha256": "e64a9d69605d8e1ea643dbc78ad86a5d6e34e2a2f3ba065fb1dc38590a6131de",
+      "confidence_level": 0.95,
+      "dem_sha256": "f9584fc7b3eefaa3b19dd7888dc97872e4ccb755fcea8e77a575293be714e85d",
+      "distance": 7,
+      "failures": 80,
+      "interval_high": 0.004975104524032772,
+      "interval_low": 0.003215395243623016,
+      "method": "wilson",
+      "p": 0.004,
+      "probability": 0.004,
+      "seed": 1885990397,
+      "shots": 20000,
+      "stage": "coarse",
+      "trials": 20000
+    },
+    {
+      "circuit_sha256": "9358c1990989cb0f21b7f1fae86e8c9b5dcb78d42580bce1e65bec9a90096a2d",
+      "confidence_level": 0.95,
+      "dem_sha256": "c069fd7e86c1eb66f0e0131da121b60cce94e0045318eb54d87dbf5abadf4f12",
+      "distance": 7,
+      "failures": 206,
+      "interval_high": 0.011796338814052773,
+      "interval_low": 0.008991741299296096,
+      "method": "wilson",
+      "p": 0.005,
+      "probability": 0.0103,
+      "seed": 601877861,
+      "shots": 20000,
+      "stage": "coarse",
+      "trials": 20000
+    },
+    {
+      "circuit_sha256": "d52d09a23d0066a6e103f8da2a72aa29eb97427a8cb8406824b0260445c2d091",
+      "confidence_level": 0.95,
+      "dem_sha256": "00f86b0b68d5d40c8608ce87e12cb6e5ff7eedac8f655c0acbb4d551b273bf20",
+      "distance": 7,
+      "failures": 374,
+      "interval_high": 0.020671911963715872,
+      "interval_low": 0.01691294194389044,
+      "method": "wilson",
+      "p": 0.006,
+      "probability": 0.0187,
+      "seed": 4138739494,
+      "shots": 20000,
+      "stage": "coarse",
+      "trials": 20000
+    },
+    {
+      "circuit_sha256": "f91e994d41f35adbe67597b5c33e6e26b37d37adfdacf52d63d9dedd86e1e2f1",
+      "confidence_level": 0.95,
+      "dem_sha256": "e22128b8abb3733ded3119f92f3a1a445f6a829cf77998351803fb945f99a292",
+      "distance": 7,
+      "failures": 673,
+      "interval_high": 0.036240073325354866,
+      "interval_low": 0.031239038704173924,
+      "method": "wilson",
+      "p": 0.007,
+      "probability": 0.03365,
+      "seed": 489137221,
+      "shots": 20000,
+      "stage": "coarse",
+      "trials": 20000
+    },
+    {
+      "circuit_sha256": "7344b7bdf5a2a580c29cba63f29495f00d2fd6c126949dc2967e15ee5ae17544",
+      "confidence_level": 0.95,
+      "dem_sha256": "781f90693673935924ca9e6a2d855d5a23ac2eed428ff3cfbe88f73a502e02e1",
+      "distance": 7,
+      "failures": 1073,
+      "interval_high": 0.05685938938363315,
+      "interval_low": 0.05061204120365145,
+      "method": "wilson",
+      "p": 0.008,
+      "probability": 0.05365,
+      "seed": 3328457129,
+      "shots": 20000,
+      "stage": "coarse",
+      "trials": 20000
+    },
+    {
+      "circuit_sha256": "a30a6f40e2a87f64362a8e84ace59e0f26154a3a64fb3925753e2c0e227a2823",
+      "confidence_level": 0.95,
+      "dem_sha256": "888ca8180cc0e39fb43d6529538ca0ee8a41b52fe670458a4be32890f85ed823",
+      "distance": 7,
+      "failures": 2073,
+      "interval_high": 0.10795071112805316,
+      "interval_low": 0.09950151585362099,
+      "method": "wilson",
+      "p": 0.01,
+      "probability": 0.10365,
+      "seed": 1065958824,
+      "shots": 20000,
+      "stage": "coarse",
+      "trials": 20000
+    },
+    {
+      "circuit_sha256": "c97ad8462f4996b4449fdc38fbbf04835c565bced814f67f1effceaac6353325",
+      "confidence_level": 0.95,
+      "dem_sha256": "4dbac9da8a2b428168cdfb6c1a257efd764d2642434f8ca333a610cc18dd06f2",
+      "distance": 3,
+      "failures": 4931,
+      "interval_high": 0.025343802484849676,
+      "interval_low": 0.023984457346859594,
+      "method": "wilson",
+      "p": 0.006,
+      "probability": 0.024655,
+      "seed": 3719728241,
+      "shots": 200000,
+      "stage": "refinement",
+      "trials": 200000
+    },
+    {
+      "circuit_sha256": "2b439b8672238cd4ed91356ae1c5162cd3e56fb0fe5870af64f26520dd85123b",
+      "confidence_level": 0.95,
+      "dem_sha256": "49ca0a4c1f72351929f72539087fdbd9e1cce1a6b203115c4548ab1badc4526a",
+      "distance": 3,
+      "failures": 6364,
+      "interval_high": 0.032598276362197226,
+      "interval_low": 0.03105970823427408,
+      "method": "wilson",
+      "p": 0.007,
+      "probability": 0.03182,
+      "seed": 3777045639,
+      "shots": 200000,
+      "stage": "refinement",
+      "trials": 200000
+    },
+    {
+      "circuit_sha256": "c6a39a20fd8ed7efa631d70b0b9d1557830b8d7ee37f08b9dbcc7ae07626aa31",
+      "confidence_level": 0.95,
+      "dem_sha256": "f2ad5b28083abaf6ce5d02646cffe54c8fe58d57be654a07a1a67a3b3e1c0b39",
+      "distance": 5,
+      "failures": 4510,
+      "interval_high": 0.023209888018561012,
+      "interval_low": 0.021908452674303316,
+      "method": "wilson",
+      "p": 0.006,
+      "probability": 0.02255,
+      "seed": 1654062479,
+      "shots": 200000,
+      "stage": "refinement",
+      "trials": 200000
+    },
+    {
+      "circuit_sha256": "a548e4b791140bcc9a343d3b11a0f80da7cf4c6022db8d4061bd43eb6748f6f4",
+      "confidence_level": 0.95,
+      "dem_sha256": "0a6f3ec6a3df97d2bd020f84b96059e25e3956e8eabbf4bb1da842aaba89cfd5",
+      "distance": 5,
+      "failures": 6970,
+      "interval_high": 0.03566274621751544,
+      "interval_low": 0.0340551219849892,
+      "method": "wilson",
+      "p": 0.007,
+      "probability": 0.03485,
+      "seed": 713093871,
+      "shots": 200000,
+      "stage": "refinement",
+      "trials": 200000
+    }
+  ],
+  "runtime_seconds": 0.01565920399980314,
+  "start_utc": "2026-10-19T16:09:33.986278+00:00",
+  "status": "COMPLETED",
+  "target": {
+    "acceptance": {
+      "bracket_rule": "adjacent refinement points where LER(d=3)-LER(d=5) changes from positive to negative",
+      "master_seed": 20261020,
+      "ordering_above": {
+        "expected": "LER(d=3) < LER(d=5) < LER(d=7)",
+        "p": 0.01
+      },
+      "ordering_below": {
+        "expected": "LER(d=3) > LER(d=5) > LER(d=7)",
+        "p": 0.004
+      },
+      "significance_rule": "Newcombe 95% interval for LER(d=3)-LER(d=5) excludes zero at both refinement points, with opposite signs",
+      "threshold_band": [
+        0.0055,
+        0.0085
+      ]
+    },
+    "coarse": {
+      "distances": [
+        3,
+        5,
+        7
+      ],
+      "p": [
+        0.004,
+        0.005,
+        0.006,
+        0.007,
+        0.008,
+        0.01
+      ],
+      "shots": 20000
+    },
+    "model": {
+      "decoder": "pymatching_mwpm_detector",
+      "description": "Stim generated surface_code:rotated_memory_z circuit, distances 3/5/7, rounds equal to distance; all four Stim depolarizing hooks set to p; PyMatching MWPM on the decomposed detector error model. This is Stim's standard circuit-level model, not the exact gate-level model of Fowler et al.",
+      "engine": "stim+pymatching",
+      "memory_basis": "Z",
+      "task": "surface_code:rotated_memory_z"
+    },
+    "name": "surface_code_threshold_mwpm_v1",
+    "notes": {
+      "exploratory_pilot": "A 20k-shot exploratory pilot with a different seed family suggested a crossover near 0.006-0.007. It is not evidence and is excluded from the confirmatory analysis."
+    },
+    "reference": {
+      "citations": [
+        "Fowler et al., Phys. Rev. A 86, 032324 (2012), DOI 10.1103/PhysRevA.86.032324",
+        "Higgott, ACM Transactions on Quantum Computing 3(3), Article 16 (2022), DOI 10.1145/3505637"
+      ],
+      "description": "Circuit-level threshold of the rotated surface code under depolarizing noise with minimum-weight perfect matching, reported at approximately 0.57% per step (Fowler et al., PRA 86, 032324, 2012; DOI 10.1103/PhysRevA.86.032324) and approximately 0.7% for the standard circuit-level depolarizing model in the PyMatching documentation (Higgott, ACM TQC 3(3), Article 16, 2022; DOI 10.1145/3505637).",
+      "literature_band": [
+        0.0057,
+        0.0082
+      ]
+    },
+    "refinement": {
+      "distances": [
+        3,
+        5
+      ],
+      "p": [
+        0.006,
+        0.007
+      ],
+      "shots": 200000
+    },
+    "schema_version": "1.0",
+    "statistics": {
+      "confidence_level": 0.95,
+      "interval": "wilson",
+      "paired": false
+    }
+  },
+  "warnings": []
+}

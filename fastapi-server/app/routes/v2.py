@@ -4,7 +4,6 @@ from __future__ import annotations
 
 import numpy as np
 from fastapi import APIRouter
-
 from quantumlab.circuit import (
     CircuitDefinition,
     DensityCircuitResult,
@@ -30,7 +29,6 @@ from app.models_v2 import (
     PurityRequest,
     StateOut,
 )
-
 
 router = APIRouter(prefix="/api/v2", tags=["v2"])
 

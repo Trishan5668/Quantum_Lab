@@ -8,7 +8,7 @@ import pytest
 from quantumlab.research.qec.code import RepetitionCode
 from quantumlab.research.qec.protocol import load_protocol
 from quantumlab.research.qec.runner import run_experiment
-from quantumlab.research.qec.stats import summarize, wilson_interval
+from quantumlab.research.qec.stats import wilson_interval
 
 
 def test_repetition_code_stabilizers_and_syndrome() -> None:
@@ -48,4 +48,5 @@ def test_protocol_and_runner_write_evidence(tmp_path) -> None:
     assert summary["trials"] == 10000
     assert summary["baseline"]["failures"] >= summary["failures"]
     assert (artifact_dir / "config.yaml").exists()
-    assert len((artifact_dir / "raw_trials.jsonl").read_text(encoding="utf-8").splitlines()) == 10000
+    raw = (artifact_dir / "raw_trials.jsonl").read_text(encoding="utf-8")
+    assert len(raw.splitlines()) == 10000

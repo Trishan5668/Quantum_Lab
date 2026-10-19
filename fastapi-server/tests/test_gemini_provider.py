@@ -5,7 +5,6 @@ from dataclasses import dataclass
 from typing import Any
 
 import pytest
-
 from app.llm.base import (
     AuthenticationError,
     ComplexAmplitude,
@@ -142,15 +141,14 @@ def test_chunk_text_fallback_to_candidates() -> None:
 
     class _Chunk:
         text = None
-        candidates = [_Candidate()]
+        candidates = (_Candidate(),)
 
     assert _chunk_text(_Chunk()) == "hello"
 
 
 def test_translate_authentication_error() -> None:
-    from google.genai import errors as ge
-
     from app.llm.gemini_provider import _translate_api_error
+    from google.genai import errors as ge
 
     exc = ge.ClientError(401, {"error": {"message": "bad key"}})
     out = _translate_api_error(exc)
@@ -158,9 +156,8 @@ def test_translate_authentication_error() -> None:
 
 
 def test_translate_rate_limit_error() -> None:
-    from google.genai import errors as ge
-
     from app.llm.gemini_provider import _translate_api_error
+    from google.genai import errors as ge
 
     exc = ge.ClientError(429, {"error": {"message": "slow down"}})
     out = _translate_api_error(exc)
@@ -168,9 +165,8 @@ def test_translate_rate_limit_error() -> None:
 
 
 def test_translate_generic_upstream_error() -> None:
-    from google.genai import errors as ge
-
     from app.llm.gemini_provider import _translate_api_error
+    from google.genai import errors as ge
 
     exc = ge.ServerError(503, {"error": {"message": "down"}})
     out = _translate_api_error(exc)

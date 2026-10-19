@@ -1,0 +1,13 @@
+{
+  "H3a_measurement_heavy_d5_excess_ge_10pct": {
+    "supported": true,
+    "value": 0.2233169129720854
+  },
+  "H3b_gate_heavy_d5_excess_lt_5pct": {
+    "supported": true,
+    "value": -0.010385866351271438
+  },
+  "H3c_excess_larger_at_d5": {
+    "supported": true
+  }
+}

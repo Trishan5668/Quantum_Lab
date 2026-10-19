@@ -26,7 +26,7 @@ def main() -> int:
         if isinstance(code, int):
             return code
         return 1
-    except Exception:
+    except Exception:  # noqa: BLE001 - worker boundary: report any failure to the parent
         import traceback
 
         traceback.print_exc()

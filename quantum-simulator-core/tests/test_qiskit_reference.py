@@ -15,15 +15,15 @@ import pytest
 
 qiskit = pytest.importorskip("qiskit")
 
-from qiskit import QuantumCircuit
-from qiskit.quantum_info import Statevector as QiskitStatevector
+from qiskit import QuantumCircuit  # noqa: E402
+from qiskit.quantum_info import Statevector as QiskitStatevector  # noqa: E402
 
-from quantumlab.circuit import CircuitDefinition, GatePlacement, run_circuit
-from quantumlab.density import DensityMatrix
-from quantumlab.entropy import entanglement_entropy
-from quantumlab.fidelity import bell_state_vector, fidelity
-from quantumlab.gates import CNOT, RX, RY, RZ, H, X, Y, Z
-from quantumlab.state import StateVector
+from quantumlab.circuit import CircuitDefinition, GatePlacement, run_circuit  # noqa: E402
+from quantumlab.density import DensityMatrix  # noqa: E402
+from quantumlab.entropy import entanglement_entropy  # noqa: E402
+from quantumlab.fidelity import bell_state_vector, fidelity  # noqa: E402
+from quantumlab.gates import CNOT, RX, RY, RZ, H, X, Y, Z  # noqa: E402
+from quantumlab.state import StateVector  # noqa: E402
 
 _ATOL = 1e-10
 

@@ -1,0 +1,31 @@
+{
+  "experiment_id": "20261019T161658Z-693b2eac",
+  "files": {
+    "config.json": {
+      "sha256": "a71261151f9112293ef0b47e481500d3a77432df815faad013e21a4f0ec3ccb9",
+      "size_bytes": 1010
+    },
+    "environment.json": {
+      "sha256": "f644bf33ef70b220698f65bc52a0e949f234a13d5dfa9129733fe5fd9cd77601",
+      "size_bytes": 593
+    },
+    "outcomes.npz": {
+      "sha256": "eeadfb3c4cfe98bd34470150d6c11298259ad879bf83fede1c372f4517704771",
+      "size_bytes": 107348
+    },
+    "provenance.json": {
+      "sha256": "b1db94bf687fbf5c5ec5199d7f492822d6638d52d8a6c61d4cc981135b2172dd",
+      "size_bytes": 2535
+    },
+    "report.md": {
+      "sha256": "437b6d6a1adf00cb522c7e69ec6581f0e7a2d6950a510dbecdd45b4796400946",
+      "size_bytes": 2975
+    },
+    "summary.json": {
+      "sha256": "ae8c751008f1a019ef116230865fc552f47fb8738e8aef379780f723aadfee3a",
+      "size_bytes": 121580
+    }
+  },
+  "kind": "calibration_generalization",
+  "schema_version": "1.0"
+}

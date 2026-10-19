@@ -9,7 +9,7 @@ import random
 import subprocess
 import sys
 import uuid
-from datetime import datetime, timezone
+from datetime import UTC, datetime
 from pathlib import Path
 
 from quantumlab.research.qec.code import RepetitionCode
@@ -29,7 +29,7 @@ def _git_revision() -> str:
 def run_experiment(protocol: Protocol, output_root: str | Path) -> Path:
     code = RepetitionCode(protocol.code_distance)
     code.validate()
-    experiment_id = f"{datetime.now(timezone.utc).strftime('%Y%m%dT%H%M%SZ')}-{uuid.uuid4().hex[:8]}"
+    experiment_id = f"{datetime.now(UTC).strftime('%Y%m%dT%H%M%SZ')}-{uuid.uuid4().hex[:8]}"
     artifact_dir = Path(output_root) / experiment_id
     artifact_dir.mkdir(parents=True, exist_ok=False)
     rng = random.Random(protocol.seed)
@@ -98,9 +98,15 @@ def run_experiment(protocol: Protocol, output_root: str | Path) -> Path:
         "hardware result or a surface-code threshold claim.\n",
         encoding="utf-8",
     )
-    files = [artifact_dir / name for name in (
-        "config.yaml", "environment.json", "provenance.json", "raw_trials.jsonl", "summary.json", "report.md"
-    )]
+    names = (
+        "config.yaml",
+        "environment.json",
+        "provenance.json",
+        "raw_trials.jsonl",
+        "summary.json",
+        "report.md",
+    )
+    files = [artifact_dir / name for name in names]
     checksums = "\n".join(
         f"{hashlib.sha256(path.read_bytes()).hexdigest()}  {path.name}" for path in files
     ) + "\n"

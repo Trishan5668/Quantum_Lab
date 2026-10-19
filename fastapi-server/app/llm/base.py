@@ -146,7 +146,7 @@ class ChatProvider(Protocol):
 
     model: str
 
-    async def chat(self, request: "AIChatRequest") -> str:
+    async def chat(self, request: AIChatRequest) -> str:
         """Return one assistant response for the supplied QuantumLab context."""
         ...
 

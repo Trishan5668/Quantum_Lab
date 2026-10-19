@@ -1,0 +1,14 @@
+{
+  "artifact_directory": "20261019T162813Z-fab5ad81",
+  "integrity_report": {
+    "checked_files": 7,
+    "errors": [],
+    "ok": true,
+    "warnings": []
+  },
+  "notice": "Package integrity does not establish scientific validity. See report.md and the independent validation plan.",
+  "package_sha256": "5ea8ef376f15716ecfb6f31036c029df2181029a532495be27e85412e868dbb6",
+  "package_size_bytes": 112788,
+  "schema_version": "1.0",
+  "scientific_claim_status": "NOT_INDEPENDENTLY_VALIDATED"
+}

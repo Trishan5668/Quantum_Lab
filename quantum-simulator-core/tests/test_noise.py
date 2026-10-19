@@ -3,8 +3,8 @@ from __future__ import annotations
 import numpy as np
 import pytest
 
-from quantumlab.exceptions import SimulationError
 from quantumlab.density import DensityMatrix
+from quantumlab.exceptions import SimulationError
 from quantumlab.gates import X
 from quantumlab.noise import (
     AmplitudeDampingChannel,

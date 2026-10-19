@@ -150,11 +150,35 @@ def test_phase_damping_exponential_t2_coherence_decay() -> None:
     assert abs(out.matrix[0, 1]) == pytest.approx(expected_coherence, rel=1e-6)
 
 
-def test_t1t2_p_phase_uses_correct_t2_mapping() -> None:
+def test_t1t2_pure_dephasing_removes_t1_contribution() -> None:
+    """T2 is the total coherence time, not the pure-dephasing time.
+
+    For 1/T2 = 1/(2*T1) + 1/T_phi, the phase-damping parameter must use
+    T_phi, otherwise the amplitude-damping dephasing is counted twice.
+    """
     model = T1T2NoiseModel(t1_us=60.0, t2_us=25.0, gate_time_ns=10000.0)
     gate_time_us = 10.0
-    expected = 1.0 - math.exp(-2.0 * gate_time_us / 25.0)
+    inverse_tphi = 1.0 / 25.0 - 1.0 / (2.0 * 60.0)
+    expected = 1.0 - math.exp(-2.0 * gate_time_us * inverse_tphi)
+    assert model.p_pure_dephasing == pytest.approx(expected, rel=1e-12)
     assert model.p_phase == pytest.approx(expected, rel=1e-12)
+
+
+def test_t1t2_total_coherence_decays_as_exp_minus_t_over_t2() -> None:
+    sv = StateVector.from_amplitudes(
+        np.array([1, 1], dtype=np.complex128) / np.sqrt(2)
+    )
+    rho = DensityMatrix.from_statevector(sv)
+    for t1_us, t2_us in [(50.0, 50.0), (50.0, 25.0), (60.0, 30.0), (50.0, 100.0)]:
+        out = T1T2NoiseModel(t1_us=t1_us, t2_us=t2_us, gate_time_ns=10_000.0).apply(rho, 0)
+        assert abs(out.matrix[0, 1]) == pytest.approx(
+            0.5 * math.exp(-10.0 / t2_us), rel=1e-12
+        )
+
+
+def test_t1t2_at_t2_equals_two_t1_has_no_pure_dephasing() -> None:
+    model = T1T2NoiseModel(t1_us=50.0, t2_us=100.0, gate_time_ns=10_000.0)
+    assert model.p_pure_dephasing == 0.0
 
 
 def test_t1t2_rejects_unphysical_t2_greater_than_2t1() -> None:

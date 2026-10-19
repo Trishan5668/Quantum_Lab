@@ -5,7 +5,8 @@
 The initial protocol is a reproduction-oriented engineering benchmark for a
 standard repetition-code decoder. It is not presented as a new QEC method.
 The review should be expanded before any surface-code or adaptive-decoding
-claim is made.
+claim is made. The current positioning and verified references are in
+`research/qec/literature/RESEARCH_GAP.md`.
 
 ## Closest foundations
 

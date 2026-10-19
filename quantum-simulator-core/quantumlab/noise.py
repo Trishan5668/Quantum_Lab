@@ -175,25 +175,46 @@ class T1T2NoiseModel(QuantumChannel):
         return 1.0 - math.exp(-gate_time_us / self.t1_us)
 
     @property
-    def p_phase(self) -> float:
-        """Dephasing probability for Kraus phase damping at gate duration.
+    def p_pure_dephasing(self) -> float:
+        """Pure-dephasing probability ``gamma_phi`` at the gate duration.
 
-        Phase-damping Kraus operators scale off-diagonals by ``sqrt(1-gamma)``.
-        For standard Ramsey T2 decay ``|rho_01(t)| = |rho_01(0)| exp(-t/T2)`` we need
-        ``sqrt(1-gamma) = exp(-t/T2)``, hence ``gamma = 1 - exp(-2t/T2)``.
+        The physically meaningful decomposition of a T1/T2 process is
+
+        ``1/T2 = 1/(2*T1) + 1/T_phi``.
+
+        Applying amplitude damping (which already dephases at rate ``1/(2*T1)``)
+        and then a phase-damping channel parameterised by the *total* T2
+        double-counts the T1 contribution and makes the coherence decay as
+        ``exp(-t/(2*T1) - t/T2)`` instead of ``exp(-t/T2)``.  We therefore
+        convert T2 into the pure-dephasing time ``T_phi`` first.  The
+        corresponding phase-damping Kraus parameter is
+        ``gamma_phi = 1 - exp(-2*t/T_phi)``, which gives an off-diagonal factor
+        ``exp(-t/T_phi)``; combined with amplitude damping the total factor is
+        exactly ``exp(-t/T2)``.
         """
         gate_time_us = self.gate_time_ns * 1e-3
-        return 1.0 - math.exp(-2.0 * gate_time_us / self.t2_us)
+        inverse_tphi = 1.0 / self.t2_us - 1.0 / (2.0 * self.t1_us)
+        if inverse_tphi <= 0.0:
+            return 0.0
+        return 1.0 - math.exp(-2.0 * gate_time_us * inverse_tphi)
+
+    @property
+    def p_phase(self) -> float:
+        """Backward-compatible alias for :attr:`p_pure_dephasing`."""
+        return self.p_pure_dephasing
 
     def kraus_operators(self) -> list[GateMatrix]:
-        raise SimulationError(
-            "T1T2NoiseModel must be applied via apply_t1_t2(), not Kraus list"
-        )
+        """Composite Kraus operators for amplitude damping followed by dephasing.
 
-    def apply(self, rho: DensityMatrix, qubit: int) -> DensityMatrix:
-        amp = AmplitudeDampingChannel(self.p_amplitude)
-        phase = PhaseDampingChannel(self.p_phase)
-        return phase.apply(amp.apply(rho, qubit), qubit)
+        If ``A_i`` are the amplitude-damping Kraus operators and ``P_j`` the
+        pure-dephasing ones, the sequential channel has Kraus operators
+        ``P_j @ A_i``.  Returning them makes ``T1T2NoiseModel`` a genuine
+        ``QuantumChannel`` rather than an object that raises from
+        ``kraus_operators``.
+        """
+        amp = AmplitudeDampingChannel(self.p_amplitude).kraus_operators()
+        phase = PhaseDampingChannel(self.p_pure_dephasing).kraus_operators()
+        return [p_op @ a_op for p_op in phase for a_op in amp]
 
 
 @dataclass(frozen=True)

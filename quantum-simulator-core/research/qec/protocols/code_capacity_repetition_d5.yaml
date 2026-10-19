@@ -1,0 +1,52 @@
+schema_version: "2.0"
+name: code_capacity_repetition_d5
+research_question: >-
+  Under a one-round ideal-syndrome code-capacity bit-flip model, do exact
+  minimum-weight, MWPM, and repetition majority decoders produce the same
+  logical failure rate, and does the residual failure probability fall with
+  distance?
+hypothesis: >-
+  For the bit-flip repetition code with p=0.1 and n=5, exact minimum-weight
+  decoding and MWPM are logically equivalent up to stabilizer on every
+  syndrome, so their per-shot outcomes are identical.  The corrected failure
+  rate is below the uncorrected rate and below the n=3 code at the same p.
+code:
+  family: repetition
+  distance: 5
+  rounds: 1
+  task: memory_z
+noise:
+  kind: code_capacity
+  model: bit_flip
+  parameters:
+    p: 0.1
+decoders:
+  - name: exact
+    mode: min_weight
+  - name: majority_vote
+  - name: mwpm
+    parameters:
+      error_probability: 0.1
+  - name: no_correction
+comparisons:
+  - "exact:no_correction"
+  - "exact:majority_vote"
+  - "exact:mwpm"
+experiment:
+  shots: 2000
+  seed: 20261019
+  partition: development
+  stopping_rule: fixed_shots
+  max_runtime_seconds: 120
+statistics:
+  method: wilson
+  confidence_level: 0.95
+  primary_metric: operational_failure_probability
+resources:
+  data_qubits: 5
+  syndrome_bits: 4
+  rounds: 1
+limitations:
+  - One ideal syndrome round; no measurement, gate, reset, idle, or leakage faults.
+  - Classical bit-flip noise only; the full Pauli distance of this code is one.
+  - The unencoded comparison is an absolute reference, not a paired resource-matched baseline.

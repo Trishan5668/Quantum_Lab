@@ -202,7 +202,12 @@ class MPSCircuitResult:
     simulation_mode: SimulationMode = "mps"
 
     def to_dict(self) -> dict[str, Any]:
-        state: dict[str, Any] = {"num_qubits": self.num_qubits, "amplitudes": [], "probabilities": [], "basis_labels": []}
+        state: dict[str, Any] = {
+            "num_qubits": self.num_qubits,
+            "amplitudes": [],
+            "probabilities": [],
+            "basis_labels": [],
+        }
         if self.num_qubits <= 12:
             amplitudes = self.final_mps.to_statevector(max_qubits=12)
             state = {

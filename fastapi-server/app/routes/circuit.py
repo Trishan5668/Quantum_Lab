@@ -4,7 +4,6 @@ from __future__ import annotations
 
 import numpy as np
 from fastapi import APIRouter
-
 from quantumlab.circuit import (
     CircuitDefinition,
     GatePlacement,
@@ -21,7 +20,6 @@ from app.models import (
     StepRequest,
     envelope,
 )
-
 
 router = APIRouter(prefix="/api/v1/circuit", tags=["circuit"])
 

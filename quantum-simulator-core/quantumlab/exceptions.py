@@ -55,5 +55,9 @@ class MPSMemoryError(TensorNetworkError):
     """Raised before an MPS operation would exceed its memory budget."""
 
 
-class UnsupportedTensorNetworkOperation(TensorNetworkError):
-    """Raised when an operation needs a tensor-network representation not implemented."""
+class UnsupportedTensorNetworkOperationError(TensorNetworkError):
+    """Raised when an operation needs an unimplemented tensor-network representation."""
+
+
+# Backwards-compatible alias; prefer ``UnsupportedTensorNetworkOperationError``.
+UnsupportedTensorNetworkOperation = UnsupportedTensorNetworkOperationError

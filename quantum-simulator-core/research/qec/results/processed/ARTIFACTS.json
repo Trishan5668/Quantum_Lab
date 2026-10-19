@@ -1,0 +1,89 @@
+{
+  "calibration_v1": {
+    "claims": {
+      "errors": [
+        "missing required summary field: result",
+        "result must be a mapping"
+      ],
+      "report_present": true,
+      "status": "FAIL",
+      "warnings": []
+    },
+    "config_hash": "ed394b4bcb5cdca06719b5a7d88de52668f0066884b178ecd74fa7d09c4cbd45",
+    "directory": "20261019T162813Z-fab5ad81",
+    "files_sha256": {
+      "checksums.sha256": "8bdffeb6ceba3b960e875fc7f84f820608974fa4acf5fc202bc60d3ad6acf483",
+      "config.json": "6114cd8108b6a0873bbe0778970d7ce76d4eb3bd07a2d6d0340748ef5ba279b6",
+      "environment.json": "cba684bab1da65e2791e3cb83a466c9ae8e3287492fcc23264143d5052761c46",
+      "manifest.json": "48033ecf075872b07c132782ff2b885dbd4809fc9cb18997826d1e250a3307a3",
+      "outcomes.npz": "6a54e2f7eff986a61a911f26b0f69540cc3184226c9f77bbfaa9fc8981fd1f3c",
+      "provenance.json": "87af047e2462c0a1d3a4573c3c76578d8843225b826ffaa9fc0f1bcf77964ca3",
+      "report.md": "41309941cb069ac1fdfdcc135837db4c2ec29b38284541a6c785fed224ee2e49",
+      "summary.json": "a2aa4c67f9b63e062dd34aa3458d8c4089abef1981c2ff8bc016f16f8e3a1249"
+    },
+    "integrity": {
+      "checked_files": 7,
+      "errors": [],
+      "ok": true,
+      "warnings": []
+    }
+  },
+  "generalization_v2": {
+    "claims": {
+      "errors": [
+        "missing required summary field: result",
+        "result must be a mapping"
+      ],
+      "report_present": true,
+      "status": "FAIL",
+      "warnings": []
+    },
+    "config_hash": "0b5f383df092af6e848f778f435333ba77cb5f14af21bc2477b09b8a5f7b9849",
+    "directory": "20261019T162505Z-08ad35cb",
+    "files_sha256": {
+      "checksums.sha256": "273335a02a701341b7cfa8262dfa70a5b70f00b494901e0d025b9fb4789edec0",
+      "config.json": "a71261151f9112293ef0b47e481500d3a77432df815faad013e21a4f0ec3ccb9",
+      "environment.json": "ae81d8f9161b371a301f0ecb83bc441dbfb6fda2c3fd18af8895c97bfb96293c",
+      "manifest.json": "3f4f6a61b5ddc7abf9442f82d74b1c52233ae6b44772b5cec7842e656964ed14",
+      "outcomes.npz": "eeadfb3c4cfe98bd34470150d6c11298259ad879bf83fede1c372f4517704771",
+      "provenance.json": "97fcee1c463d06c265372b0b41c8d79a6329c6f4409764be0399313d81752e27",
+      "report.md": "fda77f2be0cbcfeb4705d9362b53add771afa120bd1b38bf596aa566f6dc7817",
+      "summary.json": "b02508ce854d10f76a66c030622691bab0664a9a7151348031ba0af847b39fc2"
+    },
+    "integrity": {
+      "checked_files": 7,
+      "errors": [],
+      "ok": true,
+      "warnings": []
+    }
+  },
+  "reproduction": {
+    "claims": {
+      "errors": [
+        "missing required summary field: result",
+        "result must be a mapping"
+      ],
+      "report_present": true,
+      "status": "FAIL",
+      "warnings": []
+    },
+    "config_hash": "28c3bfae7e487fb5a01c0128cf9354827a802db925d07e931f5861092a75dabf",
+    "directory": "20261019T160933Z-bc711864",
+    "files_sha256": {
+      "checksums.sha256": "5770db62404ee4b828bf3ad61142e1cee60f8681ee0aa9b69bb37495cb6c7cae",
+      "config.json": "ed6d1cddfbbdeeb1d62d68331bccb987afde679bdabe8fd283860ef1126598ae",
+      "environment.json": "a27294e5490646af98bfa018bfd84c6c0dffdb0e41a1a16cbbf5a330af79f0ed",
+      "manifest.json": "71f9a48b77df64abbe6d535ddf6c5c97ac56c27ea511e56f73b1c3184362c500",
+      "outcomes.npz": "db53d1e79c6c613e65ff318f5da3db395904283cfbb7ed3097d1507644689e67",
+      "provenance.json": "f8bb82565d00932525b2c5e8c248f9ef4d4776009799d2cbcab86e2fcce7e834",
+      "report.md": "b9637413a135ee6956a457cdbb39878d073c4fa871c6945ccd42c7f8a39b83ee",
+      "summary.json": "a467c15009b0187c06ddbaff9b6443ecd07217f67abe4e013c7dc9b91e708d98"
+    },
+    "integrity": {
+      "checked_files": 7,
+      "errors": [],
+      "ok": true,
+      "warnings": []
+    }
+  }
+}

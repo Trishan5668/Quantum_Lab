@@ -4,7 +4,6 @@ import asyncio
 import math
 
 import pytest
-
 from app.llm.base import ComplexAmplitude, ExplanationRequest
 from app.llm.local_provider import LocalProvider
 

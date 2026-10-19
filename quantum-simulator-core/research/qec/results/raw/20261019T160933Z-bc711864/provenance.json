@@ -1,0 +1,41 @@
+{
+  "analysis_version": "1.0.0",
+  "artifact_schema_version": "1.0",
+  "config_hash": "28c3bfae7e487fb5a01c0128cf9354827a802db925d07e931f5861092a75dabf",
+  "experiment_id": "20261019T160933Z-bc711864",
+  "git": {
+    "diff_sha256": "92ba93c09bc24ca53e914165187b10a0d39d0933d60d521c71dcd6128e60e4bd",
+    "dirty": true,
+    "dirty_status_sha256": "ffd7d26e8cfc82df2b56a93ed234a9d8fa0913466299cadd37dacce2d95c57f9",
+    "source_revision": "100f8a3640d6a57484eec2e2b7effc93ce2ffc02",
+    "untracked_files": [
+      "quantum-simulator-core/quantumlab/research/qec/artifacts.py",
+      "quantum-simulator-core/quantumlab/research/qec/audit.py",
+      "quantum-simulator-core/quantumlab/research/qec/codes.py",
+      "quantum-simulator-core/quantumlab/research/qec/decoders/",
+      "quantum-simulator-core/quantumlab/research/qec/experiment.py",
+      "quantum-simulator-core/quantumlab/research/qec/noise.py",
+      "quantum-simulator-core/quantumlab/research/qec/pauli.py",
+      "quantum-simulator-core/quantumlab/research/qec/reproduction.py",
+      "quantum-simulator-core/quantumlab/research/qec/stabilizer.py",
+      "quantum-simulator-core/research/qec/audit/",
+      "quantum-simulator-core/research/qec/literature/REPRODUCTION_TARGET.md",
+      "quantum-simulator-core/research/qec/protocols/code_capacity_repetition_d5.yaml",
+      "quantum-simulator-core/research/qec/reproduction/",
+      "quantum-simulator-core/research/qec/results/",
+      "quantum-simulator-core/tests/test_qec_artifacts.py",
+      "quantum-simulator-core/tests/test_qec_decoders.py",
+      "quantum-simulator-core/tests/test_qec_experiment.py",
+      "quantum-simulator-core/tests/test_qec_noise.py",
+      "quantum-simulator-core/tests/test_qec_pauli.py",
+      "quantum-simulator-core/tests/test_qec_protocol.py",
+      "quantum-simulator-core/tests/test_qec_stabilizer.py",
+      "quantum-simulator-core/tests/test_qec_stats.py"
+    ]
+  },
+  "kind": "reproduction",
+  "rng_policy": "numpy SeedSequence([seed, purpose_index]) per purpose; each purpose's derived seed is recorded in summary.json",
+  "source_path": "research/qec/reproduction/surface_code_threshold_v1.yaml",
+  "source_sha256": "caf3244a1ab8d75f45ad3ea9431479200c97783184c45d7c013bd8460ec2c585",
+  "start_utc": "2026-10-19T16:09:33.986278+00:00"
+}

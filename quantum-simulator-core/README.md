@@ -16,8 +16,9 @@ for research, teaching, or as a reference implementation.
   Nothing is hidden behind compiled C++ kernels.
 - **Type-safe.** Strict `mypy` clean, with `from __future__ import annotations`
   on every file.
-- **Tested.** 58+ tests cover gate unitarity, anticommutation relations,
-  entanglement (Bell, GHZ), Bloch sphere mappings, and adversarial inputs.
+- **Tested.** More than 300 tests cover gate unitarity, anticommutation relations,
+  entanglement (Bell, GHZ), Bloch sphere mappings, QEC algebra, decoders,
+  statistical intervals, and artifact integrity.
 - **Convention-explicit.** Big-endian basis order: `q[0]` is the most
   significant bit. Documented at the module level so there are no surprises.
 
@@ -29,25 +30,49 @@ python -m pip install -e ".[dev]"
 
 Requires Python 3.11+, NumPy, SciPy.
 
-## Bounded QEC research slice
+## QEC research layer
 
-The core package includes a deliberately limited, reproducible
-three-qubit-repetition-code benchmark under `research/qec/`. It models
-phenomenological independent X faults followed by ideal syndrome extraction
-and majority-vote decoding. It is not a circuit-level surface-code or
-hardware experiment.
+The package includes a bounded but independently checked QEC research layer
+under `research/qec/`. It provides exact Pauli/stabilizer algebra, validated
+small codes, exact and MWPM decoders, explicit Pauli and phenomenological
+noise, Stim/PyMatching circuit-level surface-code execution, paired-shot
+experiments, and immutable checksummed artifacts.
+
+The capabilities and limits are audited in
+`research/qec/audit/REPOSITORY_AUDIT.md`. Key results, including a negative
+one, are recorded with claim labels:
+
+- the pre-declared circuit-level surface-code MWPM threshold bracket
+  `[0.006, 0.007]` was reproduced within the declared Stim/PyMatching model
+  class (`results/reports/PHASE2_REPRODUCTION.md`);
+- a static 1% DEM under a measurement-dominated profile produced a +22.3%
+  relative logical-failure excess at d=5
+  (`results/reports/PHASE3_LIMITATION.md`);
+- a calibrated global DEM was rejected on held-out seeds because it degraded
+  the matched control by 3.25% relative
+  (`results/reports/PHASE4_CANDIDATE.md`);
+- independent validation passes L1 analytic and L2 Stim-vs-native checks;
+  external replication is **BLOCKED** (`validation/`).
+
+This is not a hardware result and not a claim of novelty. The circuit-level
+surface-code numbers come from Stim and PyMatching, not a native
+QuantumLab executor.
 
 ```bash
-python -m quantumlab.research.qec validate research/qec/protocols/rq1_noise_aware_qec.yaml
-python -m quantumlab.research.qec run research/qec/protocols/rq1_noise_aware_qec.yaml
-python -m quantumlab.research.qec analyze research/qec/experiments/<experiment_id>
-python -m quantumlab.research.qec reproduce research/qec/experiments/<experiment_id>
+python -m quantumlab.research.qec audit
+python -m quantumlab.research.qec validate research/qec/protocols/code_capacity_repetition_d5.yaml
+python -m quantumlab.research.qec run research/qec/protocols/code_capacity_repetition_d5.yaml
+python -m quantumlab.research.qec analyze <artifact> --format table
+python -m quantumlab.research.qec verify <artifact>
+python -m quantumlab.research.qec claims <artifact>
+python -m quantumlab.research.qec package <artifact>
+python -m quantumlab.research.qec reproduce research/qec/reproduction/surface_code_threshold_v1.yaml
 ```
 
-Each run writes resolved configuration, provenance, trial-level JSONL,
-Wilson confidence intervals, resource counts, a report, and SHA-256
-checksums. The repository audit and non-exhaustive literature review are in
-`docs/research/qec/`.
+Install the optional circuit-level tools with
+`python -m pip install -e ".[research]"`. The legacy three-qubit benchmark
+remains available under `research/qec/protocols/rq1_noise_aware_qec.yaml`
+with its original scope and caveats.
 
 ## Quickstart
 
