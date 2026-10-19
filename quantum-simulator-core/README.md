@@ -29,6 +29,26 @@ python -m pip install -e ".[dev]"
 
 Requires Python 3.11+, NumPy, SciPy.
 
+## Bounded QEC research slice
+
+The core package includes a deliberately limited, reproducible
+three-qubit-repetition-code benchmark under `research/qec/`. It models
+phenomenological independent X faults followed by ideal syndrome extraction
+and majority-vote decoding. It is not a circuit-level surface-code or
+hardware experiment.
+
+```bash
+python -m quantumlab.research.qec validate research/qec/protocols/rq1_noise_aware_qec.yaml
+python -m quantumlab.research.qec run research/qec/protocols/rq1_noise_aware_qec.yaml
+python -m quantumlab.research.qec analyze research/qec/experiments/<experiment_id>
+python -m quantumlab.research.qec reproduce research/qec/experiments/<experiment_id>
+```
+
+Each run writes resolved configuration, provenance, trial-level JSONL,
+Wilson confidence intervals, resource counts, a report, and SHA-256
+checksums. The repository audit and non-exhaustive literature review are in
+`docs/research/qec/`.
+
 ## Quickstart
 
 ```python

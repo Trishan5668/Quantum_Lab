@@ -1,0 +1,62 @@
+research_question: >-
+  Under a fixed phenomenological bit-flip noise rate, does majority-vote
+  decoding of the three-qubit repetition code reduce logical failure
+  probability relative to an unencoded single-qubit baseline?
+hypothesis: >-
+  For physical bit-flip rates below one half, repetition-code majority vote
+  has a lower logical failure probability than the unencoded baseline.
+code:
+  family: repetition
+  distance: 3
+  layout: linear
+  boundaries: open
+  stabilizers: [ZZI, IZZ]
+  logical_operators:
+    x: XXX
+    z: ZII
+noise:
+  model: phenomenological_pauli_x
+  physical_error_rate: 0.01
+  acts_on: data_qubits_before_ideal_syndrome
+  preparation_error: absent
+  measurement_error: absent
+  gate_error: absent
+  idle_error: absent
+  leakage: absent
+experiment:
+  trials: 10000
+  seed: 20261019
+  partition: confirmatory
+  stopping_rule: fixed_trials
+  max_runtime_seconds: 30
+decoder:
+  baseline: unencoded_single_qubit
+  candidate: majority_vote
+  tuning: none
+optimization:
+  objective: logical_failure_probability
+  constraints: [matched_physical_error_rate]
+resources:
+  matching: data_qubits_and_one_ideal_syndrome_round
+metrics:
+  primary: logical_failure_probability
+  secondary: [failures, wilson_confidence_interval, data_qubits, syndrome_bits]
+statistics:
+  method: wilson
+  confidence_level: 0.95
+  practically_meaningful_effect: 0.001
+randomness:
+  policy: seeded_python_random
+  paired_streams: false
+inclusion_criteria:
+  - completed_trials
+exclusion_criteria:
+  - malformed_trial
+limitations:
+  - phenomenological rather than circuit-level noise
+  - ideal syndrome extraction
+  - only X errors and a single distance are supported
+  - no established MWPM implementation is included
+planned_ablations:
+  - physical_error_rate
+  - trial_count
