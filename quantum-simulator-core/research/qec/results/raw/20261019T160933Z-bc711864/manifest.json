@@ -1,0 +1,31 @@
+{
+  "experiment_id": "20261019T160933Z-bc711864",
+  "files": {
+    "config.json": {
+      "sha256": "ed6d1cddfbbdeeb1d62d68331bccb987afde679bdabe8fd283860ef1126598ae",
+      "size_bytes": 2699
+    },
+    "environment.json": {
+      "sha256": "a27294e5490646af98bfa018bfd84c6c0dffdb0e41a1a16cbbf5a330af79f0ed",
+      "size_bytes": 800
+    },
+    "outcomes.npz": {
+      "sha256": "db53d1e79c6c613e65ff318f5da3db395904283cfbb7ed3097d1507644689e67",
+      "size_bytes": 44503
+    },
+    "provenance.json": {
+      "sha256": "f8bb82565d00932525b2c5e8c248f9ef4d4776009799d2cbcab86e2fcce7e834",
+      "size_bytes": 2295
+    },
+    "report.md": {
+      "sha256": "b9637413a135ee6956a457cdbb39878d073c4fa871c6945ccd42c7f8a39b83ee",
+      "size_bytes": 4129
+    },
+    "summary.json": {
+      "sha256": "a467c15009b0187c06ddbaff9b6443ecd07217f67abe4e013c7dc9b91e708d98",
+      "size_bytes": 17020
+    }
+  },
+  "kind": "reproduction",
+  "schema_version": "1.0"
+}

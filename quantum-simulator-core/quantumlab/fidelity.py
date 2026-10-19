@@ -33,7 +33,6 @@ def fidelity(
     For pure states returns |<psi|phi>|^2. For mixed states uses the
     Uhlmann fidelity F(rho, sigma) = (Tr sqrt(sqrt(rho) sigma sqrt(rho)))^2.
     """
-    from quantumlab.density import DensityMatrix
     from quantumlab.state import StateVector
 
     if isinstance(state1, StateVector) and isinstance(state2, StateVector):
@@ -75,7 +74,6 @@ def target_state_fidelity(
     target: str,
 ) -> tuple[float, str]:
     """Compute fidelity against a named target state."""
-    from quantumlab.density import DensityMatrix
     from quantumlab.state import StateVector
 
     n = state.num_qubits

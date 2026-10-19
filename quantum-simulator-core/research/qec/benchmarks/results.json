@@ -1,0 +1,41 @@
+{
+  "benchmarks": {
+    "exact_d3": {
+      "decode_all_syndromes_seconds": 2.515799997127033e-05,
+      "microseconds_per_decode": 6.289499992817582,
+      "syndromes": 4,
+      "table_build_seconds": 0.0003874349999932747,
+      "table_size": 4
+    },
+    "exact_d5": {
+      "decode_all_syndromes_seconds": 7.477799999833223e-05,
+      "microseconds_per_decode": 4.673624999895765,
+      "syndromes": 16,
+      "table_build_seconds": 0.006514057999993383,
+      "table_size": 16
+    },
+    "exact_d7": {
+      "decode_all_syndromes_seconds": 0.0003301309998278157,
+      "microseconds_per_decode": 5.15829687230962,
+      "syndromes": 64,
+      "table_build_seconds": 0.13320522499998333,
+      "table_size": 64
+    },
+    "mwpm_surface_d3": {
+      "decode_batch_seconds": 0.0014520400000037625,
+      "detectors": 24,
+      "microseconds_per_shot": 0.7260200000018813,
+      "shots": 2000
+    },
+    "mwpm_surface_d5": {
+      "decode_batch_seconds": 0.01355859400018744,
+      "detectors": 120,
+      "microseconds_per_shot": 6.77929700009372,
+      "shots": 2000
+    }
+  },
+  "generated_utc": "2026-10-19T16:28:47+00:00",
+  "notice": "Engineering timings on this sandbox only. They are not a performance comparison to published decoders.",
+  "platform": "Linux-6.1.158+-x86_64-with-glibc2.36",
+  "python": "3.11.2"
+}

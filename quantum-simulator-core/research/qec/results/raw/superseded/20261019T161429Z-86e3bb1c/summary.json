@@ -1,0 +1,5056 @@
+{
+  "analysis_version": "1.0.0",
+  "artifact_schema_version": "1.0",
+  "claim_labels": {
+    "ai_assistance": "NOT_USED",
+    "hardware": "NOT_CLAIMED",
+    "novelty": "NO_NOVELTY_CLAIMED",
+    "phase3": "LIMITATION_MEASURED_ON_DECLARED_SIMULATION",
+    "phase4": "PROMOTED"
+  },
+  "config": {
+    "bootstrap_resamples": 10000,
+    "claim_status": "NOT_INDEPENDENTLY_VALIDATED",
+    "distances": [
+      3,
+      5
+    ],
+    "phase3": {
+      "decoders": [
+        "nominal",
+        "oracle"
+      ],
+      "master_seed": 3101,
+      "shots": 100000
+    },
+    "phase4": {
+      "calibration_shots": 5000,
+      "candidate_source": "RULE_BASED",
+      "development_master_seed": 4101,
+      "grid": [
+        0.001,
+        0.002,
+        0.004,
+        0.006,
+        0.008,
+        0.01,
+        0.012,
+        0.015,
+        0.02,
+        0.03
+      ],
+      "heldout_master_seed": 9101,
+      "heldout_shots": 100000
+    },
+    "profiles": [
+      {
+        "name": "control",
+        "p_gate": 0.01,
+        "p_meas": 0.01,
+        "p_reset": 0.01,
+        "p_round": 0.01
+      },
+      {
+        "name": "measurement_heavy",
+        "p_gate": 0.002,
+        "p_meas": 0.02,
+        "p_reset": 0.002,
+        "p_round": 0.002
+      },
+      {
+        "name": "gate_heavy",
+        "p_gate": 0.02,
+        "p_meas": 0.002,
+        "p_reset": 0.02,
+        "p_round": 0.02
+      }
+    ],
+    "study": "static_dem_mismatch_v1"
+  },
+  "config_hash": "7a9576e9a74e7c21812d45660d90f83bf5cc11b59420c90ad70cd0128ad36c20",
+  "end_utc": "2026-10-19T16:14:29.308578+00:00",
+  "experiment_id": "20261019T161429Z-86e3bb1c",
+  "phase3": {
+    "cells": {
+      "control_d3": {
+        "decoders": {
+          "nominal": {
+            "decoder": {
+              "config": {
+                "dem_sha256": "12d1d16696c1f9a75c8aec9cc772c34d9a0cf14ba70a7b1de788828d41bedd31",
+                "num_detectors": 24,
+                "num_observables": 1
+              },
+              "config_hash": "647761e3657cfcd2ca15b76a93a6df83a265341d3e8b9209601045b9459c63fd",
+              "decoder_type": "detector",
+              "deterministic": true,
+              "name": "pymatching_mwpm_detector",
+              "noise_assumptions": [
+                "independent detector error model"
+              ],
+              "supported_code_families": [
+                "surface_code_stim",
+                "repetition_code_stim"
+              ],
+              "version": "1.0.0"
+            },
+            "model": {
+              "name": "nominal",
+              "p_gate": 0.01,
+              "p_meas": 0.01,
+              "p_reset": 0.01,
+              "p_round": 0.01
+            }
+          },
+          "oracle": {
+            "decoder": {
+              "config": {
+                "dem_sha256": "12d1d16696c1f9a75c8aec9cc772c34d9a0cf14ba70a7b1de788828d41bedd31",
+                "num_detectors": 24,
+                "num_observables": 1
+              },
+              "config_hash": "647761e3657cfcd2ca15b76a93a6df83a265341d3e8b9209601045b9459c63fd",
+              "decoder_type": "detector",
+              "deterministic": true,
+              "name": "pymatching_mwpm_detector",
+              "noise_assumptions": [
+                "independent detector error model"
+              ],
+              "supported_code_families": [
+                "surface_code_stim",
+                "repetition_code_stim"
+              ],
+              "version": "1.0.0"
+            },
+            "model": {
+              "name": "control",
+              "p_gate": 0.01,
+              "p_meas": 0.01,
+              "p_reset": 0.01,
+              "p_round": 0.01
+            }
+          }
+        },
+        "distance": 3,
+        "nominal_vs_oracle": {
+          "difference_bootstrap_ci": [
+            0.0,
+            0.0
+          ],
+          "difference_first_minus_second": 0.0,
+          "first_failures": 5824,
+          "first_ler": 0.05824,
+          "first_summary": {
+            "confidence_level": 0.95,
+            "failures": 5824,
+            "interval_high": 0.05970858030665069,
+            "interval_low": 0.05680535844657869,
+            "method": "wilson",
+            "probability": 0.05824,
+            "trials": 100000
+          },
+          "mcnemar": {
+            "both_failure": 5824,
+            "both_success": 94176,
+            "discordant": 0,
+            "first_only": 0,
+            "method": "exact_binomial_two_sided",
+            "p_value": 1.0,
+            "second_only": 0,
+            "statistic": 0.0
+          },
+          "relative_excess": 0.0,
+          "second_failures": 5824,
+          "second_ler": 0.05824,
+          "second_summary": {
+            "confidence_level": 0.95,
+            "failures": 5824,
+            "interval_high": 0.05970858030665069,
+            "interval_low": 0.05680535844657869,
+            "method": "wilson",
+            "probability": 0.05824,
+            "trials": 100000
+          },
+          "trials": 100000,
+          "zero_failure_note": null
+        },
+        "profile": {
+          "name": "control",
+          "p_gate": 0.01,
+          "p_meas": 0.01,
+          "p_reset": 0.01,
+          "p_round": 0.01
+        },
+        "seed": 1285913866
+      },
+      "control_d5": {
+        "decoders": {
+          "nominal": {
+            "decoder": {
+              "config": {
+                "dem_sha256": "43047914a2a0a262ee7e7b14fa97f78fb0d150177424f9433a42b5f7444dcb8b",
+                "num_detectors": 120,
+                "num_observables": 1
+              },
+              "config_hash": "1f3a88d9742f2580076848bc043a9b115cde5870295345e73ac7a9cd9fdfde16",
+              "decoder_type": "detector",
+              "deterministic": true,
+              "name": "pymatching_mwpm_detector",
+              "noise_assumptions": [
+                "independent detector error model"
+              ],
+              "supported_code_families": [
+                "surface_code_stim",
+                "repetition_code_stim"
+              ],
+              "version": "1.0.0"
+            },
+            "model": {
+              "name": "nominal",
+              "p_gate": 0.01,
+              "p_meas": 0.01,
+              "p_reset": 0.01,
+              "p_round": 0.01
+            }
+          },
+          "oracle": {
+            "decoder": {
+              "config": {
+                "dem_sha256": "43047914a2a0a262ee7e7b14fa97f78fb0d150177424f9433a42b5f7444dcb8b",
+                "num_detectors": 120,
+                "num_observables": 1
+              },
+              "config_hash": "1f3a88d9742f2580076848bc043a9b115cde5870295345e73ac7a9cd9fdfde16",
+              "decoder_type": "detector",
+              "deterministic": true,
+              "name": "pymatching_mwpm_detector",
+              "noise_assumptions": [
+                "independent detector error model"
+              ],
+              "supported_code_families": [
+                "surface_code_stim",
+                "repetition_code_stim"
+              ],
+              "version": "1.0.0"
+            },
+            "model": {
+              "name": "control",
+              "p_gate": 0.01,
+              "p_meas": 0.01,
+              "p_reset": 0.01,
+              "p_round": 0.01
+            }
+          }
+        },
+        "distance": 5,
+        "nominal_vs_oracle": {
+          "difference_bootstrap_ci": [
+            0.0,
+            0.0
+          ],
+          "difference_first_minus_second": 0.0,
+          "first_failures": 8479,
+          "first_ler": 0.08479,
+          "first_summary": {
+            "confidence_level": 0.95,
+            "failures": 8479,
+            "interval_high": 0.08653254648473413,
+            "interval_low": 0.0830793525322171,
+            "method": "wilson",
+            "probability": 0.08479,
+            "trials": 100000
+          },
+          "mcnemar": {
+            "both_failure": 8479,
+            "both_success": 91521,
+            "discordant": 0,
+            "first_only": 0,
+            "method": "exact_binomial_two_sided",
+            "p_value": 1.0,
+            "second_only": 0,
+            "statistic": 0.0
+          },
+          "relative_excess": 0.0,
+          "second_failures": 8479,
+          "second_ler": 0.08479,
+          "second_summary": {
+            "confidence_level": 0.95,
+            "failures": 8479,
+            "interval_high": 0.08653254648473413,
+            "interval_low": 0.0830793525322171,
+            "method": "wilson",
+            "probability": 0.08479,
+            "trials": 100000
+          },
+          "trials": 100000,
+          "zero_failure_note": null
+        },
+        "profile": {
+          "name": "control",
+          "p_gate": 0.01,
+          "p_meas": 0.01,
+          "p_reset": 0.01,
+          "p_round": 0.01
+        },
+        "seed": 782684684
+      },
+      "gate_heavy_d3": {
+        "decoders": {
+          "nominal": {
+            "decoder": {
+              "config": {
+                "dem_sha256": "12d1d16696c1f9a75c8aec9cc772c34d9a0cf14ba70a7b1de788828d41bedd31",
+                "num_detectors": 24,
+                "num_observables": 1
+              },
+              "config_hash": "647761e3657cfcd2ca15b76a93a6df83a265341d3e8b9209601045b9459c63fd",
+              "decoder_type": "detector",
+              "deterministic": true,
+              "name": "pymatching_mwpm_detector",
+              "noise_assumptions": [
+                "independent detector error model"
+              ],
+              "supported_code_families": [
+                "surface_code_stim",
+                "repetition_code_stim"
+              ],
+              "version": "1.0.0"
+            },
+            "model": {
+              "name": "nominal",
+              "p_gate": 0.01,
+              "p_meas": 0.01,
+              "p_reset": 0.01,
+              "p_round": 0.01
+            }
+          },
+          "oracle": {
+            "decoder": {
+              "config": {
+                "dem_sha256": "1405084379cfa9d464580f1ab9ba1101f29c73e6da31f0dd93ae6e77f2130605",
+                "num_detectors": 24,
+                "num_observables": 1
+              },
+              "config_hash": "5f26378111bffdb78093b1b28514c8074459aa0729030456806a6e5bd241cabd",
+              "decoder_type": "detector",
+              "deterministic": true,
+              "name": "pymatching_mwpm_detector",
+              "noise_assumptions": [
+                "independent detector error model"
+              ],
+              "supported_code_families": [
+                "surface_code_stim",
+                "repetition_code_stim"
+              ],
+              "version": "1.0.0"
+            },
+            "model": {
+              "name": "gate_heavy",
+              "p_gate": 0.02,
+              "p_meas": 0.002,
+              "p_reset": 0.02,
+              "p_round": 0.02
+            }
+          }
+        },
+        "distance": 3,
+        "nominal_vs_oracle": {
+          "difference_bootstrap_ci": [
+            -0.00212025000000001,
+            -0.0006099999999999994
+          ],
+          "difference_first_minus_second": -0.00137,
+          "first_failures": 14461,
+          "first_ler": 0.14461,
+          "first_summary": {
+            "confidence_level": 0.95,
+            "failures": 14461,
+            "interval_high": 0.1468035162112647,
+            "interval_low": 0.14244378706089705,
+            "method": "wilson",
+            "probability": 0.14461,
+            "trials": 100000
+          },
+          "mcnemar": {
+            "both_failure": 13773,
+            "both_success": 84714,
+            "discordant": 1513,
+            "first_only": 688,
+            "method": "exact_binomial_two_sided",
+            "p_value": 0.00046778752502240234,
+            "second_only": 825,
+            "statistic": 12.405155320555188
+          },
+          "relative_excess": -0.009384847239347856,
+          "second_failures": 14598,
+          "second_ler": 0.14598,
+          "second_summary": {
+            "confidence_level": 0.95,
+            "failures": 14598,
+            "interval_high": 0.14818200973878262,
+            "interval_low": 0.14380518828145064,
+            "method": "wilson",
+            "probability": 0.14598,
+            "trials": 100000
+          },
+          "trials": 100000,
+          "zero_failure_note": null
+        },
+        "profile": {
+          "name": "gate_heavy",
+          "p_gate": 0.02,
+          "p_meas": 0.002,
+          "p_reset": 0.02,
+          "p_round": 0.02
+        },
+        "seed": 3916833402
+      },
+      "gate_heavy_d5": {
+        "decoders": {
+          "nominal": {
+            "decoder": {
+              "config": {
+                "dem_sha256": "43047914a2a0a262ee7e7b14fa97f78fb0d150177424f9433a42b5f7444dcb8b",
+                "num_detectors": 120,
+                "num_observables": 1
+              },
+              "config_hash": "1f3a88d9742f2580076848bc043a9b115cde5870295345e73ac7a9cd9fdfde16",
+              "decoder_type": "detector",
+              "deterministic": true,
+              "name": "pymatching_mwpm_detector",
+              "noise_assumptions": [
+                "independent detector error model"
+              ],
+              "supported_code_families": [
+                "surface_code_stim",
+                "repetition_code_stim"
+              ],
+              "version": "1.0.0"
+            },
+            "model": {
+              "name": "nominal",
+              "p_gate": 0.01,
+              "p_meas": 0.01,
+              "p_reset": 0.01,
+              "p_round": 0.01
+            }
+          },
+          "oracle": {
+            "decoder": {
+              "config": {
+                "dem_sha256": "be1712cd09d13e29e538ebc685202783adead8c56e87fd48bfd320dbb76ab487",
+                "num_detectors": 120,
+                "num_observables": 1
+              },
+              "config_hash": "7ce2cad9ca3896db48deb77d64620c14a9cb75873753da268fc6b7258341a49a",
+              "decoder_type": "detector",
+              "deterministic": true,
+              "name": "pymatching_mwpm_detector",
+              "noise_assumptions": [
+                "independent detector error model"
+              ],
+              "supported_code_families": [
+                "surface_code_stim",
+                "repetition_code_stim"
+              ],
+              "version": "1.0.0"
+            },
+            "model": {
+              "name": "gate_heavy",
+              "p_gate": 0.02,
+              "p_meas": 0.002,
+              "p_reset": 0.02,
+              "p_round": 0.02
+            }
+          }
+        },
+        "distance": 5,
+        "nominal_vs_oracle": {
+          "difference_bootstrap_ci": [
+            -0.0045600000000000085,
+            -0.0010099999999999554
+          ],
+          "difference_first_minus_second": -0.00281,
+          "first_failures": 26775,
+          "first_ler": 0.26775,
+          "first_summary": {
+            "confidence_level": 0.95,
+            "failures": 26775,
+            "interval_high": 0.270503252337327,
+            "interval_low": 0.2650145905534678,
+            "method": "wilson",
+            "probability": 0.26775,
+            "trials": 100000
+          },
+          "mcnemar": {
+            "both_failure": 22822,
+            "both_success": 68991,
+            "discordant": 8187,
+            "first_only": 3953,
+            "method": "exact_binomial_two_sided",
+            "p_value": 0.0019694104401405724,
+            "second_only": 4234,
+            "statistic": 9.64468059118114
+          },
+          "relative_excess": -0.010385866351271438,
+          "second_failures": 27056,
+          "second_ler": 0.27056,
+          "second_summary": {
+            "confidence_level": 0.95,
+            "failures": 27056,
+            "interval_high": 0.27332220874305735,
+            "interval_low": 0.2678154182660448,
+            "method": "wilson",
+            "probability": 0.27056,
+            "trials": 100000
+          },
+          "trials": 100000,
+          "zero_failure_note": null
+        },
+        "profile": {
+          "name": "gate_heavy",
+          "p_gate": 0.02,
+          "p_meas": 0.002,
+          "p_reset": 0.02,
+          "p_round": 0.02
+        },
+        "seed": 3128230714
+      },
+      "measurement_heavy_d3": {
+        "decoders": {
+          "nominal": {
+            "decoder": {
+              "config": {
+                "dem_sha256": "12d1d16696c1f9a75c8aec9cc772c34d9a0cf14ba70a7b1de788828d41bedd31",
+                "num_detectors": 24,
+                "num_observables": 1
+              },
+              "config_hash": "647761e3657cfcd2ca15b76a93a6df83a265341d3e8b9209601045b9459c63fd",
+              "decoder_type": "detector",
+              "deterministic": true,
+              "name": "pymatching_mwpm_detector",
+              "noise_assumptions": [
+                "independent detector error model"
+              ],
+              "supported_code_families": [
+                "surface_code_stim",
+                "repetition_code_stim"
+              ],
+              "version": "1.0.0"
+            },
+            "model": {
+              "name": "nominal",
+              "p_gate": 0.01,
+              "p_meas": 0.01,
+              "p_reset": 0.01,
+              "p_round": 0.01
+            }
+          },
+          "oracle": {
+            "decoder": {
+              "config": {
+                "dem_sha256": "18e32adf48c740d7259141319478dd42f2d37a9a0e9a78e92b9293cca4f228c4",
+                "num_detectors": 24,
+                "num_observables": 1
+              },
+              "config_hash": "8a278489f5db8a1a74b42cfcb2b8873d57cf2a1e8858bdb2c32233a92c4e63b4",
+              "decoder_type": "detector",
+              "deterministic": true,
+              "name": "pymatching_mwpm_detector",
+              "noise_assumptions": [
+                "independent detector error model"
+              ],
+              "supported_code_families": [
+                "surface_code_stim",
+                "repetition_code_stim"
+              ],
+              "version": "1.0.0"
+            },
+            "model": {
+              "name": "measurement_heavy",
+              "p_gate": 0.002,
+              "p_meas": 0.02,
+              "p_reset": 0.002,
+              "p_round": 0.002
+            }
+          }
+        },
+        "distance": 3,
+        "nominal_vs_oracle": {
+          "difference_bootstrap_ci": [
+            0.0015000000000000013,
+            0.0023099999999999996
+          ],
+          "difference_first_minus_second": 0.0019,
+          "first_failures": 1515,
+          "first_ler": 0.01515,
+          "first_summary": {
+            "confidence_level": 0.95,
+            "failures": 1515,
+            "interval_high": 0.01592591506874807,
+            "interval_low": 0.014411334126523708,
+            "method": "wilson",
+            "probability": 0.01515,
+            "trials": 100000
+          },
+          "mcnemar": {
+            "both_failure": 1206,
+            "both_success": 98366,
+            "discordant": 428,
+            "first_only": 309,
+            "method": "exact_binomial_two_sided",
+            "p_value": 1.4888062400740992e-20,
+            "second_only": 119,
+            "statistic": 84.34579439252336
+          },
+          "relative_excess": 0.14339622641509434,
+          "second_failures": 1325,
+          "second_ler": 0.01325,
+          "second_summary": {
+            "confidence_level": 0.95,
+            "failures": 1325,
+            "interval_high": 0.01397762595639346,
+            "interval_low": 0.012559769208706132,
+            "method": "wilson",
+            "probability": 0.01325,
+            "trials": 100000
+          },
+          "trials": 100000,
+          "zero_failure_note": null
+        },
+        "profile": {
+          "name": "measurement_heavy",
+          "p_gate": 0.002,
+          "p_meas": 0.02,
+          "p_reset": 0.002,
+          "p_round": 0.002
+        },
+        "seed": 3698153690
+      },
+      "measurement_heavy_d5": {
+        "decoders": {
+          "nominal": {
+            "decoder": {
+              "config": {
+                "dem_sha256": "43047914a2a0a262ee7e7b14fa97f78fb0d150177424f9433a42b5f7444dcb8b",
+                "num_detectors": 120,
+                "num_observables": 1
+              },
+              "config_hash": "1f3a88d9742f2580076848bc043a9b115cde5870295345e73ac7a9cd9fdfde16",
+              "decoder_type": "detector",
+              "deterministic": true,
+              "name": "pymatching_mwpm_detector",
+              "noise_assumptions": [
+                "independent detector error model"
+              ],
+              "supported_code_families": [
+                "surface_code_stim",
+                "repetition_code_stim"
+              ],
+              "version": "1.0.0"
+            },
+            "model": {
+              "name": "nominal",
+              "p_gate": 0.01,
+              "p_meas": 0.01,
+              "p_reset": 0.01,
+              "p_round": 0.01
+            }
+          },
+          "oracle": {
+            "decoder": {
+              "config": {
+                "dem_sha256": "cac4a1106f0f0c991ffd94afc59bf4b6448e3ff5fd374e148a94de8264bbdca1",
+                "num_detectors": 120,
+                "num_observables": 1
+              },
+              "config_hash": "fc4e7733f16ff03399e2666b5f212f3409385be410510731636f5999d5ca8d24",
+              "decoder_type": "detector",
+              "deterministic": true,
+              "name": "pymatching_mwpm_detector",
+              "noise_assumptions": [
+                "independent detector error model"
+              ],
+              "supported_code_families": [
+                "surface_code_stim",
+                "repetition_code_stim"
+              ],
+              "version": "1.0.0"
+            },
+            "model": {
+              "name": "measurement_heavy",
+              "p_gate": 0.002,
+              "p_meas": 0.02,
+              "p_reset": 0.002,
+              "p_round": 0.002
+            }
+          }
+        },
+        "distance": 5,
+        "nominal_vs_oracle": {
+          "difference_bootstrap_ci": [
+            0.001,
+            0.0017199999999999993
+          ],
+          "difference_first_minus_second": 0.00136,
+          "first_failures": 745,
+          "first_ler": 0.00745,
+          "first_summary": {
+            "confidence_level": 0.95,
+            "failures": 745,
+            "interval_high": 0.008002215461731224,
+            "interval_low": 0.00693562529547433,
+            "method": "wilson",
+            "probability": 0.00745,
+            "trials": 100000
+          },
+          "mcnemar": {
+            "both_failure": 512,
+            "both_success": 99158,
+            "discordant": 330,
+            "first_only": 233,
+            "method": "exact_binomial_two_sided",
+            "p_value": 4.6999483517192974e-14,
+            "second_only": 97,
+            "statistic": 56.04848484848485
+          },
+          "relative_excess": 0.2233169129720854,
+          "second_failures": 609,
+          "second_ler": 0.00609,
+          "second_summary": {
+            "confidence_level": 0.95,
+            "failures": 609,
+            "interval_high": 0.0065915398661085785,
+            "interval_low": 0.0056264053747632015,
+            "method": "wilson",
+            "probability": 0.00609,
+            "trials": 100000
+          },
+          "trials": 100000,
+          "zero_failure_note": null
+        },
+        "profile": {
+          "name": "measurement_heavy",
+          "p_gate": 0.002,
+          "p_meas": 0.02,
+          "p_reset": 0.002,
+          "p_round": 0.002
+        },
+        "seed": 2613733331
+      }
+    },
+    "conclusion": "3 of 3 descriptive Phase 3 hypotheses were supported by the pre-declared profiles. This is a limitation measurement, not a novelty claim.",
+    "verdict": {
+      "H3a_measurement_heavy_d5_excess_ge_10pct": {
+        "supported": true,
+        "value": 0.2233169129720854
+      },
+      "H3b_gate_heavy_d5_excess_lt_5pct": {
+        "supported": true,
+        "value": -0.010385866351271438
+      },
+      "H3c_excess_larger_at_d5": {
+        "supported": true
+      }
+    }
+  },
+  "phase4": {
+    "ambiguous_selections": [],
+    "cells": {
+      "control_d3": {
+        "candidate_vs_nominal": {
+          "difference_bootstrap_ci": [
+            0.0,
+            0.0
+          ],
+          "difference_first_minus_second": 0.0,
+          "first_failures": 5830,
+          "first_ler": 0.0583,
+          "first_summary": {
+            "confidence_level": 0.95,
+            "failures": 5830,
+            "interval_high": 0.059769279159807044,
+            "interval_low": 0.056864654983848816,
+            "method": "wilson",
+            "probability": 0.0583,
+            "trials": 100000
+          },
+          "mcnemar": {
+            "both_failure": 5830,
+            "both_success": 94170,
+            "discordant": 0,
+            "first_only": 0,
+            "method": "exact_binomial_two_sided",
+            "p_value": 1.0,
+            "second_only": 0,
+            "statistic": 0.0
+          },
+          "relative_excess": 0.0,
+          "second_failures": 5830,
+          "second_ler": 0.0583,
+          "second_summary": {
+            "confidence_level": 0.95,
+            "failures": 5830,
+            "interval_high": 0.059769279159807044,
+            "interval_low": 0.056864654983848816,
+            "method": "wilson",
+            "probability": 0.0583,
+            "trials": 100000
+          },
+          "trials": 100000,
+          "zero_failure_note": null
+        },
+        "candidate_vs_oracle": {
+          "difference_bootstrap_ci": [
+            0.0,
+            0.0
+          ],
+          "difference_first_minus_second": 0.0,
+          "first_failures": 5830,
+          "first_ler": 0.0583,
+          "first_summary": {
+            "confidence_level": 0.95,
+            "failures": 5830,
+            "interval_high": 0.059769279159807044,
+            "interval_low": 0.056864654983848816,
+            "method": "wilson",
+            "probability": 0.0583,
+            "trials": 100000
+          },
+          "mcnemar": {
+            "both_failure": 5830,
+            "both_success": 94170,
+            "discordant": 0,
+            "first_only": 0,
+            "method": "exact_binomial_two_sided",
+            "p_value": 1.0,
+            "second_only": 0,
+            "statistic": 0.0
+          },
+          "relative_excess": 0.0,
+          "second_failures": 5830,
+          "second_ler": 0.0583,
+          "second_summary": {
+            "confidence_level": 0.95,
+            "failures": 5830,
+            "interval_high": 0.059769279159807044,
+            "interval_low": 0.056864654983848816,
+            "method": "wilson",
+            "probability": 0.0583,
+            "trials": 100000
+          },
+          "trials": 100000,
+          "zero_failure_note": null
+        },
+        "decoders": {
+          "candidate": {
+            "decoder": {
+              "config": {
+                "dem_sha256": "12d1d16696c1f9a75c8aec9cc772c34d9a0cf14ba70a7b1de788828d41bedd31",
+                "num_detectors": 24,
+                "num_observables": 1
+              },
+              "config_hash": "647761e3657cfcd2ca15b76a93a6df83a265341d3e8b9209601045b9459c63fd",
+              "decoder_type": "detector",
+              "deterministic": true,
+              "name": "pymatching_mwpm_detector",
+              "noise_assumptions": [
+                "independent detector error model"
+              ],
+              "supported_code_families": [
+                "surface_code_stim",
+                "repetition_code_stim"
+              ],
+              "version": "1.0.0"
+            },
+            "model": {
+              "name": "candidate_0.0100_0.0100",
+              "p_gate": 0.01,
+              "p_meas": 0.01,
+              "p_reset": 0.01,
+              "p_round": 0.01
+            }
+          },
+          "nominal": {
+            "decoder": {
+              "config": {
+                "dem_sha256": "12d1d16696c1f9a75c8aec9cc772c34d9a0cf14ba70a7b1de788828d41bedd31",
+                "num_detectors": 24,
+                "num_observables": 1
+              },
+              "config_hash": "647761e3657cfcd2ca15b76a93a6df83a265341d3e8b9209601045b9459c63fd",
+              "decoder_type": "detector",
+              "deterministic": true,
+              "name": "pymatching_mwpm_detector",
+              "noise_assumptions": [
+                "independent detector error model"
+              ],
+              "supported_code_families": [
+                "surface_code_stim",
+                "repetition_code_stim"
+              ],
+              "version": "1.0.0"
+            },
+            "model": {
+              "name": "nominal",
+              "p_gate": 0.01,
+              "p_meas": 0.01,
+              "p_reset": 0.01,
+              "p_round": 0.01
+            }
+          },
+          "oracle": {
+            "decoder": {
+              "config": {
+                "dem_sha256": "12d1d16696c1f9a75c8aec9cc772c34d9a0cf14ba70a7b1de788828d41bedd31",
+                "num_detectors": 24,
+                "num_observables": 1
+              },
+              "config_hash": "647761e3657cfcd2ca15b76a93a6df83a265341d3e8b9209601045b9459c63fd",
+              "decoder_type": "detector",
+              "deterministic": true,
+              "name": "pymatching_mwpm_detector",
+              "noise_assumptions": [
+                "independent detector error model"
+              ],
+              "supported_code_families": [
+                "surface_code_stim",
+                "repetition_code_stim"
+              ],
+              "version": "1.0.0"
+            },
+            "model": {
+              "name": "control",
+              "p_gate": 0.01,
+              "p_meas": 0.01,
+              "p_reset": 0.01,
+              "p_round": 0.01
+            }
+          }
+        },
+        "distance": 3,
+        "nominal_vs_oracle": {
+          "difference_bootstrap_ci": [
+            0.0,
+            0.0
+          ],
+          "difference_first_minus_second": 0.0,
+          "first_failures": 5830,
+          "first_ler": 0.0583,
+          "first_summary": {
+            "confidence_level": 0.95,
+            "failures": 5830,
+            "interval_high": 0.059769279159807044,
+            "interval_low": 0.056864654983848816,
+            "method": "wilson",
+            "probability": 0.0583,
+            "trials": 100000
+          },
+          "mcnemar": {
+            "both_failure": 5830,
+            "both_success": 94170,
+            "discordant": 0,
+            "first_only": 0,
+            "method": "exact_binomial_two_sided",
+            "p_value": 1.0,
+            "second_only": 0,
+            "statistic": 0.0
+          },
+          "relative_excess": 0.0,
+          "second_failures": 5830,
+          "second_ler": 0.0583,
+          "second_summary": {
+            "confidence_level": 0.95,
+            "failures": 5830,
+            "interval_high": 0.059769279159807044,
+            "interval_low": 0.056864654983848816,
+            "method": "wilson",
+            "probability": 0.0583,
+            "trials": 100000
+          },
+          "trials": 100000,
+          "zero_failure_note": null
+        },
+        "profile": {
+          "name": "control",
+          "p_gate": 0.01,
+          "p_meas": 0.01,
+          "p_reset": 0.01,
+          "p_round": 0.01
+        },
+        "seed": 2266027062,
+        "selection": {
+          "ambiguous": false,
+          "development_seed_master": 4101,
+          "distance": 3,
+          "observed_profile": "control",
+          "runner_up": {
+            "p_gate": 0.01,
+            "p_meas": 0.012,
+            "score": 0.0331062583561469
+          },
+          "selected": {
+            "name": "candidate_0.0100_0.0100",
+            "p_gate": 0.01,
+            "p_meas": 0.01,
+            "score": 0.012398930413191558
+          },
+          "top_10": [
+            {
+              "candidate_features": [
+                0.08985,
+                0.1213,
+                0.12165,
+                0.0757,
+                0.108575
+              ],
+              "observed_features": [
+                0.09145,
+                0.122525,
+                0.123325,
+                0.07635,
+                0.10991666666666666
+              ],
+              "p_gate": 0.01,
+              "p_meas": 0.01,
+              "score": 0.012398930413191558
+            },
+            {
+              "candidate_features": [
+                0.09595,
+                0.125525,
+                0.124925,
+                0.08145,
+                0.11305
+              ],
+              "observed_features": [
+                0.09145,
+                0.122525,
+                0.123325,
+                0.07635,
+                0.10991666666666666
+              ],
+              "p_gate": 0.01,
+              "p_meas": 0.012,
+              "score": 0.0331062583561469
+            },
+            {
+              "candidate_features": [
+                0.0914,
+                0.11855,
+                0.118325,
+                0.0716,
+                0.106125
+              ],
+              "observed_features": [
+                0.09145,
+                0.122525,
+                0.123325,
+                0.07635,
+                0.10991666666666666
+              ],
+              "p_gate": 0.01,
+              "p_meas": 0.008,
+              "score": 0.03355191952632586
+            },
+            {
+              "candidate_features": [
+                0.09245,
+                0.118575,
+                0.116225,
+                0.06305,
+                0.10418333333333334
+              ],
+              "observed_features": [
+                0.09145,
+                0.122525,
+                0.123325,
+                0.07635,
+                0.10991666666666666
+              ],
+              "p_gate": 0.01,
+              "p_meas": 0.006,
+              "score": 0.059368434455975054
+            },
+            {
+              "candidate_features": [
+                0.10105,
+                0.125075,
+                0.127075,
+                0.0577,
+                0.11050833333333333
+              ],
+              "observed_features": [
+                0.09145,
+                0.122525,
+                0.123325,
+                0.07635,
+                0.10991666666666666
+              ],
+              "p_gate": 0.012,
+              "p_meas": 0.002,
+              "score": 0.0671197555230152
+            },
+            {
+              "candidate_features": [
+                0.10315,
+                0.12325,
+                0.12295,
+                0.0537,
+                0.10820833333333334
+              ],
+              "observed_features": [
+                0.09145,
+                0.122525,
+                0.123325,
+                0.07635,
+                0.10991666666666666
+              ],
+              "p_gate": 0.012,
+              "p_meas": 0.001,
+              "score": 0.07097154135099001
+            },
+            {
+              "candidate_features": [
+                0.08385,
+                0.11905,
+                0.1203,
+                0.10505,
+                0.11126666666666667
+              ],
+              "observed_features": [
+                0.09145,
+                0.122525,
+                0.123325,
+                0.07635,
+                0.10991666666666666
+              ],
+              "p_gate": 0.008,
+              "p_meas": 0.02,
+              "score": 0.08432545998599353
+            },
+            {
+              "candidate_features": [
+                0.103,
+                0.133775,
+                0.1289,
+                0.06395,
+                0.11538333333333334
+              ],
+              "observed_features": [
+                0.09145,
+                0.122525,
+                0.123325,
+                0.07635,
+                0.10991666666666666
+              ],
+              "p_gate": 0.012,
+              "p_meas": 0.004,
+              "score": 0.08832049404724006
+            },
+            {
+              "candidate_features": [
+                0.09945,
+                0.131625,
+                0.130425,
+                0.09365,
+                0.11953333333333334
+              ],
+              "observed_features": [
+                0.09145,
+                0.122525,
+                0.123325,
+                0.07635,
+                0.10991666666666666
+              ],
+              "p_gate": 0.01,
+              "p_meas": 0.015,
+              "score": 0.09763162920990642
+            },
+            {
+              "candidate_features": [
+                0.07875,
+                0.1118,
+                0.11165,
+                0.08715,
+                0.10213333333333334
+              ],
+              "observed_features": [
+                0.09145,
+                0.122525,
+                0.123325,
+                0.07635,
+                0.10991666666666666
+              ],
+              "p_gate": 0.008,
+              "p_meas": 0.015,
+              "score": 0.10253390208187434
+            }
+          ]
+        }
+      },
+      "control_d5": {
+        "candidate_vs_nominal": {
+          "difference_bootstrap_ci": [
+            0.0,
+            0.0
+          ],
+          "difference_first_minus_second": 0.0,
+          "first_failures": 8318,
+          "first_ler": 0.08318,
+          "first_summary": {
+            "confidence_level": 0.95,
+            "failures": 8318,
+            "interval_high": 0.0849076427704309,
+            "interval_low": 0.08148437993674283,
+            "method": "wilson",
+            "probability": 0.08318,
+            "trials": 100000
+          },
+          "mcnemar": {
+            "both_failure": 8318,
+            "both_success": 91682,
+            "discordant": 0,
+            "first_only": 0,
+            "method": "exact_binomial_two_sided",
+            "p_value": 1.0,
+            "second_only": 0,
+            "statistic": 0.0
+          },
+          "relative_excess": 0.0,
+          "second_failures": 8318,
+          "second_ler": 0.08318,
+          "second_summary": {
+            "confidence_level": 0.95,
+            "failures": 8318,
+            "interval_high": 0.0849076427704309,
+            "interval_low": 0.08148437993674283,
+            "method": "wilson",
+            "probability": 0.08318,
+            "trials": 100000
+          },
+          "trials": 100000,
+          "zero_failure_note": null
+        },
+        "candidate_vs_oracle": {
+          "difference_bootstrap_ci": [
+            0.0,
+            0.0
+          ],
+          "difference_first_minus_second": 0.0,
+          "first_failures": 8318,
+          "first_ler": 0.08318,
+          "first_summary": {
+            "confidence_level": 0.95,
+            "failures": 8318,
+            "interval_high": 0.0849076427704309,
+            "interval_low": 0.08148437993674283,
+            "method": "wilson",
+            "probability": 0.08318,
+            "trials": 100000
+          },
+          "mcnemar": {
+            "both_failure": 8318,
+            "both_success": 91682,
+            "discordant": 0,
+            "first_only": 0,
+            "method": "exact_binomial_two_sided",
+            "p_value": 1.0,
+            "second_only": 0,
+            "statistic": 0.0
+          },
+          "relative_excess": 0.0,
+          "second_failures": 8318,
+          "second_ler": 0.08318,
+          "second_summary": {
+            "confidence_level": 0.95,
+            "failures": 8318,
+            "interval_high": 0.0849076427704309,
+            "interval_low": 0.08148437993674283,
+            "method": "wilson",
+            "probability": 0.08318,
+            "trials": 100000
+          },
+          "trials": 100000,
+          "zero_failure_note": null
+        },
+        "decoders": {
+          "candidate": {
+            "decoder": {
+              "config": {
+                "dem_sha256": "43047914a2a0a262ee7e7b14fa97f78fb0d150177424f9433a42b5f7444dcb8b",
+                "num_detectors": 120,
+                "num_observables": 1
+              },
+              "config_hash": "1f3a88d9742f2580076848bc043a9b115cde5870295345e73ac7a9cd9fdfde16",
+              "decoder_type": "detector",
+              "deterministic": true,
+              "name": "pymatching_mwpm_detector",
+              "noise_assumptions": [
+                "independent detector error model"
+              ],
+              "supported_code_families": [
+                "surface_code_stim",
+                "repetition_code_stim"
+              ],
+              "version": "1.0.0"
+            },
+            "model": {
+              "name": "candidate_0.0100_0.0100",
+              "p_gate": 0.01,
+              "p_meas": 0.01,
+              "p_reset": 0.01,
+              "p_round": 0.01
+            }
+          },
+          "nominal": {
+            "decoder": {
+              "config": {
+                "dem_sha256": "43047914a2a0a262ee7e7b14fa97f78fb0d150177424f9433a42b5f7444dcb8b",
+                "num_detectors": 120,
+                "num_observables": 1
+              },
+              "config_hash": "1f3a88d9742f2580076848bc043a9b115cde5870295345e73ac7a9cd9fdfde16",
+              "decoder_type": "detector",
+              "deterministic": true,
+              "name": "pymatching_mwpm_detector",
+              "noise_assumptions": [
+                "independent detector error model"
+              ],
+              "supported_code_families": [
+                "surface_code_stim",
+                "repetition_code_stim"
+              ],
+              "version": "1.0.0"
+            },
+            "model": {
+              "name": "nominal",
+              "p_gate": 0.01,
+              "p_meas": 0.01,
+              "p_reset": 0.01,
+              "p_round": 0.01
+            }
+          },
+          "oracle": {
+            "decoder": {
+              "config": {
+                "dem_sha256": "43047914a2a0a262ee7e7b14fa97f78fb0d150177424f9433a42b5f7444dcb8b",
+                "num_detectors": 120,
+                "num_observables": 1
+              },
+              "config_hash": "1f3a88d9742f2580076848bc043a9b115cde5870295345e73ac7a9cd9fdfde16",
+              "decoder_type": "detector",
+              "deterministic": true,
+              "name": "pymatching_mwpm_detector",
+              "noise_assumptions": [
+                "independent detector error model"
+              ],
+              "supported_code_families": [
+                "surface_code_stim",
+                "repetition_code_stim"
+              ],
+              "version": "1.0.0"
+            },
+            "model": {
+              "name": "control",
+              "p_gate": 0.01,
+              "p_meas": 0.01,
+              "p_reset": 0.01,
+              "p_round": 0.01
+            }
+          }
+        },
+        "distance": 5,
+        "nominal_vs_oracle": {
+          "difference_bootstrap_ci": [
+            0.0,
+            0.0
+          ],
+          "difference_first_minus_second": 0.0,
+          "first_failures": 8318,
+          "first_ler": 0.08318,
+          "first_summary": {
+            "confidence_level": 0.95,
+            "failures": 8318,
+            "interval_high": 0.0849076427704309,
+            "interval_low": 0.08148437993674283,
+            "method": "wilson",
+            "probability": 0.08318,
+            "trials": 100000
+          },
+          "mcnemar": {
+            "both_failure": 8318,
+            "both_success": 91682,
+            "discordant": 0,
+            "first_only": 0,
+            "method": "exact_binomial_two_sided",
+            "p_value": 1.0,
+            "second_only": 0,
+            "statistic": 0.0
+          },
+          "relative_excess": 0.0,
+          "second_failures": 8318,
+          "second_ler": 0.08318,
+          "second_summary": {
+            "confidence_level": 0.95,
+            "failures": 8318,
+            "interval_high": 0.0849076427704309,
+            "interval_low": 0.08148437993674283,
+            "method": "wilson",
+            "probability": 0.08318,
+            "trials": 100000
+          },
+          "trials": 100000,
+          "zero_failure_note": null
+        },
+        "profile": {
+          "name": "control",
+          "p_gate": 0.01,
+          "p_meas": 0.01,
+          "p_reset": 0.01,
+          "p_round": 0.01
+        },
+        "seed": 747150300,
+        "selection": {
+          "ambiguous": false,
+          "development_seed_master": 4101,
+          "distance": 5,
+          "observed_profile": "control",
+          "runner_up": {
+            "p_gate": 0.01,
+            "p_meas": 0.008,
+            "score": 0.023234488989576144
+          },
+          "selected": {
+            "name": "candidate_0.0100_0.0100",
+            "p_gate": 0.01,
+            "p_meas": 0.01,
+            "score": 0.009815083442657383
+          },
+          "top_10": [
+            {
+              "candidate_features": [
+                0.10726666666666666,
+                0.13735,
+                0.1366,
+                0.13619166666666666,
+                0.13793333333333332,
+                0.08756666666666667,
+                0.12909833333333334
+              ],
+              "observed_features": [
+                0.10311666666666666,
+                0.13739166666666666,
+                0.13738333333333333,
+                0.13595833333333332,
+                0.13758333333333334,
+                0.08523333333333333,
+                0.12849833333333333
+              ],
+              "p_gate": 0.01,
+              "p_meas": 0.01,
+              "score": 0.009815083442657383
+            },
+            {
+              "candidate_features": [
+                0.1036,
+                0.1333,
+                0.13475833333333334,
+                0.13515833333333332,
+                0.13415,
+                0.0793,
+                0.12576333333333334
+              ],
+              "observed_features": [
+                0.10311666666666666,
+                0.13739166666666666,
+                0.13738333333333333,
+                0.13595833333333332,
+                0.13758333333333334,
+                0.08523333333333333,
+                0.12849833333333333
+              ],
+              "p_gate": 0.01,
+              "p_meas": 0.008,
+              "score": 0.023234488989576144
+            },
+            {
+              "candidate_features": [
+                0.10618333333333334,
+                0.14166666666666666,
+                0.13884166666666667,
+                0.13735,
+                0.14006666666666667,
+                0.0941,
+                0.13161333333333333
+              ],
+              "observed_features": [
+                0.10311666666666666,
+                0.13739166666666666,
+                0.13738333333333333,
+                0.13595833333333332,
+                0.13758333333333334,
+                0.08523333333333333,
+                0.12849833333333333
+              ],
+              "p_gate": 0.01,
+              "p_meas": 0.012,
+              "score": 0.028499380657639545
+            },
+            {
+              "candidate_features": [
+                0.1013,
+                0.12968333333333334,
+                0.1304,
+                0.130375,
+                0.13075,
+                0.07315,
+                0.12168666666666667
+              ],
+              "observed_features": [
+                0.10311666666666666,
+                0.13739166666666666,
+                0.13738333333333333,
+                0.13595833333333332,
+                0.13758333333333334,
+                0.08523333333333333,
+                0.12849833333333333
+              ],
+              "p_gate": 0.01,
+              "p_meas": 0.006,
+              "score": 0.05527269364803241
+            },
+            {
+              "candidate_features": [
+                0.0951,
+                0.13204166666666667,
+                0.1327,
+                0.13301666666666667,
+                0.13053333333333333,
+                0.11643333333333333,
+                0.12681166666666666
+              ],
+              "observed_features": [
+                0.10311666666666666,
+                0.13739166666666666,
+                0.13738333333333333,
+                0.13595833333333332,
+                0.13758333333333334,
+                0.08523333333333333,
+                0.12849833333333333
+              ],
+              "p_gate": 0.008,
+              "p_meas": 0.02,
+              "score": 0.07042394610661931
+            },
+            {
+              "candidate_features": [
+                0.11421666666666666,
+                0.14185,
+                0.143125,
+                0.14385,
+                0.14448333333333332,
+                0.06211666666666667,
+                0.132295
+              ],
+              "observed_features": [
+                0.10311666666666666,
+                0.13739166666666666,
+                0.13738333333333333,
+                0.13595833333333332,
+                0.13758333333333334,
+                0.08523333333333333,
+                0.12849833333333333
+              ],
+              "p_gate": 0.012,
+              "p_meas": 0.001,
+              "score": 0.07282425895638407
+            },
+            {
+              "candidate_features": [
+                0.10315,
+                0.127775,
+                0.128475,
+                0.12919166666666668,
+                0.12696666666666667,
+                0.06695,
+                0.11949166666666666
+              ],
+              "observed_features": [
+                0.10311666666666666,
+                0.13739166666666666,
+                0.13738333333333333,
+                0.13595833333333332,
+                0.13758333333333334,
+                0.08523333333333333,
+                0.12849833333333333
+              ],
+              "p_gate": 0.01,
+              "p_meas": 0.004,
+              "score": 0.07308625137016249
+            },
+            {
+              "candidate_features": [
+                0.11556666666666666,
+                0.14546666666666666,
+                0.14260833333333334,
+                0.14314166666666667,
+                0.14375,
+                0.06463333333333333,
+                0.13301333333333334
+              ],
+              "observed_features": [
+                0.10311666666666666,
+                0.13739166666666666,
+                0.13738333333333333,
+                0.13595833333333332,
+                0.13758333333333334,
+                0.08523333333333333,
+                0.12849833333333333
+              ],
+              "p_gate": 0.012,
+              "p_meas": 0.002,
+              "score": 0.07422283610640748
+            },
+            {
+              "candidate_features": [
+                0.10875,
+                0.14445833333333333,
+                0.14644166666666666,
+                0.14426666666666665,
+                0.14386666666666667,
+                0.10493333333333334,
+                0.137175
+              ],
+              "observed_features": [
+                0.10311666666666666,
+                0.13739166666666666,
+                0.13738333333333333,
+                0.13595833333333332,
+                0.13758333333333334,
+                0.08523333333333333,
+                0.12849833333333333
+              ],
+              "p_gate": 0.01,
+              "p_meas": 0.015,
+              "score": 0.07481424545221627
+            },
+            {
+              "candidate_features": [
+                0.11405,
+                0.1482,
+                0.147525,
+                0.14465833333333333,
+                0.14730833333333335,
+                0.07276666666666666,
+                0.13622
+              ],
+              "observed_features": [
+                0.10311666666666666,
+                0.13739166666666666,
+                0.13738333333333333,
+                0.13595833333333332,
+                0.13758333333333334,
+                0.08523333333333333,
+                0.12849833333333333
+              ],
+              "p_gate": 0.012,
+              "p_meas": 0.004,
+              "score": 0.0814834935147246
+            }
+          ]
+        }
+      },
+      "gate_heavy_d3": {
+        "candidate_vs_nominal": {
+          "difference_bootstrap_ci": [
+            0.00020000000000000573,
+            0.0017399999999999916
+          ],
+          "difference_first_minus_second": 0.00097,
+          "first_failures": 14692,
+          "first_ler": 0.14692,
+          "first_summary": {
+            "confidence_level": 0.95,
+            "failures": 14692,
+            "interval_high": 0.14912779915474134,
+            "interval_low": 0.14473932664884032,
+            "method": "wilson",
+            "probability": 0.14692,
+            "trials": 100000
+          },
+          "mcnemar": {
+            "both_failure": 13880,
+            "both_success": 84593,
+            "discordant": 1527,
+            "first_only": 812,
+            "method": "exact_binomial_two_sided",
+            "p_value": 0.013995702821629827,
+            "second_only": 715,
+            "statistic": 6.161755075311067
+          },
+          "relative_excess": 0.0066461116820829055,
+          "second_failures": 14595,
+          "second_ler": 0.14595,
+          "second_summary": {
+            "confidence_level": 0.95,
+            "failures": 14595,
+            "interval_high": 0.14815182445940142,
+            "interval_low": 0.14377537586561864,
+            "method": "wilson",
+            "probability": 0.14595,
+            "trials": 100000
+          },
+          "trials": 100000,
+          "zero_failure_note": null
+        },
+        "candidate_vs_oracle": {
+          "difference_bootstrap_ci": [
+            0.0,
+            0.0
+          ],
+          "difference_first_minus_second": 0.0,
+          "first_failures": 14692,
+          "first_ler": 0.14692,
+          "first_summary": {
+            "confidence_level": 0.95,
+            "failures": 14692,
+            "interval_high": 0.14912779915474134,
+            "interval_low": 0.14473932664884032,
+            "method": "wilson",
+            "probability": 0.14692,
+            "trials": 100000
+          },
+          "mcnemar": {
+            "both_failure": 14692,
+            "both_success": 85308,
+            "discordant": 0,
+            "first_only": 0,
+            "method": "exact_binomial_two_sided",
+            "p_value": 1.0,
+            "second_only": 0,
+            "statistic": 0.0
+          },
+          "relative_excess": 0.0,
+          "second_failures": 14692,
+          "second_ler": 0.14692,
+          "second_summary": {
+            "confidence_level": 0.95,
+            "failures": 14692,
+            "interval_high": 0.14912779915474134,
+            "interval_low": 0.14473932664884032,
+            "method": "wilson",
+            "probability": 0.14692,
+            "trials": 100000
+          },
+          "trials": 100000,
+          "zero_failure_note": null
+        },
+        "decoders": {
+          "candidate": {
+            "decoder": {
+              "config": {
+                "dem_sha256": "1405084379cfa9d464580f1ab9ba1101f29c73e6da31f0dd93ae6e77f2130605",
+                "num_detectors": 24,
+                "num_observables": 1
+              },
+              "config_hash": "5f26378111bffdb78093b1b28514c8074459aa0729030456806a6e5bd241cabd",
+              "decoder_type": "detector",
+              "deterministic": true,
+              "name": "pymatching_mwpm_detector",
+              "noise_assumptions": [
+                "independent detector error model"
+              ],
+              "supported_code_families": [
+                "surface_code_stim",
+                "repetition_code_stim"
+              ],
+              "version": "1.0.0"
+            },
+            "model": {
+              "name": "candidate_0.0200_0.0020",
+              "p_gate": 0.02,
+              "p_meas": 0.002,
+              "p_reset": 0.02,
+              "p_round": 0.02
+            }
+          },
+          "nominal": {
+            "decoder": {
+              "config": {
+                "dem_sha256": "12d1d16696c1f9a75c8aec9cc772c34d9a0cf14ba70a7b1de788828d41bedd31",
+                "num_detectors": 24,
+                "num_observables": 1
+              },
+              "config_hash": "647761e3657cfcd2ca15b76a93a6df83a265341d3e8b9209601045b9459c63fd",
+              "decoder_type": "detector",
+              "deterministic": true,
+              "name": "pymatching_mwpm_detector",
+              "noise_assumptions": [
+                "independent detector error model"
+              ],
+              "supported_code_families": [
+                "surface_code_stim",
+                "repetition_code_stim"
+              ],
+              "version": "1.0.0"
+            },
+            "model": {
+              "name": "nominal",
+              "p_gate": 0.01,
+              "p_meas": 0.01,
+              "p_reset": 0.01,
+              "p_round": 0.01
+            }
+          },
+          "oracle": {
+            "decoder": {
+              "config": {
+                "dem_sha256": "1405084379cfa9d464580f1ab9ba1101f29c73e6da31f0dd93ae6e77f2130605",
+                "num_detectors": 24,
+                "num_observables": 1
+              },
+              "config_hash": "5f26378111bffdb78093b1b28514c8074459aa0729030456806a6e5bd241cabd",
+              "decoder_type": "detector",
+              "deterministic": true,
+              "name": "pymatching_mwpm_detector",
+              "noise_assumptions": [
+                "independent detector error model"
+              ],
+              "supported_code_families": [
+                "surface_code_stim",
+                "repetition_code_stim"
+              ],
+              "version": "1.0.0"
+            },
+            "model": {
+              "name": "gate_heavy",
+              "p_gate": 0.02,
+              "p_meas": 0.002,
+              "p_reset": 0.02,
+              "p_round": 0.02
+            }
+          }
+        },
+        "distance": 3,
+        "nominal_vs_oracle": {
+          "difference_bootstrap_ci": [
+            -0.0017402500000000187,
+            -0.00023999999999999022
+          ],
+          "difference_first_minus_second": -0.00097,
+          "first_failures": 14595,
+          "first_ler": 0.14595,
+          "first_summary": {
+            "confidence_level": 0.95,
+            "failures": 14595,
+            "interval_high": 0.14815182445940142,
+            "interval_low": 0.14377537586561864,
+            "method": "wilson",
+            "probability": 0.14595,
+            "trials": 100000
+          },
+          "mcnemar": {
+            "both_failure": 13880,
+            "both_success": 84593,
+            "discordant": 1527,
+            "first_only": 715,
+            "method": "exact_binomial_two_sided",
+            "p_value": 0.013995702821629827,
+            "second_only": 812,
+            "statistic": 6.161755075311067
+          },
+          "relative_excess": -0.0066022325074870675,
+          "second_failures": 14692,
+          "second_ler": 0.14692,
+          "second_summary": {
+            "confidence_level": 0.95,
+            "failures": 14692,
+            "interval_high": 0.14912779915474134,
+            "interval_low": 0.14473932664884032,
+            "method": "wilson",
+            "probability": 0.14692,
+            "trials": 100000
+          },
+          "trials": 100000,
+          "zero_failure_note": null
+        },
+        "profile": {
+          "name": "gate_heavy",
+          "p_gate": 0.02,
+          "p_meas": 0.002,
+          "p_reset": 0.02,
+          "p_round": 0.02
+        },
+        "seed": 149929855,
+        "selection": {
+          "ambiguous": false,
+          "development_seed_master": 4101,
+          "distance": 3,
+          "observed_profile": "gate_heavy",
+          "runner_up": {
+            "p_gate": 0.02,
+            "p_meas": 0.001,
+            "score": 0.034098670729785105
+          },
+          "selected": {
+            "name": "candidate_0.0200_0.0020",
+            "p_gate": 0.02,
+            "p_meas": 0.002,
+            "score": 0.012704250512268169
+          },
+          "top_10": [
+            {
+              "candidate_features": [
+                0.156,
+                0.190925,
+                0.191375,
+                0.0866,
+                0.16786666666666666
+              ],
+              "observed_features": [
+                0.1511,
+                0.1931,
+                0.192425,
+                0.08805,
+                0.16836666666666666
+              ],
+              "p_gate": 0.02,
+              "p_meas": 0.002,
+              "score": 0.012704250512268169
+            },
+            {
+              "candidate_features": [
+                0.1592,
+                0.186225,
+                0.1885,
+                0.083,
+                0.165275
+              ],
+              "observed_features": [
+                0.1511,
+                0.1931,
+                0.192425,
+                0.08805,
+                0.16836666666666666
+              ],
+              "p_gate": 0.02,
+              "p_meas": 0.001,
+              "score": 0.034098670729785105
+            },
+            {
+              "candidate_features": [
+                0.15625,
+                0.1962,
+                0.199425,
+                0.0961,
+                0.17393333333333333
+              ],
+              "observed_features": [
+                0.1511,
+                0.1931,
+                0.192425,
+                0.08805,
+                0.16836666666666666
+              ],
+              "p_gate": 0.02,
+              "p_meas": 0.004,
+              "score": 0.03639993695161034
+            },
+            {
+              "candidate_features": [
+                0.15975,
+                0.197475,
+                0.197025,
+                0.09925,
+                0.17466666666666666
+              ],
+              "observed_features": [
+                0.1511,
+                0.1931,
+                0.192425,
+                0.08805,
+                0.16836666666666666
+              ],
+              "p_gate": 0.02,
+              "p_meas": 0.006,
+              "score": 0.04429149372143121
+            },
+            {
+              "candidate_features": [
+                0.16245,
+                0.198175,
+                0.1974,
+                0.10445,
+                0.17634166666666667
+              ],
+              "observed_features": [
+                0.1511,
+                0.1931,
+                0.192425,
+                0.08805,
+                0.16836666666666666
+              ],
+              "p_gate": 0.02,
+              "p_meas": 0.008,
+              "score": 0.057720800714548395
+            },
+            {
+              "candidate_features": [
+                0.16345,
+                0.2046,
+                0.200375,
+                0.11175,
+                0.18085833333333334
+              ],
+              "observed_features": [
+                0.1511,
+                0.1931,
+                0.192425,
+                0.08805,
+                0.16836666666666666
+              ],
+              "p_gate": 0.02,
+              "p_meas": 0.01,
+              "score": 0.0857353018441654
+            },
+            {
+              "candidate_features": [
+                0.1404,
+                0.1811,
+                0.18,
+                0.1274,
+                0.165
+              ],
+              "observed_features": [
+                0.1511,
+                0.1931,
+                0.192425,
+                0.08805,
+                0.16836666666666666
+              ],
+              "p_gate": 0.015,
+              "p_meas": 0.02,
+              "score": 0.09815583460305788
+            },
+            {
+              "candidate_features": [
+                0.16275,
+                0.20565,
+                0.20465,
+                0.11775,
+                0.18351666666666666
+              ],
+              "observed_features": [
+                0.1511,
+                0.1931,
+                0.192425,
+                0.08805,
+                0.16836666666666666
+              ],
+              "p_gate": 0.02,
+              "p_meas": 0.012,
+              "score": 0.10248515735827245
+            },
+            {
+              "candidate_features": [
+                0.1451,
+                0.19165,
+                0.191175,
+                0.159,
+                0.17829166666666665
+              ],
+              "observed_features": [
+                0.1511,
+                0.1931,
+                0.192425,
+                0.08805,
+                0.16836666666666666
+              ],
+              "p_gate": 0.015,
+              "p_meas": 0.03,
+              "score": 0.11295119003835445
+            },
+            {
+              "candidate_features": [
+                0.13725,
+                0.17175,
+                0.168775,
+                0.11475,
+                0.15550833333333333
+              ],
+              "observed_features": [
+                0.1511,
+                0.1931,
+                0.192425,
+                0.08805,
+                0.16836666666666666
+              ],
+              "p_gate": 0.015,
+              "p_meas": 0.015,
+              "score": 0.12408973887458623
+            }
+          ]
+        }
+      },
+      "gate_heavy_d5": {
+        "candidate_vs_nominal": {
+          "difference_bootstrap_ci": [
+            0.0016700000000000048,
+            0.005340000000000011
+          ],
+          "difference_first_minus_second": 0.00352,
+          "first_failures": 26970,
+          "first_ler": 0.2697,
+          "first_summary": {
+            "confidence_level": 0.95,
+            "failures": 26970,
+            "interval_high": 0.2724594825180459,
+            "interval_low": 0.2669582105616099,
+            "method": "wilson",
+            "probability": 0.2697,
+            "trials": 100000
+          },
+          "mcnemar": {
+            "both_failure": 22595,
+            "both_success": 69007,
+            "discordant": 8398,
+            "first_only": 4375,
+            "method": "exact_binomial_two_sided",
+            "p_value": 0.0001277792919130999,
+            "second_only": 4023,
+            "statistic": 14.753989045010718
+          },
+          "relative_excess": 0.013224134044631452,
+          "second_failures": 26618,
+          "second_ler": 0.26618,
+          "second_summary": {
+            "confidence_level": 0.95,
+            "failures": 26618,
+            "interval_high": 0.2689281869491251,
+            "interval_low": 0.2634497765588434,
+            "method": "wilson",
+            "probability": 0.26618,
+            "trials": 100000
+          },
+          "trials": 100000,
+          "zero_failure_note": null
+        },
+        "candidate_vs_oracle": {
+          "difference_bootstrap_ci": [
+            -0.00046000000000001595,
+            0.00036000000000002697
+          ],
+          "difference_first_minus_second": -5e-05,
+          "first_failures": 26970,
+          "first_ler": 0.2697,
+          "first_summary": {
+            "confidence_level": 0.95,
+            "failures": 26970,
+            "interval_high": 0.2724594825180459,
+            "interval_low": 0.2669582105616099,
+            "method": "wilson",
+            "probability": 0.2697,
+            "trials": 100000
+          },
+          "mcnemar": {
+            "both_failure": 26750,
+            "both_success": 72805,
+            "discordant": 445,
+            "first_only": 220,
+            "method": "exact_binomial_two_sided",
+            "p_value": 0.8496352523517369,
+            "second_only": 225,
+            "statistic": 0.056179775280898875
+          },
+          "relative_excess": -0.00018535681186283596,
+          "second_failures": 26975,
+          "second_ler": 0.26975,
+          "second_summary": {
+            "confidence_level": 0.95,
+            "failures": 26975,
+            "interval_high": 0.27250964137804756,
+            "interval_low": 0.26700804786029697,
+            "method": "wilson",
+            "probability": 0.26975,
+            "trials": 100000
+          },
+          "trials": 100000,
+          "zero_failure_note": null
+        },
+        "decoders": {
+          "candidate": {
+            "decoder": {
+              "config": {
+                "dem_sha256": "e39199bcdba0b1c52263f323c4012a33ff96818f0018e5dcdb1bd7e1f6c2eb1a",
+                "num_detectors": 120,
+                "num_observables": 1
+              },
+              "config_hash": "f9e3244949d05dcd0cc3b5e98deec691073ef81213185fccde37f41d62ba9e7b",
+              "decoder_type": "detector",
+              "deterministic": true,
+              "name": "pymatching_mwpm_detector",
+              "noise_assumptions": [
+                "independent detector error model"
+              ],
+              "supported_code_families": [
+                "surface_code_stim",
+                "repetition_code_stim"
+              ],
+              "version": "1.0.0"
+            },
+            "model": {
+              "name": "candidate_0.0200_0.0010",
+              "p_gate": 0.02,
+              "p_meas": 0.001,
+              "p_reset": 0.02,
+              "p_round": 0.02
+            }
+          },
+          "nominal": {
+            "decoder": {
+              "config": {
+                "dem_sha256": "43047914a2a0a262ee7e7b14fa97f78fb0d150177424f9433a42b5f7444dcb8b",
+                "num_detectors": 120,
+                "num_observables": 1
+              },
+              "config_hash": "1f3a88d9742f2580076848bc043a9b115cde5870295345e73ac7a9cd9fdfde16",
+              "decoder_type": "detector",
+              "deterministic": true,
+              "name": "pymatching_mwpm_detector",
+              "noise_assumptions": [
+                "independent detector error model"
+              ],
+              "supported_code_families": [
+                "surface_code_stim",
+                "repetition_code_stim"
+              ],
+              "version": "1.0.0"
+            },
+            "model": {
+              "name": "nominal",
+              "p_gate": 0.01,
+              "p_meas": 0.01,
+              "p_reset": 0.01,
+              "p_round": 0.01
+            }
+          },
+          "oracle": {
+            "decoder": {
+              "config": {
+                "dem_sha256": "be1712cd09d13e29e538ebc685202783adead8c56e87fd48bfd320dbb76ab487",
+                "num_detectors": 120,
+                "num_observables": 1
+              },
+              "config_hash": "7ce2cad9ca3896db48deb77d64620c14a9cb75873753da268fc6b7258341a49a",
+              "decoder_type": "detector",
+              "deterministic": true,
+              "name": "pymatching_mwpm_detector",
+              "noise_assumptions": [
+                "independent detector error model"
+              ],
+              "supported_code_families": [
+                "surface_code_stim",
+                "repetition_code_stim"
+              ],
+              "version": "1.0.0"
+            },
+            "model": {
+              "name": "gate_heavy",
+              "p_gate": 0.02,
+              "p_meas": 0.002,
+              "p_reset": 0.02,
+              "p_round": 0.02
+            }
+          }
+        },
+        "distance": 5,
+        "nominal_vs_oracle": {
+          "difference_bootstrap_ci": [
+            -0.005319999999999991,
+            -0.0017900000000000138
+          ],
+          "difference_first_minus_second": -0.00357,
+          "first_failures": 26618,
+          "first_ler": 0.26618,
+          "first_summary": {
+            "confidence_level": 0.95,
+            "failures": 26618,
+            "interval_high": 0.2689281869491251,
+            "interval_low": 0.2634497765588434,
+            "method": "wilson",
+            "probability": 0.26618,
+            "trials": 100000
+          },
+          "mcnemar": {
+            "both_failure": 22730,
+            "both_success": 69137,
+            "discordant": 8133,
+            "first_only": 3888,
+            "method": "exact_binomial_two_sided",
+            "p_value": 7.876971259948801e-05,
+            "second_only": 4245,
+            "statistic": 15.67060125414976
+          },
+          "relative_excess": -0.013234476367006488,
+          "second_failures": 26975,
+          "second_ler": 0.26975,
+          "second_summary": {
+            "confidence_level": 0.95,
+            "failures": 26975,
+            "interval_high": 0.27250964137804756,
+            "interval_low": 0.26700804786029697,
+            "method": "wilson",
+            "probability": 0.26975,
+            "trials": 100000
+          },
+          "trials": 100000,
+          "zero_failure_note": null
+        },
+        "profile": {
+          "name": "gate_heavy",
+          "p_gate": 0.02,
+          "p_meas": 0.002,
+          "p_reset": 0.02,
+          "p_round": 0.02
+        },
+        "seed": 3724670257,
+        "selection": {
+          "ambiguous": false,
+          "development_seed_master": 4101,
+          "distance": 5,
+          "observed_profile": "gate_heavy",
+          "runner_up": {
+            "p_gate": 0.02,
+            "p_meas": 0.002,
+            "score": 0.010229152079584587
+          },
+          "selected": {
+            "name": "candidate_0.0200_0.0010",
+            "p_gate": 0.02,
+            "p_meas": 0.001,
+            "score": 0.007481134040540165
+          },
+          "top_10": [
+            {
+              "candidate_features": [
+                0.17405,
+                0.21445833333333333,
+                0.21445833333333333,
+                0.215275,
+                0.216475,
+                0.09795,
+                0.19933333333333333
+              ],
+              "observed_features": [
+                0.17448333333333332,
+                0.21160833333333334,
+                0.2127,
+                0.21535833333333335,
+                0.21510833333333335,
+                0.10051666666666667,
+                0.198455
+              ],
+              "p_gate": 0.02,
+              "p_meas": 0.001,
+              "score": 0.007481134040540165
+            },
+            {
+              "candidate_features": [
+                0.17798333333333333,
+                0.21653333333333333,
+                0.21501666666666666,
+                0.215875,
+                0.21515833333333334,
+                0.10085,
+                0.2004
+              ],
+              "observed_features": [
+                0.17448333333333332,
+                0.21160833333333334,
+                0.2127,
+                0.21535833333333335,
+                0.21510833333333335,
+                0.10051666666666667,
+                0.198455
+              ],
+              "p_gate": 0.02,
+              "p_meas": 0.002,
+              "score": 0.010229152079584587
+            },
+            {
+              "candidate_features": [
+                0.17888333333333334,
+                0.217425,
+                0.219,
+                0.21901666666666667,
+                0.217425,
+                0.10793333333333334,
+                0.203255
+              ],
+              "observed_features": [
+                0.17448333333333332,
+                0.21160833333333334,
+                0.2127,
+                0.21535833333333335,
+                0.21510833333333335,
+                0.10051666666666667,
+                0.198455
+              ],
+              "p_gate": 0.02,
+              "p_meas": 0.004,
+              "score": 0.02613126742607329
+            },
+            {
+              "candidate_features": [
+                0.17743333333333333,
+                0.21809166666666666,
+                0.21791666666666668,
+                0.21769166666666667,
+                0.21945,
+                0.11408333333333333,
+                0.20378166666666667
+              ],
+              "observed_features": [
+                0.17448333333333332,
+                0.21160833333333334,
+                0.2127,
+                0.21535833333333335,
+                0.21510833333333335,
+                0.10051666666666667,
+                0.198455
+              ],
+              "p_gate": 0.02,
+              "p_meas": 0.006,
+              "score": 0.03027964534254859
+            },
+            {
+              "candidate_features": [
+                0.1811,
+                0.22030833333333333,
+                0.22099166666666667,
+                0.22179166666666666,
+                0.2207,
+                0.12183333333333334,
+                0.20705166666666666
+              ],
+              "observed_features": [
+                0.17448333333333332,
+                0.21160833333333334,
+                0.2127,
+                0.21535833333333335,
+                0.21510833333333335,
+                0.10051666666666667,
+                0.198455
+              ],
+              "p_gate": 0.02,
+              "p_meas": 0.008,
+              "score": 0.04934888284910494
+            },
+            {
+              "candidate_features": [
+                0.18045,
+                0.22416666666666665,
+                0.22400833333333334,
+                0.2231,
+                0.22630833333333333,
+                0.1286,
+                0.21042166666666667
+              ],
+              "observed_features": [
+                0.17448333333333332,
+                0.21160833333333334,
+                0.2127,
+                0.21535833333333335,
+                0.21510833333333335,
+                0.10051666666666667,
+                0.198455
+              ],
+              "p_gate": 0.02,
+              "p_meas": 0.01,
+              "score": 0.06687471296386918
+            },
+            {
+              "candidate_features": [
+                0.18205,
+                0.22729166666666667,
+                0.226,
+                0.225475,
+                0.22608333333333333,
+                0.13245,
+                0.21242
+              ],
+              "observed_features": [
+                0.17448333333333332,
+                0.21160833333333334,
+                0.2127,
+                0.21535833333333335,
+                0.21510833333333335,
+                0.10051666666666667,
+                0.198455
+              ],
+              "p_gate": 0.02,
+              "p_meas": 0.012,
+              "score": 0.07795336651031823
+            },
+            {
+              "candidate_features": [
+                0.16126666666666667,
+                0.20876666666666666,
+                0.20828333333333332,
+                0.20950833333333332,
+                0.20851666666666666,
+                0.16998333333333332,
+                0.20014
+              ],
+              "observed_features": [
+                0.17448333333333332,
+                0.21160833333333334,
+                0.2127,
+                0.21535833333333335,
+                0.21510833333333335,
+                0.10051666666666667,
+                0.198455
+              ],
+              "p_gate": 0.015,
+              "p_meas": 0.03,
+              "score": 0.07835113898446308
+            },
+            {
+              "candidate_features": [
+                0.18531666666666666,
+                0.23183333333333334,
+                0.22950833333333334,
+                0.22909166666666667,
+                0.23071666666666665,
+                0.14501666666666665,
+                0.21726333333333334
+              ],
+              "observed_features": [
+                0.17448333333333332,
+                0.21160833333333334,
+                0.2127,
+                0.21535833333333335,
+                0.21510833333333335,
+                0.10051666666666667,
+                0.198455
+              ],
+              "p_gate": 0.02,
+              "p_meas": 0.015,
+              "score": 0.10579242048942324
+            },
+            {
+              "candidate_features": [
+                0.15461666666666668,
+                0.19466666666666665,
+                0.19583333333333333,
+                0.19590833333333332,
+                0.19593333333333332,
+                0.13965,
+                0.185895
+              ],
+              "observed_features": [
+                0.17448333333333332,
+                0.21160833333333334,
+                0.2127,
+                0.21535833333333335,
+                0.21510833333333335,
+                0.10051666666666667,
+                0.198455
+              ],
+              "p_gate": 0.015,
+              "p_meas": 0.02,
+              "score": 0.10840993904168206
+            }
+          ]
+        }
+      },
+      "measurement_heavy_d3": {
+        "candidate_vs_nominal": {
+          "difference_bootstrap_ci": [
+            -0.002660000000000001,
+            -0.00183
+          ],
+          "difference_first_minus_second": -0.00224,
+          "first_failures": 1377,
+          "first_ler": 0.01377,
+          "first_summary": {
+            "confidence_level": 0.95,
+            "failures": 1377,
+            "interval_high": 0.014511182826829441,
+            "interval_low": 0.013066172388633062,
+            "method": "wilson",
+            "probability": 0.01377,
+            "trials": 100000
+          },
+          "mcnemar": {
+            "both_failure": 1270,
+            "both_success": 98292,
+            "discordant": 438,
+            "first_only": 107,
+            "method": "exact_binomial_two_sided",
+            "p_value": 1.0540688016088015e-27,
+            "second_only": 331,
+            "statistic": 114.55707762557077
+          },
+          "relative_excess": -0.13991255465334165,
+          "second_failures": 1601,
+          "second_ler": 0.01601,
+          "second_summary": {
+            "confidence_level": 0.95,
+            "failures": 1601,
+            "interval_high": 0.01680672620738319,
+            "interval_low": 0.015250456917334943,
+            "method": "wilson",
+            "probability": 0.01601,
+            "trials": 100000
+          },
+          "trials": 100000,
+          "zero_failure_note": null
+        },
+        "candidate_vs_oracle": {
+          "difference_bootstrap_ci": [
+            0.0,
+            0.0
+          ],
+          "difference_first_minus_second": 0.0,
+          "first_failures": 1377,
+          "first_ler": 0.01377,
+          "first_summary": {
+            "confidence_level": 0.95,
+            "failures": 1377,
+            "interval_high": 0.014511182826829441,
+            "interval_low": 0.013066172388633062,
+            "method": "wilson",
+            "probability": 0.01377,
+            "trials": 100000
+          },
+          "mcnemar": {
+            "both_failure": 1377,
+            "both_success": 98623,
+            "discordant": 0,
+            "first_only": 0,
+            "method": "exact_binomial_two_sided",
+            "p_value": 1.0,
+            "second_only": 0,
+            "statistic": 0.0
+          },
+          "relative_excess": 0.0,
+          "second_failures": 1377,
+          "second_ler": 0.01377,
+          "second_summary": {
+            "confidence_level": 0.95,
+            "failures": 1377,
+            "interval_high": 0.014511182826829441,
+            "interval_low": 0.013066172388633062,
+            "method": "wilson",
+            "probability": 0.01377,
+            "trials": 100000
+          },
+          "trials": 100000,
+          "zero_failure_note": null
+        },
+        "decoders": {
+          "candidate": {
+            "decoder": {
+              "config": {
+                "dem_sha256": "18e32adf48c740d7259141319478dd42f2d37a9a0e9a78e92b9293cca4f228c4",
+                "num_detectors": 24,
+                "num_observables": 1
+              },
+              "config_hash": "8a278489f5db8a1a74b42cfcb2b8873d57cf2a1e8858bdb2c32233a92c4e63b4",
+              "decoder_type": "detector",
+              "deterministic": true,
+              "name": "pymatching_mwpm_detector",
+              "noise_assumptions": [
+                "independent detector error model"
+              ],
+              "supported_code_families": [
+                "surface_code_stim",
+                "repetition_code_stim"
+              ],
+              "version": "1.0.0"
+            },
+            "model": {
+              "name": "candidate_0.0020_0.0200",
+              "p_gate": 0.002,
+              "p_meas": 0.02,
+              "p_reset": 0.002,
+              "p_round": 0.002
+            }
+          },
+          "nominal": {
+            "decoder": {
+              "config": {
+                "dem_sha256": "12d1d16696c1f9a75c8aec9cc772c34d9a0cf14ba70a7b1de788828d41bedd31",
+                "num_detectors": 24,
+                "num_observables": 1
+              },
+              "config_hash": "647761e3657cfcd2ca15b76a93a6df83a265341d3e8b9209601045b9459c63fd",
+              "decoder_type": "detector",
+              "deterministic": true,
+              "name": "pymatching_mwpm_detector",
+              "noise_assumptions": [
+                "independent detector error model"
+              ],
+              "supported_code_families": [
+                "surface_code_stim",
+                "repetition_code_stim"
+              ],
+              "version": "1.0.0"
+            },
+            "model": {
+              "name": "nominal",
+              "p_gate": 0.01,
+              "p_meas": 0.01,
+              "p_reset": 0.01,
+              "p_round": 0.01
+            }
+          },
+          "oracle": {
+            "decoder": {
+              "config": {
+                "dem_sha256": "18e32adf48c740d7259141319478dd42f2d37a9a0e9a78e92b9293cca4f228c4",
+                "num_detectors": 24,
+                "num_observables": 1
+              },
+              "config_hash": "8a278489f5db8a1a74b42cfcb2b8873d57cf2a1e8858bdb2c32233a92c4e63b4",
+              "decoder_type": "detector",
+              "deterministic": true,
+              "name": "pymatching_mwpm_detector",
+              "noise_assumptions": [
+                "independent detector error model"
+              ],
+              "supported_code_families": [
+                "surface_code_stim",
+                "repetition_code_stim"
+              ],
+              "version": "1.0.0"
+            },
+            "model": {
+              "name": "measurement_heavy",
+              "p_gate": 0.002,
+              "p_meas": 0.02,
+              "p_reset": 0.002,
+              "p_round": 0.002
+            }
+          }
+        },
+        "distance": 3,
+        "nominal_vs_oracle": {
+          "difference_bootstrap_ci": [
+            0.0018399999999999996,
+            0.0026602499999999973
+          ],
+          "difference_first_minus_second": 0.00224,
+          "first_failures": 1601,
+          "first_ler": 0.01601,
+          "first_summary": {
+            "confidence_level": 0.95,
+            "failures": 1601,
+            "interval_high": 0.01680672620738319,
+            "interval_low": 0.015250456917334943,
+            "method": "wilson",
+            "probability": 0.01601,
+            "trials": 100000
+          },
+          "mcnemar": {
+            "both_failure": 1270,
+            "both_success": 98292,
+            "discordant": 438,
+            "first_only": 331,
+            "method": "exact_binomial_two_sided",
+            "p_value": 1.0540688016088015e-27,
+            "second_only": 107,
+            "statistic": 114.55707762557077
+          },
+          "relative_excess": 0.1626724763979666,
+          "second_failures": 1377,
+          "second_ler": 0.01377,
+          "second_summary": {
+            "confidence_level": 0.95,
+            "failures": 1377,
+            "interval_high": 0.014511182826829441,
+            "interval_low": 0.013066172388633062,
+            "method": "wilson",
+            "probability": 0.01377,
+            "trials": 100000
+          },
+          "trials": 100000,
+          "zero_failure_note": null
+        },
+        "profile": {
+          "name": "measurement_heavy",
+          "p_gate": 0.002,
+          "p_meas": 0.02,
+          "p_reset": 0.002,
+          "p_round": 0.002
+        },
+        "seed": 3724463206,
+        "selection": {
+          "ambiguous": false,
+          "development_seed_master": 4101,
+          "distance": 3,
+          "observed_profile": "measurement_heavy",
+          "runner_up": {
+            "p_gate": 0.004,
+            "p_meas": 0.01,
+            "score": 0.12214053404028535
+          },
+          "selected": {
+            "name": "candidate_0.0020_0.0200",
+            "p_gate": 0.002,
+            "p_meas": 0.02,
+            "score": 0.013856623575391531
+          },
+          "top_10": [
+            {
+              "candidate_features": [
+                0.03915,
+                0.063875,
+                0.06155,
+                0.07995,
+                0.061658333333333336
+              ],
+              "observed_features": [
+                0.03855,
+                0.0621,
+                0.061975,
+                0.081,
+                0.061283333333333335
+              ],
+              "p_gate": 0.002,
+              "p_meas": 0.02,
+              "score": 0.013856623575391531
+            },
+            {
+              "candidate_features": [
+                0.0459,
+                0.0626,
+                0.0619,
+                0.0547,
+                0.05826666666666667
+              ],
+              "observed_features": [
+                0.03855,
+                0.0621,
+                0.061975,
+                0.081,
+                0.061283333333333335
+              ],
+              "p_gate": 0.004,
+              "p_meas": 0.01,
+              "score": 0.12214053404028535
+            },
+            {
+              "candidate_features": [
+                0.0487,
+                0.06785,
+                0.066975,
+                0.0622,
+                0.063425
+              ],
+              "observed_features": [
+                0.03855,
+                0.0621,
+                0.061975,
+                0.081,
+                0.061283333333333335
+              ],
+              "p_gate": 0.004,
+              "p_meas": 0.012,
+              "score": 0.13722703544781215
+            },
+            {
+              "candidate_features": [
+                0.0472,
+                0.061725,
+                0.06015,
+                0.04945,
+                0.05673333333333333
+              ],
+              "observed_features": [
+                0.03855,
+                0.0621,
+                0.061975,
+                0.081,
+                0.061283333333333335
+              ],
+              "p_gate": 0.004,
+              "p_meas": 0.008,
+              "score": 0.1539807045833447
+            },
+            {
+              "candidate_features": [
+                0.02835,
+                0.04885,
+                0.048125,
+                0.08205,
+                0.050725
+              ],
+              "observed_features": [
+                0.03855,
+                0.0621,
+                0.061975,
+                0.081,
+                0.061283333333333335
+              ],
+              "p_gate": 0.001,
+              "p_meas": 0.02,
+              "score": 0.16040339992894037
+            },
+            {
+              "candidate_features": [
+                0.0335,
+                0.05035,
+                0.053125,
+                0.06635,
+                0.051133333333333336
+              ],
+              "observed_features": [
+                0.03855,
+                0.0621,
+                0.061975,
+                0.081,
+                0.061283333333333335
+              ],
+              "p_gate": 0.002,
+              "p_meas": 0.015,
+              "score": 0.16545956434994122
+            },
+            {
+              "candidate_features": [
+                0.0508,
+                0.0718,
+                0.07245,
+                0.06845,
+                0.06795833333333333
+              ],
+              "observed_features": [
+                0.03855,
+                0.0621,
+                0.061975,
+                0.081,
+                0.061283333333333335
+              ],
+              "p_gate": 0.004,
+              "p_meas": 0.015,
+              "score": 0.1693951734127743
+            },
+            {
+              "candidate_features": [
+                0.0376,
+                0.068475,
+                0.06955,
+                0.1129,
+                0.07109166666666666
+              ],
+              "observed_features": [
+                0.03855,
+                0.0621,
+                0.061975,
+                0.081,
+                0.061283333333333335
+              ],
+              "p_gate": 0.001,
+              "p_meas": 0.03,
+              "score": 0.18565689141545266
+            },
+            {
+              "candidate_features": [
+                0.04205,
+                0.057325,
+                0.055375,
+                0.03975,
+                0.0512
+              ],
+              "observed_features": [
+                0.03855,
+                0.0621,
+                0.061975,
+                0.081,
+                0.061283333333333335
+              ],
+              "p_gate": 0.004,
+              "p_meas": 0.006,
+              "score": 0.21714176391811746
+            },
+            {
+              "candidate_features": [
+                0.039,
+                0.051925,
+                0.05515,
+                0.03255,
+                0.04761666666666667
+              ],
+              "observed_features": [
+                0.03855,
+                0.0621,
+                0.061975,
+                0.081,
+                0.061283333333333335
+              ],
+              "p_gate": 0.004,
+              "p_meas": 0.004,
+              "score": 0.2609527453606275
+            }
+          ]
+        }
+      },
+      "measurement_heavy_d5": {
+        "candidate_vs_nominal": {
+          "difference_bootstrap_ci": [
+            -0.0018199999999999996,
+            -0.00115
+          ],
+          "difference_first_minus_second": -0.00148,
+          "first_failures": 569,
+          "first_ler": 0.00569,
+          "first_summary": {
+            "confidence_level": 0.95,
+            "failures": 569,
+            "interval_high": 0.006175557902653089,
+            "interval_low": 0.005242418068708756,
+            "method": "wilson",
+            "probability": 0.00569,
+            "trials": 100000
+          },
+          "mcnemar": {
+            "both_failure": 498,
+            "both_success": 99212,
+            "discordant": 290,
+            "first_only": 71,
+            "method": "exact_binomial_two_sided",
+            "p_value": 1.00999233357721e-18,
+            "second_only": 219,
+            "statistic": 75.53103448275863
+          },
+          "relative_excess": -0.20641562064156208,
+          "second_failures": 717,
+          "second_ler": 0.00717,
+          "second_summary": {
+            "confidence_level": 0.95,
+            "failures": 717,
+            "interval_high": 0.007712195531306848,
+            "interval_low": 0.0066656667372417535,
+            "method": "wilson",
+            "probability": 0.00717,
+            "trials": 100000
+          },
+          "trials": 100000,
+          "zero_failure_note": null
+        },
+        "candidate_vs_oracle": {
+          "difference_bootstrap_ci": [
+            0.0,
+            0.0
+          ],
+          "difference_first_minus_second": 0.0,
+          "first_failures": 569,
+          "first_ler": 0.00569,
+          "first_summary": {
+            "confidence_level": 0.95,
+            "failures": 569,
+            "interval_high": 0.006175557902653089,
+            "interval_low": 0.005242418068708756,
+            "method": "wilson",
+            "probability": 0.00569,
+            "trials": 100000
+          },
+          "mcnemar": {
+            "both_failure": 569,
+            "both_success": 99431,
+            "discordant": 0,
+            "first_only": 0,
+            "method": "exact_binomial_two_sided",
+            "p_value": 1.0,
+            "second_only": 0,
+            "statistic": 0.0
+          },
+          "relative_excess": 0.0,
+          "second_failures": 569,
+          "second_ler": 0.00569,
+          "second_summary": {
+            "confidence_level": 0.95,
+            "failures": 569,
+            "interval_high": 0.006175557902653089,
+            "interval_low": 0.005242418068708756,
+            "method": "wilson",
+            "probability": 0.00569,
+            "trials": 100000
+          },
+          "trials": 100000,
+          "zero_failure_note": null
+        },
+        "decoders": {
+          "candidate": {
+            "decoder": {
+              "config": {
+                "dem_sha256": "cac4a1106f0f0c991ffd94afc59bf4b6448e3ff5fd374e148a94de8264bbdca1",
+                "num_detectors": 120,
+                "num_observables": 1
+              },
+              "config_hash": "fc4e7733f16ff03399e2666b5f212f3409385be410510731636f5999d5ca8d24",
+              "decoder_type": "detector",
+              "deterministic": true,
+              "name": "pymatching_mwpm_detector",
+              "noise_assumptions": [
+                "independent detector error model"
+              ],
+              "supported_code_families": [
+                "surface_code_stim",
+                "repetition_code_stim"
+              ],
+              "version": "1.0.0"
+            },
+            "model": {
+              "name": "candidate_0.0020_0.0200",
+              "p_gate": 0.002,
+              "p_meas": 0.02,
+              "p_reset": 0.002,
+              "p_round": 0.002
+            }
+          },
+          "nominal": {
+            "decoder": {
+              "config": {
+                "dem_sha256": "43047914a2a0a262ee7e7b14fa97f78fb0d150177424f9433a42b5f7444dcb8b",
+                "num_detectors": 120,
+                "num_observables": 1
+              },
+              "config_hash": "1f3a88d9742f2580076848bc043a9b115cde5870295345e73ac7a9cd9fdfde16",
+              "decoder_type": "detector",
+              "deterministic": true,
+              "name": "pymatching_mwpm_detector",
+              "noise_assumptions": [
+                "independent detector error model"
+              ],
+              "supported_code_families": [
+                "surface_code_stim",
+                "repetition_code_stim"
+              ],
+              "version": "1.0.0"
+            },
+            "model": {
+              "name": "nominal",
+              "p_gate": 0.01,
+              "p_meas": 0.01,
+              "p_reset": 0.01,
+              "p_round": 0.01
+            }
+          },
+          "oracle": {
+            "decoder": {
+              "config": {
+                "dem_sha256": "cac4a1106f0f0c991ffd94afc59bf4b6448e3ff5fd374e148a94de8264bbdca1",
+                "num_detectors": 120,
+                "num_observables": 1
+              },
+              "config_hash": "fc4e7733f16ff03399e2666b5f212f3409385be410510731636f5999d5ca8d24",
+              "decoder_type": "detector",
+              "deterministic": true,
+              "name": "pymatching_mwpm_detector",
+              "noise_assumptions": [
+                "independent detector error model"
+              ],
+              "supported_code_families": [
+                "surface_code_stim",
+                "repetition_code_stim"
+              ],
+              "version": "1.0.0"
+            },
+            "model": {
+              "name": "measurement_heavy",
+              "p_gate": 0.002,
+              "p_meas": 0.02,
+              "p_reset": 0.002,
+              "p_round": 0.002
+            }
+          }
+        },
+        "distance": 5,
+        "nominal_vs_oracle": {
+          "difference_bootstrap_ci": [
+            0.00115,
+            0.00183
+          ],
+          "difference_first_minus_second": 0.00148,
+          "first_failures": 717,
+          "first_ler": 0.00717,
+          "first_summary": {
+            "confidence_level": 0.95,
+            "failures": 717,
+            "interval_high": 0.007712195531306848,
+            "interval_low": 0.0066656667372417535,
+            "method": "wilson",
+            "probability": 0.00717,
+            "trials": 100000
+          },
+          "mcnemar": {
+            "both_failure": 498,
+            "both_success": 99212,
+            "discordant": 290,
+            "first_only": 219,
+            "method": "exact_binomial_two_sided",
+            "p_value": 1.00999233357721e-18,
+            "second_only": 71,
+            "statistic": 75.53103448275863
+          },
+          "relative_excess": 0.2601054481546573,
+          "second_failures": 569,
+          "second_ler": 0.00569,
+          "second_summary": {
+            "confidence_level": 0.95,
+            "failures": 569,
+            "interval_high": 0.006175557902653089,
+            "interval_low": 0.005242418068708756,
+            "method": "wilson",
+            "probability": 0.00569,
+            "trials": 100000
+          },
+          "trials": 100000,
+          "zero_failure_note": null
+        },
+        "profile": {
+          "name": "measurement_heavy",
+          "p_gate": 0.002,
+          "p_meas": 0.02,
+          "p_reset": 0.002,
+          "p_round": 0.002
+        },
+        "seed": 1229079736,
+        "selection": {
+          "ambiguous": false,
+          "development_seed_master": 4101,
+          "distance": 5,
+          "observed_profile": "measurement_heavy",
+          "runner_up": {
+            "p_gate": 0.004,
+            "p_meas": 0.008,
+            "score": 0.1336664445924939
+          },
+          "selected": {
+            "name": "candidate_0.0020_0.0200",
+            "p_gate": 0.002,
+            "p_meas": 0.02,
+            "score": 0.015263898141979442
+          },
+          "top_10": [
+            {
+              "candidate_features": [
+                0.039483333333333336,
+                0.06409166666666667,
+                0.06438333333333333,
+                0.06309166666666667,
+                0.06383333333333334,
+                0.08681666666666667,
+                0.06371
+              ],
+              "observed_features": [
+                0.039016666666666665,
+                0.06368333333333333,
+                0.06453333333333333,
+                0.06415,
+                0.06371666666666667,
+                0.09098333333333333,
+                0.06421666666666667
+              ],
+              "p_gate": 0.002,
+              "p_meas": 0.02,
+              "score": 0.015263898141979442
+            },
+            {
+              "candidate_features": [
+                0.04845,
+                0.06760833333333334,
+                0.06868333333333333,
+                0.06684166666666666,
+                0.06569166666666666,
+                0.05325,
+                0.063935
+              ],
+              "observed_features": [
+                0.039016666666666665,
+                0.06368333333333333,
+                0.06453333333333333,
+                0.06415,
+                0.06371666666666667,
+                0.09098333333333333,
+                0.06421666666666667
+              ],
+              "p_gate": 0.004,
+              "p_meas": 0.008,
+              "score": 0.1336664445924939
+            },
+            {
+              "candidate_features": [
+                0.04596666666666667,
+                0.06295,
+                0.06323333333333334,
+                0.06300833333333333,
+                0.06396666666666667,
+                0.04385,
+                0.05961333333333333
+              ],
+              "observed_features": [
+                0.039016666666666665,
+                0.06368333333333333,
+                0.06453333333333333,
+                0.06415,
+                0.06371666666666667,
+                0.09098333333333333,
+                0.06421666666666667
+              ],
+              "p_gate": 0.004,
+              "p_meas": 0.006,
+              "score": 0.13793396994596194
+            },
+            {
+              "candidate_features": [
+                0.040633333333333334,
+                0.069875,
+                0.070225,
+                0.07054166666666667,
+                0.07101666666666667,
+                0.12195,
+                0.07259
+              ],
+              "observed_features": [
+                0.039016666666666665,
+                0.06368333333333333,
+                0.06453333333333333,
+                0.06415,
+                0.06371666666666667,
+                0.09098333333333333,
+                0.06421666666666667
+              ],
+              "p_gate": 0.001,
+              "p_meas": 0.03,
+              "score": 0.1477496483825598
+            },
+            {
+              "candidate_features": [
+                0.030333333333333334,
+                0.051525,
+                0.052533333333333335,
+                0.05254166666666667,
+                0.05289166666666666,
+                0.08621666666666666,
+                0.053553333333333335
+              ],
+              "observed_features": [
+                0.039016666666666665,
+                0.06368333333333333,
+                0.06453333333333333,
+                0.06415,
+                0.06371666666666667,
+                0.09098333333333333,
+                0.06421666666666667
+              ],
+              "p_gate": 0.001,
+              "p_meas": 0.02,
+              "score": 0.1570175438596491
+            },
+            {
+              "candidate_features": [
+                0.049216666666666666,
+                0.06983333333333333,
+                0.07234166666666667,
+                0.07415833333333334,
+                0.069825,
+                0.059866666666666665,
+                0.06814
+              ],
+              "observed_features": [
+                0.039016666666666665,
+                0.06368333333333333,
+                0.06453333333333333,
+                0.06415,
+                0.06371666666666667,
+                0.09098333333333333,
+                0.06421666666666667
+              ],
+              "p_gate": 0.004,
+              "p_meas": 0.01,
+              "score": 0.167255163224517
+            },
+            {
+              "candidate_features": [
+                0.032933333333333335,
+                0.05478333333333334,
+                0.05485,
+                0.054325,
+                0.054641666666666665,
+                0.06945,
+                0.05395833333333333
+              ],
+              "observed_features": [
+                0.039016666666666665,
+                0.06368333333333333,
+                0.06453333333333333,
+                0.06415,
+                0.06371666666666667,
+                0.09098333333333333,
+                0.06421666666666667
+              ],
+              "p_gate": 0.002,
+              "p_meas": 0.015,
+              "score": 0.16735139536605226
+            },
+            {
+              "candidate_features": [
+                0.05188333333333333,
+                0.07305833333333334,
+                0.07294166666666667,
+                0.07375,
+                0.07424166666666666,
+                0.06863333333333334,
+                0.07085
+              ],
+              "observed_features": [
+                0.039016666666666665,
+                0.06368333333333333,
+                0.06453333333333333,
+                0.06415,
+                0.06371666666666667,
+                0.09098333333333333,
+                0.06421666666666667
+              ],
+              "p_gate": 0.004,
+              "p_meas": 0.012,
+              "score": 0.17712265896809531
+            },
+            {
+              "candidate_features": [
+                0.04466666666666667,
+                0.0613,
+                0.059366666666666665,
+                0.059958333333333336,
+                0.06030833333333333,
+                0.03676666666666667,
+                0.05633
+              ],
+              "observed_features": [
+                0.039016666666666665,
+                0.06368333333333333,
+                0.06453333333333333,
+                0.06415,
+                0.06371666666666667,
+                0.09098333333333333,
+                0.06421666666666667
+              ],
+              "p_gate": 0.004,
+              "p_meas": 0.004,
+              "score": 0.1841068917018284
+            },
+            {
+              "candidate_features": [
+                0.04393333333333333,
+                0.056091666666666665,
+                0.058091666666666666,
+                0.05739166666666667,
+                0.05731666666666667,
+                0.029133333333333334,
+                0.053085
+              ],
+              "observed_features": [
+                0.039016666666666665,
+                0.06368333333333333,
+                0.06453333333333333,
+                0.06415,
+                0.06371666666666667,
+                0.09098333333333333,
+                0.06421666666666667
+              ],
+              "p_gate": 0.004,
+              "p_meas": 0.002,
+              "score": 0.23337774816788812
+            }
+          ]
+        }
+      }
+    },
+    "frozen_candidates": {
+      "control_d3": {
+        "name": "candidate_0.0100_0.0100",
+        "p_gate": 0.01,
+        "p_meas": 0.01,
+        "p_reset": 0.01,
+        "p_round": 0.01
+      },
+      "control_d5": {
+        "name": "candidate_0.0100_0.0100",
+        "p_gate": 0.01,
+        "p_meas": 0.01,
+        "p_reset": 0.01,
+        "p_round": 0.01
+      },
+      "gate_heavy_d3": {
+        "name": "candidate_0.0200_0.0020",
+        "p_gate": 0.02,
+        "p_meas": 0.002,
+        "p_reset": 0.02,
+        "p_round": 0.02
+      },
+      "gate_heavy_d5": {
+        "name": "candidate_0.0200_0.0010",
+        "p_gate": 0.02,
+        "p_meas": 0.001,
+        "p_reset": 0.02,
+        "p_round": 0.02
+      },
+      "measurement_heavy_d3": {
+        "name": "candidate_0.0020_0.0200",
+        "p_gate": 0.002,
+        "p_meas": 0.02,
+        "p_reset": 0.002,
+        "p_round": 0.002
+      },
+      "measurement_heavy_d5": {
+        "name": "candidate_0.0020_0.0200",
+        "p_gate": 0.002,
+        "p_meas": 0.02,
+        "p_reset": 0.002,
+        "p_round": 0.002
+      }
+    },
+    "gates": [
+      {
+        "detail": "selection used development master seed 4101; held-out master seed 9101",
+        "id": "G1_selection_isolation",
+        "passed": true
+      },
+      {
+        "detail": {
+          "control_relative_change": 0.0,
+          "required": "<= 0.02 and interval upper < 2% of nominal"
+        },
+        "id": "G2_no_control_degradation",
+        "passed": true
+      },
+      {
+        "detail": {
+          "candidate_ler": 0.00569,
+          "nominal_ler": 0.00717,
+          "oracle_ler": 0.00569,
+          "recovery": 1.0
+        },
+        "id": "G3_recovery_ge_50pct",
+        "passed": true
+      },
+      {
+        "detail": {
+          "d3": {
+            "difference_bootstrap_ci": [
+              -0.002660000000000001,
+              -0.00183
+            ],
+            "difference_first_minus_second": -0.00224,
+            "first_failures": 1377,
+            "first_ler": 0.01377,
+            "first_summary": {
+              "confidence_level": 0.95,
+              "failures": 1377,
+              "interval_high": 0.014511182826829441,
+              "interval_low": 0.013066172388633062,
+              "method": "wilson",
+              "probability": 0.01377,
+              "trials": 100000
+            },
+            "mcnemar": {
+              "both_failure": 1270,
+              "both_success": 98292,
+              "discordant": 438,
+              "first_only": 107,
+              "method": "exact_binomial_two_sided",
+              "p_value": 1.0540688016088015e-27,
+              "second_only": 331,
+              "statistic": 114.55707762557077
+            },
+            "relative_excess": -0.13991255465334165,
+            "second_failures": 1601,
+            "second_ler": 0.01601,
+            "second_summary": {
+              "confidence_level": 0.95,
+              "failures": 1601,
+              "interval_high": 0.01680672620738319,
+              "interval_low": 0.015250456917334943,
+              "method": "wilson",
+              "probability": 0.01601,
+              "trials": 100000
+            },
+            "trials": 100000,
+            "zero_failure_note": null
+          },
+          "d5": {
+            "difference_bootstrap_ci": [
+              -0.0018199999999999996,
+              -0.00115
+            ],
+            "difference_first_minus_second": -0.00148,
+            "first_failures": 569,
+            "first_ler": 0.00569,
+            "first_summary": {
+              "confidence_level": 0.95,
+              "failures": 569,
+              "interval_high": 0.006175557902653089,
+              "interval_low": 0.005242418068708756,
+              "method": "wilson",
+              "probability": 0.00569,
+              "trials": 100000
+            },
+            "mcnemar": {
+              "both_failure": 498,
+              "both_success": 99212,
+              "discordant": 290,
+              "first_only": 71,
+              "method": "exact_binomial_two_sided",
+              "p_value": 1.00999233357721e-18,
+              "second_only": 219,
+              "statistic": 75.53103448275863
+            },
+            "relative_excess": -0.20641562064156208,
+            "second_failures": 717,
+            "second_ler": 0.00717,
+            "second_summary": {
+              "confidence_level": 0.95,
+              "failures": 717,
+              "interval_high": 0.007712195531306848,
+              "interval_low": 0.0066656667372417535,
+              "method": "wilson",
+              "probability": 0.00717,
+              "trials": 100000
+            },
+            "trials": 100000,
+            "zero_failure_note": null
+          }
+        },
+        "id": "G4_replication_d3_d5",
+        "passed": true
+      },
+      {
+        "detail": {
+          "p_value": 1.00999233357721e-18
+        },
+        "id": "G5_mcnemar_p_lt_0.05",
+        "passed": true
+      }
+    ],
+    "promotion_note": "PROMOTED means eligible for independent validation; it is not a default decoder and not a production recommendation.",
+    "rationale": "All pre-declared gates passed on held-out seeds.",
+    "selections": {
+      "control_d3": {
+        "ambiguous": false,
+        "development_seed_master": 4101,
+        "distance": 3,
+        "observed_profile": "control",
+        "runner_up": {
+          "p_gate": 0.01,
+          "p_meas": 0.012,
+          "score": 0.0331062583561469
+        },
+        "selected": {
+          "name": "candidate_0.0100_0.0100",
+          "p_gate": 0.01,
+          "p_meas": 0.01,
+          "score": 0.012398930413191558
+        },
+        "top_10": [
+          {
+            "candidate_features": [
+              0.08985,
+              0.1213,
+              0.12165,
+              0.0757,
+              0.108575
+            ],
+            "observed_features": [
+              0.09145,
+              0.122525,
+              0.123325,
+              0.07635,
+              0.10991666666666666
+            ],
+            "p_gate": 0.01,
+            "p_meas": 0.01,
+            "score": 0.012398930413191558
+          },
+          {
+            "candidate_features": [
+              0.09595,
+              0.125525,
+              0.124925,
+              0.08145,
+              0.11305
+            ],
+            "observed_features": [
+              0.09145,
+              0.122525,
+              0.123325,
+              0.07635,
+              0.10991666666666666
+            ],
+            "p_gate": 0.01,
+            "p_meas": 0.012,
+            "score": 0.0331062583561469
+          },
+          {
+            "candidate_features": [
+              0.0914,
+              0.11855,
+              0.118325,
+              0.0716,
+              0.106125
+            ],
+            "observed_features": [
+              0.09145,
+              0.122525,
+              0.123325,
+              0.07635,
+              0.10991666666666666
+            ],
+            "p_gate": 0.01,
+            "p_meas": 0.008,
+            "score": 0.03355191952632586
+          },
+          {
+            "candidate_features": [
+              0.09245,
+              0.118575,
+              0.116225,
+              0.06305,
+              0.10418333333333334
+            ],
+            "observed_features": [
+              0.09145,
+              0.122525,
+              0.123325,
+              0.07635,
+              0.10991666666666666
+            ],
+            "p_gate": 0.01,
+            "p_meas": 0.006,
+            "score": 0.059368434455975054
+          },
+          {
+            "candidate_features": [
+              0.10105,
+              0.125075,
+              0.127075,
+              0.0577,
+              0.11050833333333333
+            ],
+            "observed_features": [
+              0.09145,
+              0.122525,
+              0.123325,
+              0.07635,
+              0.10991666666666666
+            ],
+            "p_gate": 0.012,
+            "p_meas": 0.002,
+            "score": 0.0671197555230152
+          },
+          {
+            "candidate_features": [
+              0.10315,
+              0.12325,
+              0.12295,
+              0.0537,
+              0.10820833333333334
+            ],
+            "observed_features": [
+              0.09145,
+              0.122525,
+              0.123325,
+              0.07635,
+              0.10991666666666666
+            ],
+            "p_gate": 0.012,
+            "p_meas": 0.001,
+            "score": 0.07097154135099001
+          },
+          {
+            "candidate_features": [
+              0.08385,
+              0.11905,
+              0.1203,
+              0.10505,
+              0.11126666666666667
+            ],
+            "observed_features": [
+              0.09145,
+              0.122525,
+              0.123325,
+              0.07635,
+              0.10991666666666666
+            ],
+            "p_gate": 0.008,
+            "p_meas": 0.02,
+            "score": 0.08432545998599353
+          },
+          {
+            "candidate_features": [
+              0.103,
+              0.133775,
+              0.1289,
+              0.06395,
+              0.11538333333333334
+            ],
+            "observed_features": [
+              0.09145,
+              0.122525,
+              0.123325,
+              0.07635,
+              0.10991666666666666
+            ],
+            "p_gate": 0.012,
+            "p_meas": 0.004,
+            "score": 0.08832049404724006
+          },
+          {
+            "candidate_features": [
+              0.09945,
+              0.131625,
+              0.130425,
+              0.09365,
+              0.11953333333333334
+            ],
+            "observed_features": [
+              0.09145,
+              0.122525,
+              0.123325,
+              0.07635,
+              0.10991666666666666
+            ],
+            "p_gate": 0.01,
+            "p_meas": 0.015,
+            "score": 0.09763162920990642
+          },
+          {
+            "candidate_features": [
+              0.07875,
+              0.1118,
+              0.11165,
+              0.08715,
+              0.10213333333333334
+            ],
+            "observed_features": [
+              0.09145,
+              0.122525,
+              0.123325,
+              0.07635,
+              0.10991666666666666
+            ],
+            "p_gate": 0.008,
+            "p_meas": 0.015,
+            "score": 0.10253390208187434
+          }
+        ]
+      },
+      "control_d5": {
+        "ambiguous": false,
+        "development_seed_master": 4101,
+        "distance": 5,
+        "observed_profile": "control",
+        "runner_up": {
+          "p_gate": 0.01,
+          "p_meas": 0.008,
+          "score": 0.023234488989576144
+        },
+        "selected": {
+          "name": "candidate_0.0100_0.0100",
+          "p_gate": 0.01,
+          "p_meas": 0.01,
+          "score": 0.009815083442657383
+        },
+        "top_10": [
+          {
+            "candidate_features": [
+              0.10726666666666666,
+              0.13735,
+              0.1366,
+              0.13619166666666666,
+              0.13793333333333332,
+              0.08756666666666667,
+              0.12909833333333334
+            ],
+            "observed_features": [
+              0.10311666666666666,
+              0.13739166666666666,
+              0.13738333333333333,
+              0.13595833333333332,
+              0.13758333333333334,
+              0.08523333333333333,
+              0.12849833333333333
+            ],
+            "p_gate": 0.01,
+            "p_meas": 0.01,
+            "score": 0.009815083442657383
+          },
+          {
+            "candidate_features": [
+              0.1036,
+              0.1333,
+              0.13475833333333334,
+              0.13515833333333332,
+              0.13415,
+              0.0793,
+              0.12576333333333334
+            ],
+            "observed_features": [
+              0.10311666666666666,
+              0.13739166666666666,
+              0.13738333333333333,
+              0.13595833333333332,
+              0.13758333333333334,
+              0.08523333333333333,
+              0.12849833333333333
+            ],
+            "p_gate": 0.01,
+            "p_meas": 0.008,
+            "score": 0.023234488989576144
+          },
+          {
+            "candidate_features": [
+              0.10618333333333334,
+              0.14166666666666666,
+              0.13884166666666667,
+              0.13735,
+              0.14006666666666667,
+              0.0941,
+              0.13161333333333333
+            ],
+            "observed_features": [
+              0.10311666666666666,
+              0.13739166666666666,
+              0.13738333333333333,
+              0.13595833333333332,
+              0.13758333333333334,
+              0.08523333333333333,
+              0.12849833333333333
+            ],
+            "p_gate": 0.01,
+            "p_meas": 0.012,
+            "score": 0.028499380657639545
+          },
+          {
+            "candidate_features": [
+              0.1013,
+              0.12968333333333334,
+              0.1304,
+              0.130375,
+              0.13075,
+              0.07315,
+              0.12168666666666667
+            ],
+            "observed_features": [
+              0.10311666666666666,
+              0.13739166666666666,
+              0.13738333333333333,
+              0.13595833333333332,
+              0.13758333333333334,
+              0.08523333333333333,
+              0.12849833333333333
+            ],
+            "p_gate": 0.01,
+            "p_meas": 0.006,
+            "score": 0.05527269364803241
+          },
+          {
+            "candidate_features": [
+              0.0951,
+              0.13204166666666667,
+              0.1327,
+              0.13301666666666667,
+              0.13053333333333333,
+              0.11643333333333333,
+              0.12681166666666666
+            ],
+            "observed_features": [
+              0.10311666666666666,
+              0.13739166666666666,
+              0.13738333333333333,
+              0.13595833333333332,
+              0.13758333333333334,
+              0.08523333333333333,
+              0.12849833333333333
+            ],
+            "p_gate": 0.008,
+            "p_meas": 0.02,
+            "score": 0.07042394610661931
+          },
+          {
+            "candidate_features": [
+              0.11421666666666666,
+              0.14185,
+              0.143125,
+              0.14385,
+              0.14448333333333332,
+              0.06211666666666667,
+              0.132295
+            ],
+            "observed_features": [
+              0.10311666666666666,
+              0.13739166666666666,
+              0.13738333333333333,
+              0.13595833333333332,
+              0.13758333333333334,
+              0.08523333333333333,
+              0.12849833333333333
+            ],
+            "p_gate": 0.012,
+            "p_meas": 0.001,
+            "score": 0.07282425895638407
+          },
+          {
+            "candidate_features": [
+              0.10315,
+              0.127775,
+              0.128475,
+              0.12919166666666668,
+              0.12696666666666667,
+              0.06695,
+              0.11949166666666666
+            ],
+            "observed_features": [
+              0.10311666666666666,
+              0.13739166666666666,
+              0.13738333333333333,
+              0.13595833333333332,
+              0.13758333333333334,
+              0.08523333333333333,
+              0.12849833333333333
+            ],
+            "p_gate": 0.01,
+            "p_meas": 0.004,
+            "score": 0.07308625137016249
+          },
+          {
+            "candidate_features": [
+              0.11556666666666666,
+              0.14546666666666666,
+              0.14260833333333334,
+              0.14314166666666667,
+              0.14375,
+              0.06463333333333333,
+              0.13301333333333334
+            ],
+            "observed_features": [
+              0.10311666666666666,
+              0.13739166666666666,
+              0.13738333333333333,
+              0.13595833333333332,
+              0.13758333333333334,
+              0.08523333333333333,
+              0.12849833333333333
+            ],
+            "p_gate": 0.012,
+            "p_meas": 0.002,
+            "score": 0.07422283610640748
+          },
+          {
+            "candidate_features": [
+              0.10875,
+              0.14445833333333333,
+              0.14644166666666666,
+              0.14426666666666665,
+              0.14386666666666667,
+              0.10493333333333334,
+              0.137175
+            ],
+            "observed_features": [
+              0.10311666666666666,
+              0.13739166666666666,
+              0.13738333333333333,
+              0.13595833333333332,
+              0.13758333333333334,
+              0.08523333333333333,
+              0.12849833333333333
+            ],
+            "p_gate": 0.01,
+            "p_meas": 0.015,
+            "score": 0.07481424545221627
+          },
+          {
+            "candidate_features": [
+              0.11405,
+              0.1482,
+              0.147525,
+              0.14465833333333333,
+              0.14730833333333335,
+              0.07276666666666666,
+              0.13622
+            ],
+            "observed_features": [
+              0.10311666666666666,
+              0.13739166666666666,
+              0.13738333333333333,
+              0.13595833333333332,
+              0.13758333333333334,
+              0.08523333333333333,
+              0.12849833333333333
+            ],
+            "p_gate": 0.012,
+            "p_meas": 0.004,
+            "score": 0.0814834935147246
+          }
+        ]
+      },
+      "gate_heavy_d3": {
+        "ambiguous": false,
+        "development_seed_master": 4101,
+        "distance": 3,
+        "observed_profile": "gate_heavy",
+        "runner_up": {
+          "p_gate": 0.02,
+          "p_meas": 0.001,
+          "score": 0.034098670729785105
+        },
+        "selected": {
+          "name": "candidate_0.0200_0.0020",
+          "p_gate": 0.02,
+          "p_meas": 0.002,
+          "score": 0.012704250512268169
+        },
+        "top_10": [
+          {
+            "candidate_features": [
+              0.156,
+              0.190925,
+              0.191375,
+              0.0866,
+              0.16786666666666666
+            ],
+            "observed_features": [
+              0.1511,
+              0.1931,
+              0.192425,
+              0.08805,
+              0.16836666666666666
+            ],
+            "p_gate": 0.02,
+            "p_meas": 0.002,
+            "score": 0.012704250512268169
+          },
+          {
+            "candidate_features": [
+              0.1592,
+              0.186225,
+              0.1885,
+              0.083,
+              0.165275
+            ],
+            "observed_features": [
+              0.1511,
+              0.1931,
+              0.192425,
+              0.08805,
+              0.16836666666666666
+            ],
+            "p_gate": 0.02,
+            "p_meas": 0.001,
+            "score": 0.034098670729785105
+          },
+          {
+            "candidate_features": [
+              0.15625,
+              0.1962,
+              0.199425,
+              0.0961,
+              0.17393333333333333
+            ],
+            "observed_features": [
+              0.1511,
+              0.1931,
+              0.192425,
+              0.08805,
+              0.16836666666666666
+            ],
+            "p_gate": 0.02,
+            "p_meas": 0.004,
+            "score": 0.03639993695161034
+          },
+          {
+            "candidate_features": [
+              0.15975,
+              0.197475,
+              0.197025,
+              0.09925,
+              0.17466666666666666
+            ],
+            "observed_features": [
+              0.1511,
+              0.1931,
+              0.192425,
+              0.08805,
+              0.16836666666666666
+            ],
+            "p_gate": 0.02,
+            "p_meas": 0.006,
+            "score": 0.04429149372143121
+          },
+          {
+            "candidate_features": [
+              0.16245,
+              0.198175,
+              0.1974,
+              0.10445,
+              0.17634166666666667
+            ],
+            "observed_features": [
+              0.1511,
+              0.1931,
+              0.192425,
+              0.08805,
+              0.16836666666666666
+            ],
+            "p_gate": 0.02,
+            "p_meas": 0.008,
+            "score": 0.057720800714548395
+          },
+          {
+            "candidate_features": [
+              0.16345,
+              0.2046,
+              0.200375,
+              0.11175,
+              0.18085833333333334
+            ],
+            "observed_features": [
+              0.1511,
+              0.1931,
+              0.192425,
+              0.08805,
+              0.16836666666666666
+            ],
+            "p_gate": 0.02,
+            "p_meas": 0.01,
+            "score": 0.0857353018441654
+          },
+          {
+            "candidate_features": [
+              0.1404,
+              0.1811,
+              0.18,
+              0.1274,
+              0.165
+            ],
+            "observed_features": [
+              0.1511,
+              0.1931,
+              0.192425,
+              0.08805,
+              0.16836666666666666
+            ],
+            "p_gate": 0.015,
+            "p_meas": 0.02,
+            "score": 0.09815583460305788
+          },
+          {
+            "candidate_features": [
+              0.16275,
+              0.20565,
+              0.20465,
+              0.11775,
+              0.18351666666666666
+            ],
+            "observed_features": [
+              0.1511,
+              0.1931,
+              0.192425,
+              0.08805,
+              0.16836666666666666
+            ],
+            "p_gate": 0.02,
+            "p_meas": 0.012,
+            "score": 0.10248515735827245
+          },
+          {
+            "candidate_features": [
+              0.1451,
+              0.19165,
+              0.191175,
+              0.159,
+              0.17829166666666665
+            ],
+            "observed_features": [
+              0.1511,
+              0.1931,
+              0.192425,
+              0.08805,
+              0.16836666666666666
+            ],
+            "p_gate": 0.015,
+            "p_meas": 0.03,
+            "score": 0.11295119003835445
+          },
+          {
+            "candidate_features": [
+              0.13725,
+              0.17175,
+              0.168775,
+              0.11475,
+              0.15550833333333333
+            ],
+            "observed_features": [
+              0.1511,
+              0.1931,
+              0.192425,
+              0.08805,
+              0.16836666666666666
+            ],
+            "p_gate": 0.015,
+            "p_meas": 0.015,
+            "score": 0.12408973887458623
+          }
+        ]
+      },
+      "gate_heavy_d5": {
+        "ambiguous": false,
+        "development_seed_master": 4101,
+        "distance": 5,
+        "observed_profile": "gate_heavy",
+        "runner_up": {
+          "p_gate": 0.02,
+          "p_meas": 0.002,
+          "score": 0.010229152079584587
+        },
+        "selected": {
+          "name": "candidate_0.0200_0.0010",
+          "p_gate": 0.02,
+          "p_meas": 0.001,
+          "score": 0.007481134040540165
+        },
+        "top_10": [
+          {
+            "candidate_features": [
+              0.17405,
+              0.21445833333333333,
+              0.21445833333333333,
+              0.215275,
+              0.216475,
+              0.09795,
+              0.19933333333333333
+            ],
+            "observed_features": [
+              0.17448333333333332,
+              0.21160833333333334,
+              0.2127,
+              0.21535833333333335,
+              0.21510833333333335,
+              0.10051666666666667,
+              0.198455
+            ],
+            "p_gate": 0.02,
+            "p_meas": 0.001,
+            "score": 0.007481134040540165
+          },
+          {
+            "candidate_features": [
+              0.17798333333333333,
+              0.21653333333333333,
+              0.21501666666666666,
+              0.215875,
+              0.21515833333333334,
+              0.10085,
+              0.2004
+            ],
+            "observed_features": [
+              0.17448333333333332,
+              0.21160833333333334,
+              0.2127,
+              0.21535833333333335,
+              0.21510833333333335,
+              0.10051666666666667,
+              0.198455
+            ],
+            "p_gate": 0.02,
+            "p_meas": 0.002,
+            "score": 0.010229152079584587
+          },
+          {
+            "candidate_features": [
+              0.17888333333333334,
+              0.217425,
+              0.219,
+              0.21901666666666667,
+              0.217425,
+              0.10793333333333334,
+              0.203255
+            ],
+            "observed_features": [
+              0.17448333333333332,
+              0.21160833333333334,
+              0.2127,
+              0.21535833333333335,
+              0.21510833333333335,
+              0.10051666666666667,
+              0.198455
+            ],
+            "p_gate": 0.02,
+            "p_meas": 0.004,
+            "score": 0.02613126742607329
+          },
+          {
+            "candidate_features": [
+              0.17743333333333333,
+              0.21809166666666666,
+              0.21791666666666668,
+              0.21769166666666667,
+              0.21945,
+              0.11408333333333333,
+              0.20378166666666667
+            ],
+            "observed_features": [
+              0.17448333333333332,
+              0.21160833333333334,
+              0.2127,
+              0.21535833333333335,
+              0.21510833333333335,
+              0.10051666666666667,
+              0.198455
+            ],
+            "p_gate": 0.02,
+            "p_meas": 0.006,
+            "score": 0.03027964534254859
+          },
+          {
+            "candidate_features": [
+              0.1811,
+              0.22030833333333333,
+              0.22099166666666667,
+              0.22179166666666666,
+              0.2207,
+              0.12183333333333334,
+              0.20705166666666666
+            ],
+            "observed_features": [
+              0.17448333333333332,
+              0.21160833333333334,
+              0.2127,
+              0.21535833333333335,
+              0.21510833333333335,
+              0.10051666666666667,
+              0.198455
+            ],
+            "p_gate": 0.02,
+            "p_meas": 0.008,
+            "score": 0.04934888284910494
+          },
+          {
+            "candidate_features": [
+              0.18045,
+              0.22416666666666665,
+              0.22400833333333334,
+              0.2231,
+              0.22630833333333333,
+              0.1286,
+              0.21042166666666667
+            ],
+            "observed_features": [
+              0.17448333333333332,
+              0.21160833333333334,
+              0.2127,
+              0.21535833333333335,
+              0.21510833333333335,
+              0.10051666666666667,
+              0.198455
+            ],
+            "p_gate": 0.02,
+            "p_meas": 0.01,
+            "score": 0.06687471296386918
+          },
+          {
+            "candidate_features": [
+              0.18205,
+              0.22729166666666667,
+              0.226,
+              0.225475,
+              0.22608333333333333,
+              0.13245,
+              0.21242
+            ],
+            "observed_features": [
+              0.17448333333333332,
+              0.21160833333333334,
+              0.2127,
+              0.21535833333333335,
+              0.21510833333333335,
+              0.10051666666666667,
+              0.198455
+            ],
+            "p_gate": 0.02,
+            "p_meas": 0.012,
+            "score": 0.07795336651031823
+          },
+          {
+            "candidate_features": [
+              0.16126666666666667,
+              0.20876666666666666,
+              0.20828333333333332,
+              0.20950833333333332,
+              0.20851666666666666,
+              0.16998333333333332,
+              0.20014
+            ],
+            "observed_features": [
+              0.17448333333333332,
+              0.21160833333333334,
+              0.2127,
+              0.21535833333333335,
+              0.21510833333333335,
+              0.10051666666666667,
+              0.198455
+            ],
+            "p_gate": 0.015,
+            "p_meas": 0.03,
+            "score": 0.07835113898446308
+          },
+          {
+            "candidate_features": [
+              0.18531666666666666,
+              0.23183333333333334,
+              0.22950833333333334,
+              0.22909166666666667,
+              0.23071666666666665,
+              0.14501666666666665,
+              0.21726333333333334
+            ],
+            "observed_features": [
+              0.17448333333333332,
+              0.21160833333333334,
+              0.2127,
+              0.21535833333333335,
+              0.21510833333333335,
+              0.10051666666666667,
+              0.198455
+            ],
+            "p_gate": 0.02,
+            "p_meas": 0.015,
+            "score": 0.10579242048942324
+          },
+          {
+            "candidate_features": [
+              0.15461666666666668,
+              0.19466666666666665,
+              0.19583333333333333,
+              0.19590833333333332,
+              0.19593333333333332,
+              0.13965,
+              0.185895
+            ],
+            "observed_features": [
+              0.17448333333333332,
+              0.21160833333333334,
+              0.2127,
+              0.21535833333333335,
+              0.21510833333333335,
+              0.10051666666666667,
+              0.198455
+            ],
+            "p_gate": 0.015,
+            "p_meas": 0.02,
+            "score": 0.10840993904168206
+          }
+        ]
+      },
+      "measurement_heavy_d3": {
+        "ambiguous": false,
+        "development_seed_master": 4101,
+        "distance": 3,
+        "observed_profile": "measurement_heavy",
+        "runner_up": {
+          "p_gate": 0.004,
+          "p_meas": 0.01,
+          "score": 0.12214053404028535
+        },
+        "selected": {
+          "name": "candidate_0.0020_0.0200",
+          "p_gate": 0.002,
+          "p_meas": 0.02,
+          "score": 0.013856623575391531
+        },
+        "top_10": [
+          {
+            "candidate_features": [
+              0.03915,
+              0.063875,
+              0.06155,
+              0.07995,
+              0.061658333333333336
+            ],
+            "observed_features": [
+              0.03855,
+              0.0621,
+              0.061975,
+              0.081,
+              0.061283333333333335
+            ],
+            "p_gate": 0.002,
+            "p_meas": 0.02,
+            "score": 0.013856623575391531
+          },
+          {
+            "candidate_features": [
+              0.0459,
+              0.0626,
+              0.0619,
+              0.0547,
+              0.05826666666666667
+            ],
+            "observed_features": [
+              0.03855,
+              0.0621,
+              0.061975,
+              0.081,
+              0.061283333333333335
+            ],
+            "p_gate": 0.004,
+            "p_meas": 0.01,
+            "score": 0.12214053404028535
+          },
+          {
+            "candidate_features": [
+              0.0487,
+              0.06785,
+              0.066975,
+              0.0622,
+              0.063425
+            ],
+            "observed_features": [
+              0.03855,
+              0.0621,
+              0.061975,
+              0.081,
+              0.061283333333333335
+            ],
+            "p_gate": 0.004,
+            "p_meas": 0.012,
+            "score": 0.13722703544781215
+          },
+          {
+            "candidate_features": [
+              0.0472,
+              0.061725,
+              0.06015,
+              0.04945,
+              0.05673333333333333
+            ],
+            "observed_features": [
+              0.03855,
+              0.0621,
+              0.061975,
+              0.081,
+              0.061283333333333335
+            ],
+            "p_gate": 0.004,
+            "p_meas": 0.008,
+            "score": 0.1539807045833447
+          },
+          {
+            "candidate_features": [
+              0.02835,
+              0.04885,
+              0.048125,
+              0.08205,
+              0.050725
+            ],
+            "observed_features": [
+              0.03855,
+              0.0621,
+              0.061975,
+              0.081,
+              0.061283333333333335
+            ],
+            "p_gate": 0.001,
+            "p_meas": 0.02,
+            "score": 0.16040339992894037
+          },
+          {
+            "candidate_features": [
+              0.0335,
+              0.05035,
+              0.053125,
+              0.06635,
+              0.051133333333333336
+            ],
+            "observed_features": [
+              0.03855,
+              0.0621,
+              0.061975,
+              0.081,
+              0.061283333333333335
+            ],
+            "p_gate": 0.002,
+            "p_meas": 0.015,
+            "score": 0.16545956434994122
+          },
+          {
+            "candidate_features": [
+              0.0508,
+              0.0718,
+              0.07245,
+              0.06845,
+              0.06795833333333333
+            ],
+            "observed_features": [
+              0.03855,
+              0.0621,
+              0.061975,
+              0.081,
+              0.061283333333333335
+            ],
+            "p_gate": 0.004,
+            "p_meas": 0.015,
+            "score": 0.1693951734127743
+          },
+          {
+            "candidate_features": [
+              0.0376,
+              0.068475,
+              0.06955,
+              0.1129,
+              0.07109166666666666
+            ],
+            "observed_features": [
+              0.03855,
+              0.0621,
+              0.061975,
+              0.081,
+              0.061283333333333335
+            ],
+            "p_gate": 0.001,
+            "p_meas": 0.03,
+            "score": 0.18565689141545266
+          },
+          {
+            "candidate_features": [
+              0.04205,
+              0.057325,
+              0.055375,
+              0.03975,
+              0.0512
+            ],
+            "observed_features": [
+              0.03855,
+              0.0621,
+              0.061975,
+              0.081,
+              0.061283333333333335
+            ],
+            "p_gate": 0.004,
+            "p_meas": 0.006,
+            "score": 0.21714176391811746
+          },
+          {
+            "candidate_features": [
+              0.039,
+              0.051925,
+              0.05515,
+              0.03255,
+              0.04761666666666667
+            ],
+            "observed_features": [
+              0.03855,
+              0.0621,
+              0.061975,
+              0.081,
+              0.061283333333333335
+            ],
+            "p_gate": 0.004,
+            "p_meas": 0.004,
+            "score": 0.2609527453606275
+          }
+        ]
+      },
+      "measurement_heavy_d5": {
+        "ambiguous": false,
+        "development_seed_master": 4101,
+        "distance": 5,
+        "observed_profile": "measurement_heavy",
+        "runner_up": {
+          "p_gate": 0.004,
+          "p_meas": 0.008,
+          "score": 0.1336664445924939
+        },
+        "selected": {
+          "name": "candidate_0.0020_0.0200",
+          "p_gate": 0.002,
+          "p_meas": 0.02,
+          "score": 0.015263898141979442
+        },
+        "top_10": [
+          {
+            "candidate_features": [
+              0.039483333333333336,
+              0.06409166666666667,
+              0.06438333333333333,
+              0.06309166666666667,
+              0.06383333333333334,
+              0.08681666666666667,
+              0.06371
+            ],
+            "observed_features": [
+              0.039016666666666665,
+              0.06368333333333333,
+              0.06453333333333333,
+              0.06415,
+              0.06371666666666667,
+              0.09098333333333333,
+              0.06421666666666667
+            ],
+            "p_gate": 0.002,
+            "p_meas": 0.02,
+            "score": 0.015263898141979442
+          },
+          {
+            "candidate_features": [
+              0.04845,
+              0.06760833333333334,
+              0.06868333333333333,
+              0.06684166666666666,
+              0.06569166666666666,
+              0.05325,
+              0.063935
+            ],
+            "observed_features": [
+              0.039016666666666665,
+              0.06368333333333333,
+              0.06453333333333333,
+              0.06415,
+              0.06371666666666667,
+              0.09098333333333333,
+              0.06421666666666667
+            ],
+            "p_gate": 0.004,
+            "p_meas": 0.008,
+            "score": 0.1336664445924939
+          },
+          {
+            "candidate_features": [
+              0.04596666666666667,
+              0.06295,
+              0.06323333333333334,
+              0.06300833333333333,
+              0.06396666666666667,
+              0.04385,
+              0.05961333333333333
+            ],
+            "observed_features": [
+              0.039016666666666665,
+              0.06368333333333333,
+              0.06453333333333333,
+              0.06415,
+              0.06371666666666667,
+              0.09098333333333333,
+              0.06421666666666667
+            ],
+            "p_gate": 0.004,
+            "p_meas": 0.006,
+            "score": 0.13793396994596194
+          },
+          {
+            "candidate_features": [
+              0.040633333333333334,
+              0.069875,
+              0.070225,
+              0.07054166666666667,
+              0.07101666666666667,
+              0.12195,
+              0.07259
+            ],
+            "observed_features": [
+              0.039016666666666665,
+              0.06368333333333333,
+              0.06453333333333333,
+              0.06415,
+              0.06371666666666667,
+              0.09098333333333333,
+              0.06421666666666667
+            ],
+            "p_gate": 0.001,
+            "p_meas": 0.03,
+            "score": 0.1477496483825598
+          },
+          {
+            "candidate_features": [
+              0.030333333333333334,
+              0.051525,
+              0.052533333333333335,
+              0.05254166666666667,
+              0.05289166666666666,
+              0.08621666666666666,
+              0.053553333333333335
+            ],
+            "observed_features": [
+              0.039016666666666665,
+              0.06368333333333333,
+              0.06453333333333333,
+              0.06415,
+              0.06371666666666667,
+              0.09098333333333333,
+              0.06421666666666667
+            ],
+            "p_gate": 0.001,
+            "p_meas": 0.02,
+            "score": 0.1570175438596491
+          },
+          {
+            "candidate_features": [
+              0.049216666666666666,
+              0.06983333333333333,
+              0.07234166666666667,
+              0.07415833333333334,
+              0.069825,
+              0.059866666666666665,
+              0.06814
+            ],
+            "observed_features": [
+              0.039016666666666665,
+              0.06368333333333333,
+              0.06453333333333333,
+              0.06415,
+              0.06371666666666667,
+              0.09098333333333333,
+              0.06421666666666667
+            ],
+            "p_gate": 0.004,
+            "p_meas": 0.01,
+            "score": 0.167255163224517
+          },
+          {
+            "candidate_features": [
+              0.032933333333333335,
+              0.05478333333333334,
+              0.05485,
+              0.054325,
+              0.054641666666666665,
+              0.06945,
+              0.05395833333333333
+            ],
+            "observed_features": [
+              0.039016666666666665,
+              0.06368333333333333,
+              0.06453333333333333,
+              0.06415,
+              0.06371666666666667,
+              0.09098333333333333,
+              0.06421666666666667
+            ],
+            "p_gate": 0.002,
+            "p_meas": 0.015,
+            "score": 0.16735139536605226
+          },
+          {
+            "candidate_features": [
+              0.05188333333333333,
+              0.07305833333333334,
+              0.07294166666666667,
+              0.07375,
+              0.07424166666666666,
+              0.06863333333333334,
+              0.07085
+            ],
+            "observed_features": [
+              0.039016666666666665,
+              0.06368333333333333,
+              0.06453333333333333,
+              0.06415,
+              0.06371666666666667,
+              0.09098333333333333,
+              0.06421666666666667
+            ],
+            "p_gate": 0.004,
+            "p_meas": 0.012,
+            "score": 0.17712265896809531
+          },
+          {
+            "candidate_features": [
+              0.04466666666666667,
+              0.0613,
+              0.059366666666666665,
+              0.059958333333333336,
+              0.06030833333333333,
+              0.03676666666666667,
+              0.05633
+            ],
+            "observed_features": [
+              0.039016666666666665,
+              0.06368333333333333,
+              0.06453333333333333,
+              0.06415,
+              0.06371666666666667,
+              0.09098333333333333,
+              0.06421666666666667
+            ],
+            "p_gate": 0.004,
+            "p_meas": 0.004,
+            "score": 0.1841068917018284
+          },
+          {
+            "candidate_features": [
+              0.04393333333333333,
+              0.056091666666666665,
+              0.058091666666666666,
+              0.05739166666666667,
+              0.05731666666666667,
+              0.029133333333333334,
+              0.053085
+            ],
+            "observed_features": [
+              0.039016666666666665,
+              0.06368333333333333,
+              0.06453333333333333,
+              0.06415,
+              0.06371666666666667,
+              0.09098333333333333,
+              0.06421666666666667
+            ],
+            "p_gate": 0.004,
+            "p_meas": 0.002,
+            "score": 0.23337774816788812
+          }
+        ]
+      }
+    },
+    "status": "PROMOTED"
+  },
+  "provenance": {
+    "diff_sha256": "92ba93c09bc24ca53e914165187b10a0d39d0933d60d521c71dcd6128e60e4bd",
+    "dirty": true,
+    "dirty_status_sha256": "ef7c583b768588815a77ff70612538ff83dc8e8e93c3787e5dfc20e912eb63c7",
+    "source_revision": "100f8a3640d6a57484eec2e2b7effc93ce2ffc02",
+    "untracked_files": [
+      "quantum-simulator-core/quantumlab/research/qec/artifacts.py",
+      "quantum-simulator-core/quantumlab/research/qec/audit.py",
+      "quantum-simulator-core/quantumlab/research/qec/calibration.py",
+      "quantum-simulator-core/quantumlab/research/qec/codes.py",
+      "quantum-simulator-core/quantumlab/research/qec/decoders/",
+      "quantum-simulator-core/quantumlab/research/qec/experiment.py",
+      "quantum-simulator-core/quantumlab/research/qec/noise.py",
+      "quantum-simulator-core/quantumlab/research/qec/pauli.py",
+      "quantum-simulator-core/quantumlab/research/qec/reproduction.py",
+      "quantum-simulator-core/quantumlab/research/qec/stabilizer.py",
+      "quantum-simulator-core/research/qec/audit/",
+      "quantum-simulator-core/research/qec/literature/REPRODUCTION_TARGET.md",
+      "quantum-simulator-core/research/qec/literature/RESEARCH_GAP.md",
+      "quantum-simulator-core/research/qec/protocol/",
+      "quantum-simulator-core/research/qec/protocols/code_capacity_repetition_d5.yaml",
+      "quantum-simulator-core/research/qec/reproduction/",
+      "quantum-simulator-core/research/qec/results/",
+      "quantum-simulator-core/tests/test_qec_artifacts.py",
+      "quantum-simulator-core/tests/test_qec_decoders.py",
+      "quantum-simulator-core/tests/test_qec_experiment.py",
+      "quantum-simulator-core/tests/test_qec_noise.py",
+      "quantum-simulator-core/tests/test_qec_pauli.py",
+      "quantum-simulator-core/tests/test_qec_protocol.py",
+      "quantum-simulator-core/tests/test_qec_stabilizer.py",
+      "quantum-simulator-core/tests/test_qec_stats.py"
+    ]
+  },
+  "runtime_seconds": 0.017240120999986175,
+  "start_utc": "2026-10-19T16:14:29.291325+00:00",
+  "study": "static_dem_mismatch_v1",
+  "warnings": []
+}

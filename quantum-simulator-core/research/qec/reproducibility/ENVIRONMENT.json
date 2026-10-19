@@ -1,0 +1,16 @@
+{
+  "python": "3.11.2",
+  "platform": "Linux-6.1.158+-x86_64-with-glibc2.36",
+  "packages": {
+    "numpy": "2.4.6",
+    "scipy": "1.17.1",
+    "PyYAML": "6.0.3",
+    "stim": "1.16.0",
+    "pymatching": "2.4.0",
+    "pytest": "9.1.1",
+    "hypothesis": "6.170.2",
+    "ruff": "0.17.1",
+    "mypy": "2.4.0"
+  },
+  "note": "Versions recorded from the audit sandbox; ci pins stim/pymatching."
+}

@@ -1,0 +1,66 @@
+{
+  "bracket": [
+    0.006,
+    0.007
+  ],
+  "claim_label": "REPRODUCED_WITHIN_DECLARED_MODEL",
+  "criteria": [
+    {
+      "detail": "bracket=[0.006, 0.007]",
+      "id": "bracket_exists",
+      "passed": true
+    },
+    {
+      "detail": "band=[0.0055, 0.0085]",
+      "id": "bracket_in_predeclared_band",
+      "passed": true
+    },
+    {
+      "detail": "Newcombe 95% intervals exclude zero with opposite signs",
+      "id": "refinement_significant",
+      "passed": true
+    },
+    {
+      "detail": "LER(d3,d5,d7) at p=0.004 = (0.01215, 0.008, 0.004)",
+      "evaluable": true,
+      "id": "ordering_below_threshold",
+      "passed": true
+    },
+    {
+      "detail": "LER(d3,d5,d7) at p=0.010 = (0.05885, 0.086, 0.10365)",
+      "evaluable": true,
+      "id": "ordering_above_threshold",
+      "passed": true
+    }
+  ],
+  "differences": {
+    "0.006": {
+      "d3_estimate": 0.024655,
+      "d5_estimate": 0.02255,
+      "difference": 0.0021049999999999992,
+      "interval_excludes_zero": true,
+      "interval_high": 0.003046292640066656,
+      "interval_low": 0.001164213283086462
+    },
+    "0.007": {
+      "d3_estimate": 0.03182,
+      "d5_estimate": 0.03485,
+      "difference": -0.003029999999999998,
+      "interval_excludes_zero": true,
+      "interval_high": -0.0019175499315913296,
+      "interval_low": -0.004142924068890725
+    }
+  },
+  "predeclared_band": [
+    0.0055,
+    0.0085
+  ],
+  "rationale": "The measured crossing is inside the pre-declared literature band, is statistically resolved at the refinement points, and both distance-ordering checks pass for the declared model.",
+  "scope": "Stim circuit-level depolarizing model with PyMatching MWPM; not a hardware result and not Fowler et al.'s exact gate model.",
+  "scores": {
+    "0.006": 0.0021049999999999992,
+    "0.007": -0.003029999999999998
+  },
+  "status": "REPRODUCED",
+  "within_predeclared_band": true
+}

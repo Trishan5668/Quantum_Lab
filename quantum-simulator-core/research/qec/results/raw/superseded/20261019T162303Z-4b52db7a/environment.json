@@ -1,0 +1,28 @@
+{
+  "command_line": [
+    "/home/user/Quantum_Lab/quantum-simulator-core/quantumlab/research/qec/calibration.py",
+    "--output",
+    "research/qec/results/raw"
+  ],
+  "cpu_count": 2,
+  "hostname": "e2b.local",
+  "machine": "x86_64",
+  "packages": {
+    "PyYAML": "6.0.3",
+    "hypothesis": "6.170.2",
+    "numpy": "2.4.6",
+    "pymatching": "2.4.0",
+    "pytest": "9.1.1",
+    "scipy": "1.17.1",
+    "stim": "1.16.0"
+  },
+  "platform": "Linux-6.1.158+-x86_64-with-glibc2.36",
+  "processor": "",
+  "python": "3.11.2 (main, Apr  8 2026, 01:58:00) [GCC 12.2.0]",
+  "python_implementation": "CPython",
+  "resource_usage": {
+    "maxrss_kib": 179548,
+    "system_cpu_seconds": 0.243529,
+    "user_cpu_seconds": 171.375365
+  }
+}

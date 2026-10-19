@@ -35,6 +35,11 @@ dev = [
     "pytest-cov>=4.1",
     "mypy>=1.10",
     "ruff>=0.5",
+    "hypothesis>=6.100",
+]
+research = [
+    "stim>=1.15",
+    "pymatching>=2.3",
 ]
 validation = [
     "qiskit>=1.0",

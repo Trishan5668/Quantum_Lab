@@ -1,0 +1,78 @@
+{
+  "config_hash": "28c3bfae7e487fb5a01c0128cf9354827a802db925d07e931f5861092a75dabf",
+  "kind": "reproduction",
+  "raw": {
+    "acceptance": {
+      "bracket_rule": "adjacent refinement points where LER(d=3)-LER(d=5) changes from positive to negative",
+      "master_seed": 20261020,
+      "ordering_above": {
+        "expected": "LER(d=3) < LER(d=5) < LER(d=7)",
+        "p": 0.01
+      },
+      "ordering_below": {
+        "expected": "LER(d=3) > LER(d=5) > LER(d=7)",
+        "p": 0.004
+      },
+      "significance_rule": "Newcombe 95% interval for LER(d=3)-LER(d=5) excludes zero at both refinement points, with opposite signs",
+      "threshold_band": [
+        0.0055,
+        0.0085
+      ]
+    },
+    "coarse": {
+      "distances": [
+        3,
+        5,
+        7
+      ],
+      "p": [
+        0.004,
+        0.005,
+        0.006,
+        0.007,
+        0.008,
+        0.01
+      ],
+      "shots": 20000
+    },
+    "model": {
+      "decoder": "pymatching_mwpm_detector",
+      "description": "Stim generated surface_code:rotated_memory_z circuit, distances 3/5/7, rounds equal to distance; all four Stim depolarizing hooks set to p; PyMatching MWPM on the decomposed detector error model. This is Stim's standard circuit-level model, not the exact gate-level model of Fowler et al.",
+      "engine": "stim+pymatching",
+      "memory_basis": "Z",
+      "task": "surface_code:rotated_memory_z"
+    },
+    "name": "surface_code_threshold_mwpm_v1",
+    "notes": {
+      "exploratory_pilot": "A 20k-shot exploratory pilot with a different seed family suggested a crossover near 0.006-0.007. It is not evidence and is excluded from the confirmatory analysis."
+    },
+    "reference": {
+      "citations": [
+        "Fowler et al., Phys. Rev. A 86, 032324 (2012), DOI 10.1103/PhysRevA.86.032324",
+        "Higgott, ACM Transactions on Quantum Computing 3(3), Article 16 (2022), DOI 10.1145/3505637"
+      ],
+      "description": "Circuit-level threshold of the rotated surface code under depolarizing noise with minimum-weight perfect matching, reported at approximately 0.57% per step (Fowler et al., PRA 86, 032324, 2012; DOI 10.1103/PhysRevA.86.032324) and approximately 0.7% for the standard circuit-level depolarizing model in the PyMatching documentation (Higgott, ACM TQC 3(3), Article 16, 2022; DOI 10.1145/3505637).",
+      "literature_band": [
+        0.0057,
+        0.0082
+      ]
+    },
+    "refinement": {
+      "distances": [
+        3,
+        5
+      ],
+      "p": [
+        0.006,
+        0.007
+      ],
+      "shots": 200000
+    },
+    "schema_version": "1.0",
+    "statistics": {
+      "confidence_level": 0.95,
+      "interval": "wilson",
+      "paired": false
+    }
+  }
+}

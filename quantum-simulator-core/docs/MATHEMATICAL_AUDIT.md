@@ -12,7 +12,7 @@ QuantumLab's quantum core is **mathematically sound** for its documented **big-e
 
 **One physics bug was fixed:** T2→phase-damping parameter mapping used `γ = 1−e^(−t/T2)` instead of the correct `γ = 1−e^(−2t/T2)` for off-diagonal decay `exp(−t/T2)`.
 
-**150 pytest tests pass**, including 40+ new mathematical validation tests and 18 Qiskit cross-reference tests (with wire remap).
+**305 pytest tests pass and 4 skip** (309 collected, re-measured 2026-10-19 on Python 3.11.2). One skip is `tests/test_qiskit_reference.py` because Qiskit is not installed in the audit environment; three are parametrized `test_math_validation.py` cases whose qubit index exceeds the register size and are skipped by design. This includes the 40+ mathematical-validation tests and the QEC research layer's tests. The earlier figure of 150 predates that layer.
 
 ---
 

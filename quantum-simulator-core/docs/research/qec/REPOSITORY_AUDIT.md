@@ -1,3 +1,9 @@
+> **Superseded:** this document describes the pre-expansion slice and reports
+> an old test count. The current audit is
+> `research/qec/audit/REPOSITORY_AUDIT.md`, which records measured commands,
+> classifications, the Phase 2 reproduction, the Phase 3 limitation, the
+> rejected Phase 4 candidate, and blocked checks.
+
 # QuantumLab QEC repository audit
 
 ## Scope and baseline

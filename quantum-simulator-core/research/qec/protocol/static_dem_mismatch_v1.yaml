@@ -1,0 +1,35 @@
+study: static_dem_mismatch_v1
+status: predeclared
+date: "2026-10-19"
+profiles:
+  control: {p_gate: 0.010, p_meas: 0.010}
+  measurement_heavy: {p_gate: 0.002, p_meas: 0.020}
+  gate_heavy: {p_gate: 0.020, p_meas: 0.002}
+distances: [3, 5]
+rounds: "distance"
+phase3:
+  master_seed: 3101
+  shots_per_cell: 100000
+  decoders: [nominal, oracle]
+phase4:
+  development_master_seed: 4101
+  heldout_master_seed: 9101
+  calibration_shots: 5000
+  heldout_shots: 100000
+  grid: [0.001, 0.002, 0.004, 0.006, 0.008, 0.010, 0.012, 0.015, 0.020, 0.030]
+  candidate: calibrated_global_dem_v1
+  selection: detector_cohort_rate_mae
+  gates:
+    G1: selection isolation
+    G2: control degradation <= 2% relative
+    G3: recovery >= 50% of oracle gain
+    G4: improvement replicates at d=3 and d=5
+    G5: McNemar p < 0.05
+generalization_v2:
+  status: exploratory_post_hoc_motivated
+  development_master_seed: 4201
+  heldout_master_seed: 9201
+  grid: [0.001, 0.004, 0.007, 0.012, 0.018, 0.025]
+  note: "Designed after v1 showed the grid contained the true profiles; cannot promote."
+ai_assistance: not_used
+novelty_claim: none

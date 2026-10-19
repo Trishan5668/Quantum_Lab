@@ -1,0 +1,63 @@
+{
+  "config_hash": "ed394b4bcb5cdca06719b5a7d88de52668f0066884b178ecd74fa7d09c4cbd45",
+  "kind": "calibration_study",
+  "raw": {
+    "bootstrap_resamples": 10000,
+    "claim_status": "NOT_INDEPENDENTLY_VALIDATED",
+    "distances": [
+      3,
+      5
+    ],
+    "phase3": {
+      "decoders": [
+        "nominal",
+        "oracle"
+      ],
+      "master_seed": 3101,
+      "shots": 100000
+    },
+    "phase4": {
+      "calibration_shots": 5000,
+      "candidate_source": "RULE_BASED",
+      "development_master_seed": 4101,
+      "grid": [
+        0.001,
+        0.002,
+        0.004,
+        0.006,
+        0.008,
+        0.01,
+        0.012,
+        0.015,
+        0.02,
+        0.03
+      ],
+      "heldout_master_seed": 9101,
+      "heldout_shots": 100000
+    },
+    "profiles": [
+      {
+        "name": "control",
+        "p_gate": 0.01,
+        "p_meas": 0.01,
+        "p_reset": 0.01,
+        "p_round": 0.01
+      },
+      {
+        "name": "measurement_heavy",
+        "p_gate": 0.002,
+        "p_meas": 0.02,
+        "p_reset": 0.002,
+        "p_round": 0.002
+      },
+      {
+        "name": "gate_heavy",
+        "p_gate": 0.02,
+        "p_meas": 0.002,
+        "p_reset": 0.02,
+        "p_round": 0.02
+      }
+    ],
+    "study": "static_dem_mismatch_v1"
+  }
+}
