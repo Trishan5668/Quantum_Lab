@@ -4,25 +4,23 @@ from __future__ import annotations
 
 import os
 
+import quantumlab
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-
-import quantumlab
+from quantumlab.exceptions import QuantumLabError
 
 from app.exceptions import (
     quantumlab_exception_handler,
     unexpected_exception_handler,
 )
 from app.models import HealthOut, envelope
-from app.routes.circuit import router as circuit_router
-from app.routes.explain import router as explain_router
 from app.routes.ai import router as ai_router
-from app.routes.research import router as research_router
+from app.routes.circuit import router as circuit_router
 from app.routes.editor import router as editor_router
+from app.routes.explain import router as explain_router
+from app.routes.research import router as research_router
 from app.routes.v2 import router as v2_router
 from app.routes.visualize import router as visualize_router
-from quantumlab.exceptions import QuantumLabError
-
 
 SERVER_VERSION = "2.0.0"
 

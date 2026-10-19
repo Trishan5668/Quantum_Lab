@@ -4,8 +4,6 @@ from __future__ import annotations
 
 from typing import Any, Literal
 
-import numpy as np
-
 from quantumlab.circuit import GatePlacement
 
 from app.models import GatePlacementIn
@@ -14,7 +12,6 @@ from app.wolfram.client import WolframClient, WolframUnavailableError, stable_ha
 from app.wolfram.symbolic import (
     basis_labels,
     initial_state_vector,
-    matrix_out,
     operator_dataset,
     vector_out,
     wolfram_language_payload,

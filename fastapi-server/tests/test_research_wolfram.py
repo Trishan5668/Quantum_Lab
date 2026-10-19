@@ -1,16 +1,19 @@
 from __future__ import annotations
 
-import pytest
 import httpx
-from fastapi.testclient import TestClient
-
+import pytest
 from app.main import create_app
 from app.models import ComplexAmplitude, GatePlacementIn
 from app.models_v2 import ResearchVerifyRequest, SimulationConfigIn
-from app.wolfram.client import WolframClient, WolframConfig, WolframUnavailableError, _extract_json_result
+from app.wolfram.client import (
+    WolframClient,
+    WolframConfig,
+    WolframUnavailableError,
+    _extract_json_result,
+)
 from app.wolfram.symbolic import wolfram_language_payload
-from app.wolfram.verification import _structured_input
-from app.wolfram.verification import verify_research_payload
+from app.wolfram.verification import _structured_input, verify_research_payload
+from fastapi.testclient import TestClient
 
 
 class UnavailableClient:

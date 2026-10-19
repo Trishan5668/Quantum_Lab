@@ -1,12 +1,10 @@
 from __future__ import annotations
 
-import logging
 import json
+import logging
 
 import httpx
 import pytest
-from fastapi.testclient import TestClient
-
 from app.llm.base import (
     AuthenticationError,
     ConfigurationError,
@@ -26,6 +24,7 @@ from app.llm.featherless_provider import (
 )
 from app.main import create_app
 from app.models_v2 import AIChatRequest
+from fastapi.testclient import TestClient
 
 
 def _request() -> AIChatRequest:

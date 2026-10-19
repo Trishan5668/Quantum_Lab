@@ -126,7 +126,7 @@ async def explain(req: ExplainRequest) -> StreamingResponse:
     # this means we surface a 503 if no API key is configured -- doing
     # it here (before StreamingResponse) keeps the failure path on a
     # proper HTTP status code instead of an in-stream error frame.
-    if hasattr(provider, "_api_key") and getattr(provider, "_api_key") in (None, ""):
+    if hasattr(provider, "_api_key") and provider._api_key in (None, ""):
         raise HTTPException(
             status_code=503,
             detail=_error_envelope(

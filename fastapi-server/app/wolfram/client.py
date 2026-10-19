@@ -31,7 +31,7 @@ class WolframConfig:
     timeout_s: float = 12.0
 
     @classmethod
-    def from_env(cls) -> "WolframConfig":
+    def from_env(cls) -> WolframConfig:
         timeout_raw = os.getenv("WOLFRAM_TIMEOUT_S", "12")
         try:
             timeout = float(timeout_raw)

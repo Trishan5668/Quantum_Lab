@@ -5,7 +5,6 @@ from __future__ import annotations
 import numpy as np
 from fastapi import APIRouter
 from pydantic import BaseModel, Field
-
 from quantumlab.state import StateVector
 
 from app.models import (
@@ -15,7 +14,6 @@ from app.models import (
     DensityMatrixOut,
     envelope,
 )
-
 
 router = APIRouter(prefix="/api/v1/visualize", tags=["visualize"])
 

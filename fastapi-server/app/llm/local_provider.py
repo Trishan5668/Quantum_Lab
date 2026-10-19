@@ -27,7 +27,6 @@ from app.llm.base import (
     ExplanationRequest,
 )
 
-
 _MAX_WORDS = 119
 """Tight upper bound; the spec requires strictly under 120 words."""
 

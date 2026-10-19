@@ -7,7 +7,6 @@ from typing import Any
 
 from fastapi import Request
 from fastapi.responses import JSONResponse
-
 from quantumlab.exceptions import (
     InvalidGateError,
     NormalizationError,
@@ -15,7 +14,6 @@ from quantumlab.exceptions import (
     QubitIndexError,
     SimulationError,
 )
-
 
 _STATUS_MAP: dict[type[QuantumLabError], int] = {
     InvalidGateError: 400,

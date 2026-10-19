@@ -35,7 +35,7 @@ def main() -> int:
         result = qsharp.run("Main()", shots=1)
         if result is not None:
             print(result)
-    except Exception:
+    except Exception:  # noqa: BLE001 - worker boundary: report any failure to the parent
         traceback.print_exc()
         return 1
     return 0

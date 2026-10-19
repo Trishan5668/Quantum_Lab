@@ -28,7 +28,6 @@ from app.llm.base import (
 )
 from app.llm.prompts import system_prompt_for, user_message_for
 
-
 DEFAULT_MODEL: Final[str] = "gemini-2.5-flash"
 """Model id used unless overridden via ``QUANTUMLAB_GEMINI_MODEL``."""
 

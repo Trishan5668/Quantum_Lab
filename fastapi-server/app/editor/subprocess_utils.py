@@ -45,7 +45,7 @@ async def _kill_process_tree(proc: asyncio.subprocess.Process) -> None:
             proc.kill()
     try:
         await asyncio.wait_for(proc.wait(), timeout=2.0)
-    except asyncio.TimeoutError:
+    except TimeoutError:
         pass
 
 
@@ -67,7 +67,7 @@ async def run_isolated_subprocess(
     )
     try:
         stdout_b, stderr_b = await asyncio.wait_for(proc.communicate(), timeout=timeout_s)
-    except asyncio.TimeoutError:
+    except TimeoutError:
         await _kill_process_tree(proc)
         return "", "Execution timed out", -1
 
