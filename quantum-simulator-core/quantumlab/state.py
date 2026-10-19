@@ -18,7 +18,7 @@ two qubits using SWAP operators which are themselves built from
 from __future__ import annotations
 
 from dataclasses import dataclass, field
-from typing import TYPE_CHECKING, Any, cast
+from typing import TYPE_CHECKING, Any
 
 import numpy as np
 
@@ -133,13 +133,14 @@ class StateVector:
 
     def probabilities(self) -> np.ndarray:
         """Return the Born-rule probabilities ``|c_i|^2``."""
-        probs = np.abs(self.amplitudes) ** 2
-        return cast(np.ndarray, probs.astype(np.float64))
+        probs: np.ndarray = (np.abs(self.amplitudes) ** 2).astype(np.float64)
+        return probs
 
     def density_matrix(self) -> np.ndarray:
         """Return the full density matrix ``|psi><psi|``."""
         psi = self.amplitudes.reshape(-1, 1)
-        return cast(np.ndarray, psi @ psi.conj().T)
+        matrix: np.ndarray = psi @ psi.conj().T
+        return matrix
 
     def to_density_matrix(self) -> DensityMatrix:
         """Return a :class:`~quantumlab.density.DensityMatrix` for this state."""
@@ -160,8 +161,8 @@ class StateVector:
         axes_order = [keep] + others
         tensor = np.transpose(tensor, axes=axes_order)
         flat = tensor.reshape(2, -1)
-        rho = flat @ flat.conj().T
-        return cast(np.ndarray, rho)
+        rho: np.ndarray = flat @ flat.conj().T
+        return rho
 
     def bloch_angles(self, qubit: int) -> tuple[float, float]:
         """Return ``(theta, phi)`` of the Bloch vector for a single qubit."""

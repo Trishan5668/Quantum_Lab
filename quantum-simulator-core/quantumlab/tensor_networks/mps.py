@@ -7,7 +7,7 @@ significant qubit in a computational-basis label.
 from __future__ import annotations
 
 from dataclasses import dataclass, field
-from typing import Any, Literal, cast
+from typing import Any, Literal
 
 import numpy as np
 
@@ -362,7 +362,8 @@ class MPS:
         rho = np.einsum(
             "ab,axi,byj,ji->xy", left_env, block, block.conj(), right_env, optimize=True
         )
-        return cast(np.ndarray, (rho + rho.conj().T) / 2)
+        hermitian: np.ndarray = (rho + rho.conj().T) / 2
+        return hermitian
 
     def expectation_pauli(self, operators: dict[int, str]) -> float:
         matrices = {

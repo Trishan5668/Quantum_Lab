@@ -22,7 +22,7 @@ from __future__ import annotations
 
 import math
 from dataclasses import dataclass
-from typing import Any, Literal, cast
+from typing import Any, Literal
 
 import numpy as np
 
@@ -129,7 +129,7 @@ class PauliChannel:
         u = rng.random(shape)
         codes = np.searchsorted(cumulative, u, side="right")
         codes = np.clip(codes, 0, 3).astype(np.uint8)
-        return cast(np.ndarray, codes)
+        return codes
 
     def sample_pauli(self, rng: np.random.Generator, num_qubits: int) -> Pauli:
         codes = self.sample_labels(rng, (num_qubits,))
@@ -226,7 +226,8 @@ class MeasurementErrorModel:
         if not np.all((array == 0) | (array == 1)):
             raise NoiseModelError("measurement bits must be binary")
         noise = (rng.random(array.shape) < self.probability).astype(array.dtype)
-        return cast(np.ndarray, np.bitwise_xor(array, noise))
+        flipped: np.ndarray = np.bitwise_xor(array, noise)
+        return flipped
 
     def to_dict(self) -> dict[str, Any]:
         return {"type": "measurement_bit_flip", "probability": self.probability}
