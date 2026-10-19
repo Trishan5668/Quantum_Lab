@@ -110,6 +110,7 @@ def test_zero_failures_have_an_explicit_upper_bound(tmp_path: Path) -> None:
 
 
 def test_measurement_error_is_explicit_and_counted(tmp_path: Path) -> None:
+    pytest.importorskip("pymatching")
     path = _write(
         tmp_path,
         name="measurement",
@@ -133,6 +134,7 @@ def test_measurement_error_is_explicit_and_counted(tmp_path: Path) -> None:
 
 
 def test_same_seed_reproduces_outcomes(tmp_path: Path) -> None:
+    pytest.importorskip("pymatching")
     protocol = _load(_write(tmp_path))
     first = run_protocol(protocol, tmp_path / "a")
     second = run_protocol(protocol, tmp_path / "b")
@@ -244,6 +246,7 @@ def test_unencoded_decoder_is_rejected(tmp_path: Path) -> None:
 
 
 def test_report_labels_are_conservative(tmp_path: Path) -> None:
+    pytest.importorskip("pymatching")
     artifact = run_protocol(_load(_write(tmp_path)), tmp_path / "runs")
     report = (artifact / "report.md").read_text(encoding="utf-8")
     assert "NOT_CLAIMED" in report

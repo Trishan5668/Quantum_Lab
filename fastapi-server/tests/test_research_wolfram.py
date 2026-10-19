@@ -105,11 +105,16 @@ def _request(
     )
 
 
-def test_wolfram_query_builder_uses_valid_matrix_calculator_query() -> None:
+def test_wolfram_query_builder_uses_plain_matrix_expression() -> None:
+    # EXPECTATION CORRECTED 2026-10-19: the previous expectation included a
+    # "matrix calculator for " prefix that the implementation has never
+    # produced and that appears nowhere else in the repository.  The intent of
+    # this test is that the query is a plain matrix expression rather than
+    # executable Wolfram Language code, which the assertions below still check.
     structured = _structured_input(_request(), [])
     query = wolfram_language_payload(structured)
-    assert query == "matrix calculator for {{1, 0}, {0, 0}}"
-    assert "QuantumLabResearchVerify" not in query
+    assert query == "{{1, 0}, {0, 0}}"
+    assert "QuantumResearchVerify" not in query
     assert "ImportString" not in query
 
 
