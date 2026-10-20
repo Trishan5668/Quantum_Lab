@@ -141,7 +141,8 @@ def _failure_vector(
     predictions = decoder.decode_batch(detectors)
     observed = np.asarray(observables).reshape(detectors.shape[0], -1)
     predicted = np.asarray(predictions).reshape(detectors.shape[0], -1)
-    return cast(np.ndarray, np.any(predicted != observed, axis=1).astype(np.uint8))
+    failures: np.ndarray = np.any(predicted != observed, axis=1).astype(np.uint8)
+    return failures
 
 
 def _cohort_rates(detectors: np.ndarray, circuit: Any) -> np.ndarray:
@@ -151,7 +152,7 @@ def _cohort_rates(detectors: np.ndarray, circuit: Any) -> np.ndarray:
     for index in range(num_detectors):
         coords = coordinates.get(index, [])
         times[index] = int(coords[-1]) if coords else 0
-    upper = int(times.max()) if num_detectors else 0
+    upper = int(np.max(times)) if num_detectors else 0
     rates = []
     for cohort in range(upper + 1):
         mask = times == cohort

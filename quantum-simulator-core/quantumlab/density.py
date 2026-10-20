@@ -3,7 +3,7 @@
 from __future__ import annotations
 
 from dataclasses import dataclass
-from typing import TYPE_CHECKING, Any, cast
+from typing import TYPE_CHECKING, Any
 
 import numpy as np
 
@@ -160,8 +160,8 @@ class DensityMatrix:
 
     def probabilities(self) -> np.ndarray:
         """Return Born-rule probabilities diag(rho)."""
-        probs = np.real(np.diag(self.matrix))
-        return cast(np.ndarray, probs.astype(np.float64))
+        probs: np.ndarray = np.real(np.diag(self.matrix)).astype(np.float64)
+        return probs
 
     def is_pure(self) -> bool:
         return self.purity() > 1.0 - _PURE_TOL

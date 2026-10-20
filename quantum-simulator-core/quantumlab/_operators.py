@@ -8,7 +8,6 @@ placement is identical across simulation modes.
 from __future__ import annotations
 
 from functools import reduce
-from typing import cast
 
 import numpy as np
 
@@ -97,7 +96,8 @@ def two_qubit_full(
     s1 = swap_qubits_full(1, q1_after, num_qubits)
 
     perm = s1 @ s0
-    return cast(np.ndarray, perm.conj().T @ embedded @ perm)
+    composed: np.ndarray = perm.conj().T @ embedded @ perm
+    return composed
 
 
 def embed_kraus(kraus: GateMatrix, qubit: int, num_qubits: int) -> np.ndarray:
