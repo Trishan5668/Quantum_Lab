@@ -43,7 +43,7 @@ export default function HistoryPage(): JSX.Element {
 
   return (
     <>
-      <PageMeta title="Recent Circuits | QuantumLab" description="Reopen saved QuantumLab circuits." />
+      <PageMeta title="Recent Circuits | QuantHub" description="Reopen saved QuantHub circuits." />
       <section className="platform-container py-10">
         <div className="settings-head">
           <div>

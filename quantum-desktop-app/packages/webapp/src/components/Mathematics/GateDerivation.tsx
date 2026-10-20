@@ -59,7 +59,7 @@ function stackExplanation(gateType: string, stackCount: number): string {
   if (stackCount === 2 && ["H", "X", "Y", "Z", "CNOT"].includes(gateType)) {
     return `${gateType} is self-inverse here, so applying it twice gives the identity and returns the state to its previous value.`;
   }
-  return `${gateType} is applied ${stackCount} consecutive times as repeated matrix multiplication. Parameterized gates keep the same parameter each time; QuantumLab does not simplify the angle automatically.`;
+  return `${gateType} is applied ${stackCount} consecutive times as repeated matrix multiplication. Parameterized gates keep the same parameter each time; QuantHub does not simplify the angle automatically.`;
 }
 
 function Info({ label, value }: { label: string; value: string }): JSX.Element {

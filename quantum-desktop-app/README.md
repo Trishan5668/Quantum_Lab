@@ -1,6 +1,6 @@
 # quantum-desktop-app
 
-**The Electron + React frontend for QuantumLab.**
+**The Electron + React frontend for QuantHub.**
 
 A dark, IDE-style quantum circuit builder. Drag-and-drop gate palette,
 live Bloch spheres rendered with Three.js, state-vector + probability
@@ -25,7 +25,9 @@ Open three terminals.
 python -m pip install -e quantum-simulator-core
 python -m pip install -e fastapi-server
 cd fastapi-server
-python -m uvicorn app.main:app --host 127.0.0.1 --port 8765
+# QUANTHUB_ENV opts into the labelled local session (identity headers).
+QUANTHUB_ENV=development QUANTHUB_TRUST_CLIENT_IDENTITY=1 \
+  python -m uvicorn app.main:app --host 127.0.0.1 --port 8765
 ```
 
 **Terminal 2 — webapp:**
@@ -69,7 +71,13 @@ python -m uvicorn app.main:app --host 0.0.0.0 --port $PORT
 Set `CORS_ORIGINS=https://your-vercel-app.vercel.app` on the FastAPI host so the
 deployed browser app can call it.
 
-Only `VITE_API_URL` changes between local development and production.
+Then set `QUANTHUB_ENV=production`, `FIREBASE_PROJECT_ID=<your Firebase project>`
+and do **not** set `QUANTHUB_TRUST_CLIENT_IDENTITY`: production requires verified
+Firebase tokens, and startup fails if the identity headers are enabled or the
+project id is missing. `VITE_*` variables only configure the browser bundle.
+
+Only `VITE_API_URL`, `QUANTHUB_ENV` and `FIREBASE_PROJECT_ID` differ between
+local development and production.
 
 **Terminal 3 (optional) — Electron shell:**
 

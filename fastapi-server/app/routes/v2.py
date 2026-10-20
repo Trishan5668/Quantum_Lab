@@ -1,4 +1,4 @@
-"""QuantumLab API v2 — density mode, noise, and metrics."""
+"""QuantHub API v2 — density mode, noise, and metrics."""
 
 from __future__ import annotations
 

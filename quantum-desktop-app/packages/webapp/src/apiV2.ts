@@ -15,12 +15,12 @@ import { BACKEND_UNAVAILABLE_MESSAGE, apiUrl } from "./config/api";
 export class ApiV2ClientError extends Error {
   readonly code: string;
   readonly status: number;
-  readonly trace: string | null;
-  constructor(code: string, message: string, status: number, trace: string | null) {
+  readonly reference: string | null;
+  constructor(code: string, message: string, status: number, reference: string | null) {
     super(message);
     this.code = code;
     this.status = status;
-    this.trace = trace;
+    this.reference = reference;
   }
 }
 
@@ -64,7 +64,7 @@ async function postV2<TResponse, TBody = unknown>(
       e?.code ?? "HttpError",
       e?.message ?? `HTTP ${resp.status}`,
       resp.status,
-      e?.trace ?? null,
+      e?.reference ?? null,
     );
   }
   if (envelope.data === null || envelope.data === undefined) {

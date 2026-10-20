@@ -100,13 +100,13 @@ export function AIAssistantPane(): JSX.Element {
         metrics: metricContext,
       },
       mathematics: {
-        source: "QuantumLab mathematical report data",
+        source: "QuantHub mathematical report data",
         metrics: metricContext,
         circuit_unitary: "not serialized by the current report",
         density_matrix_included: Boolean(includeDensity),
       },
       physics: {
-        source: "QuantumLab Physics report",
+        source: "QuantHub Physics report",
         sections: physicsSections.map((section) => ({
           title: section.title,
           subtitle: section.subtitle,
@@ -145,14 +145,14 @@ export function AIAssistantPane(): JSX.Element {
   };
 
   return (
-    <aside className={`ai-assistant-pane ${open ? "ai-assistant-pane-open" : ""}`} aria-label="QuantumLab AI assistant">
+    <aside className={`ai-assistant-pane ${open ? "ai-assistant-pane-open" : ""}`} aria-label="QuantHub AI assistant">
       <button type="button" className="ai-pane-toggle" onClick={() => setOpen((value) => !value)} aria-expanded={open}>
         {open ? "Close AI" : "Ask AI"}
       </button>
       <section className="ai-pane-surface">
         <header className="flex shrink-0 items-start justify-between gap-3 border-b border-border/70 px-3 py-3">
           <div className="min-w-0">
-            <h2 className="font-display text-xs font-semibold uppercase tracking-[0.2em] text-text-secondary">Ask QuantumLab</h2>
+            <h2 className="font-display text-xs font-semibold uppercase tracking-[0.2em] text-text-secondary">Ask QuantHub</h2>
             <p className="mt-1 truncate font-mono text-[10px] text-text-muted">AI | DeepSeek</p>
             <p className="mt-1 truncate font-mono text-[10px] text-text-muted" title={summary}>{summary}</p>
             <p className={`mt-1 font-mono text-[10px] ${verificationStatus === "VERIFIED" ? "text-emerald-300" : "text-text-muted"}`}>Wolfram: {verificationStatus}</p>
@@ -171,7 +171,7 @@ export function AIAssistantPane(): JSX.Element {
           )}
           {messages.map((message, index) => (
             <article key={`${message.role}-${index}`} className={`ai-chat-message ai-chat-message-${message.role}`}>
-              <p className="mb-1 font-mono text-[10px] uppercase tracking-[0.14em] text-text-muted">{message.role === "user" ? "You" : "QuantumLab AI"}</p>
+              <p className="mb-1 font-mono text-[10px] uppercase tracking-[0.14em] text-text-muted">{message.role === "user" ? "You" : "QuantHub AI"}</p>
               {message.role === "assistant" ? <AssistantText text={message.content} /> : <p className="whitespace-pre-wrap text-xs leading-5">{message.content}</p>}
             </article>
           ))}
@@ -196,13 +196,13 @@ function AssistantText({ text }: { text: string }): JSX.Element {
 
 function chatErrorMessage(reason: unknown): string {
   if (!(reason instanceof ApiV2ClientError)) {
-    return "QuantumLab AI could not respond. Please try again.";
+    return "QuantHub AI could not respond. Please try again.";
   }
   if (reason.status === 422) {
-    return "QuantumLab AI could not validate the current circuit context. Please try your question again.";
+    return "QuantHub AI could not validate the current circuit context. Please try your question again.";
   }
   if (reason.code === "AIAuthenticationError") {
-    return "QuantumLab AI is not authorized with its provider. Please contact the administrator.";
+    return "QuantHub AI is not authorized with its provider. Please contact the administrator.";
   }
   return reason.message;
 }

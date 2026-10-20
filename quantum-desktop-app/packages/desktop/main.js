@@ -35,7 +35,7 @@ function createWindow() {
     height: 960,
     minWidth: 1120,
     minHeight: 720,
-    title: "QuantumLab",
+    title: "QuantHub",
     backgroundColor: "#0a0b0f",
     show: false,
     autoHideMenuBar: true,

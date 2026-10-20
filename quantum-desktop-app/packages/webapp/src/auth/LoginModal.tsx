@@ -61,7 +61,7 @@ export function LoginModal(): JSX.Element | null {
             <span className="font-display text-base font-bold text-accent-glow">Q</span>
           </div>
           <div>
-            <h2 id="auth-title">QuantumLab</h2>
+            <h2 id="auth-title">QuantHub</h2>
             <p>Sign in to sync circuits, reports, and preferences.</p>
           </div>
         </div>

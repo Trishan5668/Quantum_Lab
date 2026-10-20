@@ -133,7 +133,7 @@ export function AuthProvider({ children }: { children: ReactNode }): JSX.Element
       const nextProfile = {
         ...(profile ?? {
           uid: user.uid,
-          name: user.displayName ?? "QuantumLab User",
+          name: user.displayName ?? "QuantHub User",
           email: user.email ?? "",
           photoURL: user.photoURL ?? "",
           provider: "password",

@@ -6,7 +6,7 @@ A pure-Python, dependency-light state-vector simulator with mathematically
 exact gate matrices and a strict typed API. No Qiskit, no approximations,
 no silent fallbacks — every failure raises a named exception.
 
-This package is the foundation of [QuantumLab](https://github.com/quantumlab),
+This package is the foundation of [QuantHub](https://github.com/quantumlab),
 an open-source educational quantum simulator. It can also be used standalone
 for research, teaching, or as a reference implementation.
 
@@ -56,7 +56,7 @@ one, are recorded with claim labels:
 
 This is not a hardware result and not a claim of novelty. The circuit-level
 surface-code numbers come from Stim and PyMatching, not a native
-QuantumLab executor.
+QuantHub executor.
 
 ```bash
 python -m quantumlab.research.qec audit

@@ -1,9 +1,9 @@
-# QuantumLab Mathematical Foundations
+# QuantHub Mathematical Foundations
 
 ## Chapter 1: Linear Algebra Foundations
 
 ### Complex vectors
-An n-qubit pure state is a unit vector |ψ⟩ ∈ ℂ^(2^n). QuantumLab stores amplitudes as `numpy.complex128` arrays of shape `(2^n,)`.
+An n-qubit pure state is a unit vector |ψ⟩ ∈ ℂ^(2^n). QuantHub stores amplitudes as `numpy.complex128` arrays of shape `(2^n,)`.
 
 ### Inner product
 ⟨φ|ψ⟩ = Σᵢ φᵢ* ψᵢ. Normalization requires ⟨ψ|ψ⟩ = 1 (tolerance 1e−9).
@@ -15,7 +15,7 @@ An n-qubit pure state is a unit vector |ψ⟩ ∈ ℂ^(2^n). QuantumLab stores a
 For single-qubit gates U on wire q of an n-qubit register:
 U_full = G₀ ⊗ G₁ ⊗ … ⊗ G_{n−1} where Gᵢ = U if i = q, else I.
 
-QuantumLab builds this via `numpy.kron` in `_operators.py`.
+QuantHub builds this via `numpy.kron` in `_operators.py`.
 
 ### Unitary matrices
 A gate U satisfies U†U = I. Validated by `assert_valid_gate` with tolerance 1e−10.
@@ -37,7 +37,7 @@ Single-qubit pure states map to (θ, φ) via reduced density matrix:
 ### Born rule
 Measurement probability of basis state |i⟩ is pᵢ = |aᵢ|² for pure states, or pᵢ = ρᵢᵢ for density matrices.
 
-### Measurement in QuantumLab
+### Measurement in QuantHub
 The M gate is a visualization marker — it does not collapse the state. Probabilities are always computed from the full post-circuit state.
 
 ---
@@ -122,7 +122,7 @@ H on qubit 0, then CNOT(0,1):
 ρ' = U ρ U† for unitary U.
 
 ### Partial trace
-ρ_A = Tr_B(ρ_AB). QuantumLab traces out qubits not in `keep_qubits` (sorted ascending).
+ρ_A = Tr_B(ρ_AB). QuantHub traces out qubits not in `keep_qubits` (sorted ascending).
 
 ### Purity
 P = Tr(ρ²). P = 1 for pure states; P < 1 for mixed states.
@@ -183,7 +183,7 @@ Basis change |j⟩ → (1/√N) Σₖ e^(2πijk/N)|k⟩. Built from H and contro
 ## Chapter 9: Verification Against Qiskit
 
 ### Methodology
-1. Build identical circuit in QuantumLab and Qiskit
+1. Build identical circuit in QuantHub and Qiskit
 2. Apply wire remap: q_qiskit = n − 1 − q_qlab (endianness alignment)
 3. Compare statevectors with atol = 1e−10 (global phase ignored)
 4. Compare probabilities, fidelity, and entropy independently
@@ -205,4 +205,4 @@ python quantum-simulator-core/scripts/generate_math_pdf.py
 
 ---
 
-*QuantumLab v2.0.0 — MIT License. This document accompanies the mathematical audit report.*
+*QuantHub v2.0.0 — MIT License. This document accompanies the mathematical audit report.*

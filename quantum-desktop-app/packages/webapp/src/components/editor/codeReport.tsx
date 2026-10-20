@@ -119,7 +119,7 @@ export function buildCodeReport(input: BuildCodeReportInput): ReportSection[] {
     section(
       "circuit",
       "Quantum Algorithm / Circuit Interpretation",
-      "Mapping between code and the QuantumLab circuit model",
+      "Mapping between code and the QuantHub circuit model",
       circuitMarkdown(input, circuitLabel),
       circuitLatex(input),
       () => <CircuitChapter input={input} circuitLabel={circuitLabel} />,
@@ -262,7 +262,7 @@ function AbstractChapter({
   return (
     <Article>
       <p className="code-report-lead">
-        This report documents a <strong>{languageLabel}</strong> quantum program written in the QuantumLab Editor.
+        This report documents a <strong>{languageLabel}</strong> quantum program written in the QuantHub Editor.
         The linked simulator circuit contains <strong>{circuitLabel}</strong>. Execution status: <strong>{executionLabel}</strong>.
       </p>
       <MetaGrid
@@ -353,7 +353,7 @@ function CircuitChapter({ input, circuitLabel }: { input: BuildCodeReportInput; 
   return (
     <Article>
       <p>
-        QuantumLab maintains a synchronized circuit model used by the simulator preview. The current model is{" "}
+        QuantHub maintains a synchronized circuit model used by the simulator preview. The current model is{" "}
         <strong>{circuitLabel}</strong> with initial state <InlineMath math={`|${input.initialBasisState}\\rangle`} />.
       </p>
       {input.gates.length > 0 ? (
@@ -476,7 +476,7 @@ function LimitationsChapter({ input, analysis }: { input: BuildCodeReportInput; 
     <Article>
       <ul>
         <li>Static analysis cannot prove semantic equivalence between editor code and the simulator circuit.</li>
-        <li>Mathematical sections are derived from the QuantumLab circuit model and detected source patterns.</li>
+        <li>Mathematical sections are derived from the QuantHub circuit model and detected source patterns.</li>
         {input.outputState === "idle" && <li>No execution output was available when this report was generated.</li>}
         {input.outputState === "error" && <li>The most recent execution failed; see Execution Results for diagnostics.</li>}
         {!analysis.hasMeasurement && <li>No explicit measurement operation was detected in the source listing.</li>}
@@ -505,7 +505,7 @@ function ConclusionChapter({ circuitLabel, executionLabel }: { circuitLabel: str
   return (
     <Article>
       <p>
-        This documentation ties the editor source, the QuantumLab circuit ({circuitLabel}), and the latest execution outcome (
+        This documentation ties the editor source, the QuantHub circuit ({circuitLabel}), and the latest execution outcome (
         {executionLabel}) into a single reproducible technical record.
       </p>
     </Article>
@@ -560,7 +560,7 @@ function abstractMarkdown(
   executionLabel: string,
 ): string {
   const languageLabel = EDITOR_LANGUAGES.find((item) => item.id === input.language)?.label ?? input.language;
-  return `QuantumLab code report for ${languageLabel}. Circuit: ${circuitLabel}. Execution: ${executionLabel}. ${analysis.lineCount} lines.`;
+  return `QuantHub code report for ${languageLabel}. Circuit: ${circuitLabel}. Execution: ${executionLabel}. ${analysis.lineCount} lines.`;
 }
 
 function abstractLatex(input: BuildCodeReportInput): string[] {

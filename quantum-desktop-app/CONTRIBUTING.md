@@ -1,6 +1,6 @@
 # Contributing to quantum-desktop-app
 
-The desktop app is the public face of QuantumLab. UI changes need to feel
+The desktop app is the public face of QuantHub. UI changes need to feel
 deliberate and stay inside the design system.
 
 ## House rules

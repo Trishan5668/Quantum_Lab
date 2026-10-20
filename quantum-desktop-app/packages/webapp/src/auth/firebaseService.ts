@@ -53,7 +53,7 @@ export async function ensureUserDocument(user: User): Promise<QuantumLabUser> {
   const now = new Date().toISOString();
   const base = {
     uid: user.uid,
-    name: user.displayName ?? user.email?.split("@")[0] ?? "QuantumLab User",
+    name: user.displayName ?? user.email?.split("@")[0] ?? "QuantHub User",
     email: user.email ?? "",
     photoURL: user.photoURL ?? "",
     provider: providerId(user),
@@ -95,7 +95,7 @@ export function normalizeUser(data: Record<string, unknown>): QuantumLabUser {
   } as UserPreferences;
   return {
     uid: String(data.uid ?? ""),
-    name: String(data.name ?? "QuantumLab User"),
+    name: String(data.name ?? "QuantHub User"),
     email: String(data.email ?? ""),
     photoURL: String(data.photoURL ?? ""),
     provider: String(data.provider ?? "password"),

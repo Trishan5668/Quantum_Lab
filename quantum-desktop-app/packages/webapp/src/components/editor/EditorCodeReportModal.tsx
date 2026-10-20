@@ -64,7 +64,7 @@ export function EditorCodeReportModal({ open, onClose }: EditorCodeReportModalPr
   if (!open) return null;
 
   return (
-    <div className="report-modal" role="dialog" aria-modal="true" aria-label="QuantumLab code report">
+    <div className="report-modal" role="dialog" aria-modal="true" aria-label="QuantHub code report">
       <div className="report-modal-panel">
         <header className="report-modal-header">
           <div className="min-w-0">
@@ -82,7 +82,7 @@ export function EditorCodeReportModal({ open, onClose }: EditorCodeReportModalPr
         <div className="report-modal-body">
           <div className="physics-report-surface code-report-surface physics-report-fullscreen">
             <ReportReader
-              title="QuantumLab Code Report"
+              title="QuantHub Code Report"
               subtitle={subtitle}
               sections={sections}
               metadata={metadata}

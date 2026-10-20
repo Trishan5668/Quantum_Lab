@@ -52,7 +52,7 @@ async def verify_research_payload(
     except WolframUnavailableError as exc:
         return {
             "status": "UNAVAILABLE",
-            "source": "QuantumLab simulated; Wolfram unavailable",
+            "source": "QuantHub simulated; Wolfram unavailable",
             "message": str(exc),
             "query_hash": query_hash,
             "structured_input": structured,
@@ -166,7 +166,7 @@ def _discrepancies(structured: dict[str, Any], wolfram: dict[str, Any]) -> list[
             warnings.append(
                 {
                     "severity": "warning",
-                    "message": "QuantumLab/Wolfram discrepancy detected in final statevector",
+                    "message": "QuantHub/Wolfram discrepancy detected in final statevector",
                     "difference": diff,
                     "affectedCalculation": "stateEvolution",
                     "quantumLab": native_final,

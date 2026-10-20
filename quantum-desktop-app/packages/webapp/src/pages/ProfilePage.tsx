@@ -9,12 +9,12 @@ function formatDate(value: string | undefined): string {
 
 export default function ProfilePage(): JSX.Element {
   const { profile, user, openLogin } = useAuth();
-  const name = profile?.name ?? user?.displayName ?? "QuantumLab User";
+  const name = profile?.name ?? user?.displayName ?? "QuantHub User";
   const photo = profile?.photoURL || user?.photoURL || "";
 
   return (
     <>
-      <PageMeta title="Profile | QuantumLab" description="QuantumLab account profile and simulator activity." />
+      <PageMeta title="Profile | QuantHub" description="QuantHub account profile and simulator activity." />
       <section className="platform-container py-10">
         {!user ? (
           <div className="profile-empty">

@@ -19,7 +19,7 @@ F(ρ, σ) = (Tr √(√ρ σ √ρ))²
 
 When one state is pure, this reduces to the overlap formula.
 
-## Interpretation in QuantumLab
+## Interpretation in QuantHub
 
 | Fidelity | Meaning        |
 |----------|----------------|

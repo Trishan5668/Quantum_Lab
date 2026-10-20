@@ -12,12 +12,12 @@ import { BACKEND_UNAVAILABLE_MESSAGE, apiUrl } from "./config/api";
 export class ApiClientError extends Error {
   readonly code: string;
   readonly status: number;
-  readonly trace: string | null;
-  constructor(code: string, message: string, status: number, trace: string | null) {
+  readonly reference: string | null;
+  constructor(code: string, message: string, status: number, reference: string | null) {
     super(message);
     this.code = code;
     this.status = status;
-    this.trace = trace;
+    this.reference = reference;
   }
 }
 
@@ -59,14 +59,14 @@ async function postJson<TResponse, TBody = unknown>(
   if (!resp.ok) {
     const err = envelope?.error;
     const detail =
-      (envelope as unknown as { detail?: { error?: { code: string; message: string; trace: string | null } } })
+      (envelope as unknown as { detail?: { error?: { code: string; message: string; reference?: string | null } } })
         ?.detail?.error ?? null;
     const e = err ?? detail;
     throw new ApiClientError(
       e?.code ?? "HttpError",
       e?.message ?? `HTTP ${resp.status}`,
       resp.status,
-      e?.trace ?? null,
+      e?.reference ?? null,
     );
   }
 
@@ -75,7 +75,7 @@ async function postJson<TResponse, TBody = unknown>(
       envelope.error.code,
       envelope.error.message,
       resp.status,
-      envelope.error.trace,
+      envelope.error.reference ?? null,
     );
   }
   if (envelope.data === null || envelope.data === undefined) {
@@ -199,17 +199,17 @@ export async function streamExplain(
     let detail: ApiClientError;
     try {
       const body = (await resp.json()) as
-        | { detail?: { error?: { code: string; message: string; trace: string | null } } }
+        | { detail?: { error?: { code: string; message: string; reference?: string | null } } }
         | ApiEnvelope<unknown>;
       const e =
-        (body as { detail?: { error?: { code: string; message: string; trace: string | null } } }).detail?.error ??
+        (body as { detail?: { error?: { code: string; message: string; reference?: string | null } } }).detail?.error ??
         (body as ApiEnvelope<unknown>).error ??
         null;
       detail = new ApiClientError(
         e?.code ?? "HttpError",
         e?.message ?? `HTTP ${resp.status}`,
         resp.status,
-        e?.trace ?? null,
+        e?.reference ?? null,
       );
     } catch {
       detail = new ApiClientError("HttpError", `HTTP ${resp.status}`, resp.status, null);

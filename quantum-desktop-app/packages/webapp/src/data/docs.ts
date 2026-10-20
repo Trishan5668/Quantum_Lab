@@ -80,7 +80,7 @@ Browser/Electron → React UI → FastAPI → quantumlab Python core
     summary: "Pure states as complex amplitude vectors in Hilbert space.",
     content: `An n-qubit pure state is a unit vector |ψ⟩ in ℂ^(2ⁿ).
 
-QuantumLab uses **big-endian** indexing: qubit 0 is the most significant bit in the basis label |q₀q₁…⟩.
+QuantHub uses **big-endian** indexing: qubit 0 is the most significant bit in the basis label |q₀q₁…⟩.
 
 The simulator normalizes after every gate and reports measurement probabilities |aᵢ|².`,
   },

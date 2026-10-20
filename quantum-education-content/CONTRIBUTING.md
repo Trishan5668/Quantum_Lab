@@ -9,7 +9,7 @@ Curricula live here. Be ruthless about pedagogical clarity.
 3. Add the hints referenced in the mission to `hints/<hint_id>.txt`.
    One hint per file. Plain UTF-8 text, no markdown.
 4. Add the reference solution to `solutions/<solution_id>.json` as a
-   QuantumLab circuit definition.
+   QuantHub circuit definition.
 5. Verify the mission loads in the desktop app and the solution
    actually meets the success condition (run it once, confirm
    fidelity ≥ threshold).

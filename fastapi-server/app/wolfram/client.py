@@ -59,7 +59,7 @@ class WolframClient:
 
     The default implementation records the exact Wolfram Language payload and
     uses WolframAlpha's JSON endpoint when an APP ID is configured. The parser
-    normalizes Wolfram Alpha v2 pods into QuantumLab's verification schema;
+    normalizes Wolfram Alpha v2 pods into QuantHub's verification schema;
     tests may replace this client with a deterministic fake that returns the
     same schema.
     """

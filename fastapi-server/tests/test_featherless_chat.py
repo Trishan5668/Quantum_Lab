@@ -68,7 +68,7 @@ async def test_successful_featherless_request_uses_model_and_context() -> None:
     assert seen["headers"]["authorization"] == "Bearer test-secret"  # type: ignore[index]
     assert seen["url"] == CHAT_COMPLETIONS_URL
     messages = seen["body"]["messages"]  # type: ignore[index]
-    assert any("Current QuantumLab context" in item["content"] for item in messages)
+    assert any("Current QuantHub context" in item["content"] for item in messages)
     assert "test-secret" not in str(seen["body"])
 
 

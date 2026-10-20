@@ -520,7 +520,7 @@ function TitlePage({
     ["Qubits", valueOrDash(metadata.qubitCount)],
     ["Gates", valueOrDash(metadata.gateCount)],
     ["Initial state", metadata.initialState ?? "not specified"],
-    ["QuantumLab version", metadata.quantumLabVersion ?? pkg.version],
+    ["QuantHub version", metadata.quantumLabVersion ?? pkg.version],
     ["Author", metadata.authorName ?? "Unsigned local user"],
     ["Report ID", reportId],
     ["Report hash", reportHash],
@@ -529,7 +529,7 @@ function TitlePage({
     <header className="report-title-block report-title-page">
       <div className="report-title-row">
         <div>
-          <p className="report-eyebrow">QuantumLab Research Report</p>
+          <p className="report-eyebrow">QuantHub Research Report</p>
           <h2>{title}</h2>
           {subtitle && <p>{subtitle}</p>}
         </div>
@@ -791,11 +791,11 @@ function reportLatex(
     "\\pagestyle{fancy}",
     "\\fancyhf{}",
     `\\lhead{${escapeLatex(metadata.reportKind ?? title)}}`,
-    "\\rhead{QuantumLab}",
+    "\\rhead{QuantHub}",
     "\\cfoot{\\thepage}",
     "\\begin{document}",
     `\\title{${escapeLatex(title)}}`,
-    `\\author{${escapeLatex(metadata.authorName ?? "QuantumLab User")}}`,
+    `\\author{${escapeLatex(metadata.authorName ?? "QuantHub User")}}`,
     `\\date{${escapeLatex(formatDate(metadata.generatedAt))}}`,
     "\\maketitle",
     subtitle ? `\\begin{abstract}${escapeLatex(subtitle)}\\end{abstract}` : "",
@@ -886,7 +886,7 @@ function metadataMarkdown(metadata: ReportMetadata, reportId: string, reportHash
     `- Simulation mode: ${metadata.simulationMode ?? "Statevector"}`,
     `- Noise model: ${metadata.noiseModel ?? "Ideal"}`,
     `- Generated: ${formatDate(metadata.generatedAt)}`,
-    `- QuantumLab version: ${metadata.quantumLabVersion ?? pkg.version}`,
+    `- QuantHub version: ${metadata.quantumLabVersion ?? pkg.version}`,
     `- Author: ${metadata.authorName ?? "Unsigned local user"}`,
     `- Report ID: ${reportId}`,
     `- Report hash: ${reportHash}`,
@@ -902,7 +902,7 @@ function metadataLatex(metadata: ReportMetadata, reportId: string, reportHash: s
     ["Simulation mode", metadata.simulationMode ?? "Statevector"],
     ["Noise model", metadata.noiseModel ?? "Ideal"],
     ["Generated", formatDate(metadata.generatedAt)],
-    ["QuantumLab version", metadata.quantumLabVersion ?? pkg.version],
+    ["QuantHub version", metadata.quantumLabVersion ?? pkg.version],
     ["Report ID", reportId],
     ["Report hash", reportHash],
   ];

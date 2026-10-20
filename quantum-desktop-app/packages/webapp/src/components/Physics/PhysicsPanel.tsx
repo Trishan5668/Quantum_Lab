@@ -91,9 +91,9 @@ export function PhysicsPanel(): JSX.Element {
       title="Physics"
       subtitle="Why the circuit behaves this way"
       actions={
-        <FullscreenReport label="Physics fullscreen" title="QuantumLab Physics Report" subtitle={subtitle}>
+        <FullscreenReport label="Physics fullscreen" title="QuantHub Physics Report" subtitle={subtitle}>
           <div className="physics-report-surface physics-report-fullscreen">
-            <ReportReader title="QuantumLab Physics Report" subtitle={subtitle} sections={sections} metadata={metadata} />
+            <ReportReader title="QuantHub Physics Report" subtitle={subtitle} sections={sections} metadata={metadata} />
           </div>
         </FullscreenReport>
       }
@@ -102,7 +102,7 @@ export function PhysicsPanel(): JSX.Element {
         <PanelPlaceholder>Run the circuit to bind this report to the latest simulator output.</PanelPlaceholder>
       )}
       <div className="physics-report-surface">
-        <ReportReader title="QuantumLab Physics Report" subtitle={subtitle} sections={sections} metadata={metadata} compact />
+        <ReportReader title="QuantHub Physics Report" subtitle={subtitle} sections={sections} metadata={metadata} compact />
       </div>
     </PanelSection>
   );

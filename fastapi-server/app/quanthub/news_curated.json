@@ -1,0 +1,121 @@
+{
+  "schema_version": "1.0",
+  "notice": "Individually verified snapshot. Each item was opened at its publisher URL on the verification date below. This file is not a live feed and must never be labelled as one.",
+  "items": [
+    {
+      "id": "anthropic-claude-quantum-circuits",
+      "title": "Anthropic's Claude Designs Leaner Quantum Circuits, Reducing Resources Needed for Key Calculations",
+      "summary": "Anthropic and Harvard researchers report using an AI system, identified in Anthropic's accompanying blog post as Claude Mythos 5, to redesign eight quantum computational building blocks. The preprint states that seven of the eight designs reduced both costly quantum operations and peak qubit requirements versus the study's baselines, and that one redesigned decoding circuit needed about 440,000 Toffoli gates instead of 5.1 million, with peak qubits falling from 1,938 to 1,837. The work was evaluated through computational checks and resource estimates, not by running calculations on quantum hardware.",
+      "source": "The Quantum Insider",
+      "url": "https://thequantuminsider.com/2026/10/17/anthropics-claude-designs-leaner-quantum-circuits-reducing-resources-needed-for-key-calculations/",
+      "published_at": "2026-10-17",
+      "tags": ["circuit-optimization", "algorithms", "research", "resource-estimation"],
+      "category": "algorithms",
+      "kind": "news",
+      "verified_at": "2026-10-20",
+      "verification": "Article fetched 2026-10-20; headline, author, publication date (17 October 2026), model name and resource figures confirmed on the publisher page, which links the arXiv preprint and Anthropic's blog post.",
+      "related": [
+        "https://arxiv.org/abs/2610.22367",
+        "https://www.anthropic.com/research/designing-efficient-quantum-circuits"
+      ]
+    },
+    {
+      "id": "google-magic-state-cultivation",
+      "title": "Bringing the magic: Google breaks open a bottleneck in quantum computing",
+      "summary": "Google Quantum AI reports demonstrating magic state cultivation on its Willow superconducting processor, with roughly a 40-fold error reduction relative to uncultivated states and T-states at 99.99% logical fidelity, published in Science. The post describes grafting states from a distance-3 colour code to a distance-5 surface code. Google states that larger-scale demonstrations are still required.",
+      "source": "Google (The Keyword)",
+      "url": "https://blog.google/innovation-and-ai/models-and-research/quantum-computing/magic-state-cultivation-quantum-computing/",
+      "published_at": "2026-10-15",
+      "tags": ["hardware", "qec", "magic-states", "fault-tolerance"],
+      "category": "hardware",
+      "kind": "announcement",
+      "verified_at": "2026-10-20",
+      "verification": "Publisher page fetched 2026-10-20; date 15 October 2026 shown on page. Figures are the authors' reported results, not independently re-measured by QuantHub.",
+      "related": ["https://www.science.org/doi/10.1126/science.aee7961"]
+    },
+    {
+      "id": "ibm-nighthawk-surface-code",
+      "title": "Demonstration of Logical Error Suppression in a Surface Code Memory on a Cloud-Accessible IBM Superconducting Processor",
+      "summary": "A preprint reports rotated surface-code memory experiments on an IBM Nighthawk r2 processor, with memory experiments of up to 150 rounds. The authors report that an optimised syndrome-extraction circuit reduced median per-round logical error rates by factors of 3.8 (X basis) and 1.4 (Z basis) relative to standard readout, and that increasing the protected distance from 3 to 6 reduced per-round logical error from 0.53% to 0.24% (Z) and 0.52% to 0.22% (X), with suppression factors of 1.68 and 1.85 under maximum-likelihood decoding. The preprint also reports that the distance advantage weakens over long runs alongside long-lived correlations. This is a preprint and has not been peer reviewed.",
+      "source": "arXiv (quant-ph)",
+      "url": "https://arxiv.org/abs/2610.23840",
+      "published_at": "2026-10-16",
+      "tags": ["qec", "hardware", "surface-code", "preprint"],
+      "category": "qec",
+      "kind": "preprint",
+      "verified_at": "2026-10-20",
+      "verification": "arXiv abstract page fetched 2026-10-20; submission date 16 October 2026 and all quoted figures confirmed in the abstract.",
+      "related": []
+    },
+    {
+      "id": "works-on-my-qpu-reproducibility",
+      "title": "Works on My QPU: Reproducibility in Quantum Computing Research",
+      "summary": "A preprint evaluates 127 quantum computing papers against a five-question framework covering code availability, environment specification, documentation, hardware description and executability, and screens nearly 5,000 further papers for the same indicators. It reports a code-availability rate of about 26.8% and finds that roughly one-third of papers with accessible code lack machine-readable environment specifications. The authors conclude that reproducibility is not yet consistently achieved and propose practical recommendations.",
+      "source": "arXiv (quant-ph)",
+      "url": "https://arxiv.org/abs/2607.08348",
+      "published_at": "2026-07-09",
+      "tags": ["reproducibility", "benchmarks", "research-practice"],
+      "category": "benchmarks",
+      "kind": "preprint",
+      "verified_at": "2026-10-20",
+      "verification": "arXiv abstract page searched and cited content reviewed 2026-10-20; submission date 9 July 2026 (v2 3 August 2026). Findings are the authors' and not peer reviewed.",
+      "related": []
+    },
+    {
+      "id": "qiskit-2-5-release",
+      "title": "Release News: Qiskit v2.5 is here!",
+      "summary": "IBM released Qiskit SDK v2.5 with a compiler abstraction for multiple intermediate representations, classical control-flow inspection in the C API, dedicated preset pass managers for Pauli-based computation and Clifford+T, and transpiler speedups from LightSabre changes and multithreading. IBM also renamed Qiskit Runtime Service to IBM Quantum Compute Service, stating that there are no API or workflow changes. Qiskit 1.x reached end of life with 1.4.6 on 12 June 2026.",
+      "source": "IBM Quantum Blog",
+      "url": "https://www.ibm.com/quantum/blog/qiskit-2-5-release-summary",
+      "published_at": "2026-07-14",
+      "tags": ["software", "compiler", "qiskit", "circuit-optimization"],
+      "category": "software",
+      "kind": "release",
+      "verified_at": "2026-10-20",
+      "verification": "Publisher page fetched 2026-10-20; dated 14 July 2026 with the quoted feature list.",
+      "related": []
+    },
+    {
+      "id": "eth-lattice-surgery",
+      "title": "A clever quantum trick brings practical quantum computers closer",
+      "summary": "ETH Zurich reports that researchers led by Andreas Wallraff demonstrated lattice surgery between superconducting logical qubits while error correction continued, splitting a distance-3 surface code encoded on 17 physical qubits into two entangled logical qubits, with stabilizers measured every 1.66 microseconds. The work was published in Nature Physics. The researchers note that 41 physical qubits would be needed for a splitting operation that is also stabilised against phase flips.",
+      "source": "ScienceDaily (ETH Zurich)",
+      "url": "https://www.sciencedaily.com/releases/2026/02/260206012208.htm",
+      "published_at": "2026-02-06",
+      "tags": ["qec", "hardware", "lattice-surgery", "superconducting"],
+      "category": "qec",
+      "kind": "research-summary",
+      "verified_at": "2026-10-20",
+      "verification": "Publisher page fetched 2026-10-20; dated 6 February 2026, sourced to ETH Zurich, and describes the Nature Physics publication.",
+      "related": []
+    },
+    {
+      "id": "google-dynamic-surface-codes",
+      "title": "Dynamic surface codes open new avenues for quantum error correction",
+      "summary": "Google Quantum AI reports operating dynamic surface-code circuits on its Willow processor using hexagonal, walking and iSWAP circuit constructions that periodically retile detecting regions. Using the three-coupler hexagonal circuit on square-connectivity hardware with unused couplers turned off, the team reports that scaling code distance from 3 to 5 improved the logical error rate by a factor of 2.15, matching a static circuit on the same hardware. The work was published in Nature Physics.",
+      "source": "Google Research Blog",
+      "url": "https://research.google/blog/dynamic-surface-codes-open-new-avenues-for-quantum-error-correction/",
+      "published_at": "2026-01-13",
+      "tags": ["qec", "hardware", "surface-code"],
+      "category": "qec",
+      "kind": "announcement",
+      "verified_at": "2026-10-20",
+      "verification": "Publisher page fetched 2026-10-20; dated 13 January 2026 and links the Nature Physics paper.",
+      "related": ["https://www.nature.com/articles/s41567-025-03070-w"]
+    },
+    {
+      "id": "microsoft-qdk-developer-tools",
+      "title": "Powerful new developer tools increase the versatility of the Microsoft Quantum platform",
+      "summary": "Microsoft announced an updated open-source Quantum Development Kit with VS Code and GitHub Copilot integration, domain libraries for error correction and chemistry, and a qubit-virtualisation system that generates logical qubits from physical hardware. Microsoft states that chemistry-aware algorithms can reduce circuit depth sharply for certain problems. These are vendor-described capabilities; the post does not report independent benchmarks.",
+      "source": "Microsoft Azure Quantum Blog",
+      "url": "https://azure.microsoft.com/en-us/blog/quantum/2026/01/22/powerful-new-developer-tools-increase-the-versatility-of-the-microsoft-quantum-platform/",
+      "published_at": "2026-01-22",
+      "tags": ["software", "developer-tools", "qec", "chemistry"],
+      "category": "software",
+      "kind": "release",
+      "verified_at": "2026-10-20",
+      "verification": "Publisher page fetched 2026-10-20; URL path and page content correspond to the 22 January 2026 announcement.",
+      "related": []
+    }
+  ]
+}

@@ -139,7 +139,7 @@ function GateStackingChapter({ ctx }: { ctx: PhysicsContext }): JSX.Element {
   return (
     <ArticleChapter>
       <Lead>
-        Gate stacking means QuantumLab treats repeated gates at one circuit location as one effective unitary power. {stacked.length ? `This circuit has ${stacked.length} stacked placement${stacked.length === 1 ? "" : "s"}.` : "This circuit has no stacked placements yet."}
+        Gate stacking means QuantHub treats repeated gates at one circuit location as one effective unitary power. {stacked.length ? `This circuit has ${stacked.length} stacked placement${stacked.length === 1 ? "" : "s"}.` : "This circuit has no stacked placements yet."}
       </Lead>
       {stacked.length ? (
         <>
@@ -190,7 +190,7 @@ function HilbertChapter({ ctx }: { ctx: PhysicsContext }): JSX.Element {
   return (
     <ArticleChapter>
       <Lead>
-        Your circuit is a physical story about a vector in a Hilbert space, not merely a list of gates. With {ctx.numQubits} qubit{ctx.numQubits === 1 ? "" : "s"}, the relevant space has {ctx.dim} mutually distinguishable computational directions. QuantumLab tracks one complex amplitude for each direction, and the collection of those amplitudes is the wavefunction that every later chapter interprets.
+        Your circuit is a physical story about a vector in a Hilbert space, not merely a list of gates. With {ctx.numQubits} qubit{ctx.numQubits === 1 ? "" : "s"}, the relevant space has {ctx.dim} mutually distinguishable computational directions. QuantHub tracks one complex amplitude for each direction, and the collection of those amplitudes is the wavefunction that every later chapter interprets.
       </Lead>
       <p>
         The important physics is that a qubit register does not choose one classical string while the circuit evolves. Instead, the register carries a coherent amplitude distribution across the basis strings. In this run, the final state has observable support on {ctx.support.length} of the {ctx.dim} basis directions. The remaining {ctx.quietBasisCount} directions have probability below numerical tolerance, which means this particular circuit did not leave measurable population there after all interference effects were accounted for.
@@ -212,7 +212,7 @@ function ComputationalBasisChapter({ ctx }: { ctx: PhysicsContext }): JSX.Elemen
   return (
     <ArticleChapter>
       <Lead>
-        The computational basis is the set of mutually distinguishable outcomes that would appear if every qubit were measured in the standard readout basis. For this {ctx.numQubits}-qubit circuit, QuantumLab labels those directions as bit strings such as {labels.join(", ")}{ctx.dim > labels.length ? ", ..." : ""}.
+        The computational basis is the set of mutually distinguishable outcomes that would appear if every qubit were measured in the standard readout basis. For this {ctx.numQubits}-qubit circuit, QuantHub labels those directions as bit strings such as {labels.join(", ")}{ctx.dim > labels.length ? ", ..." : ""}.
       </Lead>
       <p>
         These labels are not extra mathematics placed on top of the physics. They are the possible classical records a measurement device can return. The Hilbert-space vector is expressed in this basis so the simulator can say how much amplitude sits on each possible detector outcome. Orthogonality means that two different labels represent experimentally distinguishable alternatives.
@@ -238,7 +238,7 @@ function InitialStateChapter({ ctx }: { ctx: PhysicsContext }): JSX.Element {
   return (
     <ArticleChapter>
       <Lead>
-        QuantumLab prepares this circuit in {displayKet(ctx.initialBasisState)}. Physically, that means the register begins in a pure computational basis state before any gate has been applied.
+        QuantHub prepares this circuit in {displayKet(ctx.initialBasisState)}. Physically, that means the register begins in a pure computational basis state before any gate has been applied.
       </Lead>
       <p>
         This starting condition is intentionally sharp. No superposition exists initially: one selected basis amplitude is one, all other basis amplitudes are zero, and measurement in the computational basis would be deterministic before evolution begins.
@@ -261,7 +261,7 @@ function SuperpositionChapter({ ctx }: { ctx: PhysicsContext }): JSX.Element {
   return (
     <ArticleChapter>
       <Lead>
-        Superposition in this circuit means the final wavefunction cannot be described as a single occupied computational basis string. QuantumLab finds {ctx.support.length} populated basis component{ctx.support.length === 1 ? "" : "s"} above tolerance, so the physical reading is {ctx.support.length === 1 ? "a definite basis outcome for the final state" : "a coherent spread of alternatives that remain simultaneously present until measurement"}.
+        Superposition in this circuit means the final wavefunction cannot be described as a single occupied computational basis string. QuantHub finds {ctx.support.length} populated basis component{ctx.support.length === 1 ? "" : "s"} above tolerance, so the physical reading is {ctx.support.length === 1 ? "a definite basis outcome for the final state" : "a coherent spread of alternatives that remain simultaneously present until measurement"}.
       </Lead>
       <p>
         The gates that most directly create or reshape superposition here are {gateList(ctx.gates.filter((gate) => gate.gateType === "H" || ["RX", "RY"].includes(gate.gateType)))}. A Hadamard pulse changes a qubit from a sharp computational-basis description into an equal pair of phase-sensitive alternatives. A rotation gate changes the state continuously, as if a spinor were precessing under a controlled Hamiltonian. These are different physical mechanisms, but both have the same consequence: amplitudes become shared among basis labels instead of living in a single label.
@@ -333,7 +333,7 @@ function EntanglementChapter({ ctx }: { ctx: PhysicsContext }): JSX.Element {
       </p>
       <Proof title="Reduced purity separability test">
         <p>
-          For a global pure state, a subsystem is pure exactly when it is not entangled with the complementary subsystem. QuantumLab computes the reduced state by summing over the unobserved basis labels.
+          For a global pure state, a subsystem is pure exactly when it is not entangled with the complementary subsystem. QuantHub computes the reduced state by summing over the unobserved basis labels.
         </p>
         <Equation math={"(\\rho_A)_{ij}=\\sum_b \\rho_{ib,jb}"} />
         <Equation math={reducedMatrixLatex(ctx.reduced)} />
@@ -350,7 +350,7 @@ function MeasurementChapter({ ctx }: { ctx: PhysicsContext }): JSX.Element {
   return (
     <ArticleChapter>
       <Lead>
-        Measurement turns the wavefunction into a classical record. QuantumLab reports the Born-rule distribution for this circuit but keeps the explanatory wavefunction intact, so the report can still analyze phase, density operators, and subsystem structure after the probabilities are computed.
+        Measurement turns the wavefunction into a classical record. QuantHub reports the Born-rule distribution for this circuit but keeps the explanatory wavefunction intact, so the report can still analyze phase, density operators, and subsystem structure after the probabilities are computed.
       </Lead>
       <MeasurementBars ctx={ctx} />
       <p>

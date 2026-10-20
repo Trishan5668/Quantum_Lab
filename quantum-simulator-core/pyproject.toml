@@ -5,11 +5,11 @@ build-backend = "setuptools.build_meta"
 [project]
 name = "quantumlab"
 version = "2.0.0"
-description = "QuantumLab core: pure NumPy quantum circuit simulator."
+description = "QuantHub core: pure NumPy quantum circuit simulator."
 readme = "README.md"
 requires-python = ">=3.11"
 license = { text = "MIT" }
-authors = [{ name = "QuantumLab Contributors" }]
+authors = [{ name = "QuantHub Contributors" }]
 keywords = ["quantum", "simulator", "numpy", "education"]
 classifiers = [
     "Development Status :: 4 - Beta",

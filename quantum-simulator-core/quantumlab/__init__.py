@@ -1,4 +1,4 @@
-"""QuantumLab core: pure NumPy quantum circuit simulator."""
+"""QuantHub core: pure NumPy quantum circuit simulator."""
 
 from __future__ import annotations
 

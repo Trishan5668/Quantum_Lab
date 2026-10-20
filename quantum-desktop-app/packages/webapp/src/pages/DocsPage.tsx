@@ -21,7 +21,7 @@ export default function DocsPage(): JSX.Element {
         <SectionHeader
           eyebrow="Docs"
           title="Production documentation"
-          subtitle="Everything you need to install, understand, and use QuantumLab."
+          subtitle="Everything you need to install, understand, and use QuantHub."
         />
         <div className="grid gap-8 lg:grid-cols-[220px_1fr]">
           <nav className="space-y-4" aria-label="Documentation categories">

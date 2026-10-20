@@ -152,7 +152,8 @@ export interface AIChatResponse {
 export interface ApiError {
   code: string;
   message: string;
-  trace: string | null;
+  /** Opaque correlation id for server logs; never a stack trace. */
+  reference?: string | null;
 }
 
 export interface ApiEnvelope<T> {

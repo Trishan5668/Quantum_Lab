@@ -1,6 +1,6 @@
 # Noise Models
 
-Real qubits decohere. QuantumLab V2 simulates common **CPTP channels** using Kraus operators.
+Real qubits decohere. QuantHub simulates common **CPTP channels** using Kraus operators.
 
 ## Amplitude damping (T1)
 
@@ -25,7 +25,7 @@ With probability p, the qubit undergoes a random Pauli (X, Y, or Z) error; other
 
 ## Superconducting qubit context
 
-Paik et al. (2011) reported T1 up to ~60 μs and T2 ~ 25 μs for transmon qubits. QuantumLab's T1/T2 preset uses similar educational defaults (T1 = 50 μs, T2 = 25 μs).
+Paik et al. (2011) reported T1 up to ~60 μs and T2 ~ 25 μs for transmon qubits. QuantHub's T1/T2 preset uses similar educational defaults (T1 = 50 μs, T2 = 25 μs).
 
 ## In the UI
 
