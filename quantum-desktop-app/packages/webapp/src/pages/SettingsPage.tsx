@@ -21,7 +21,7 @@ export default function SettingsPage(): JSX.Element {
 
   return (
     <>
-      <PageMeta title="Settings | QuantumLab" description="QuantumLab account and simulator preferences." />
+      <PageMeta title="Settings | QuantHub" description="QuantHub account and simulator preferences." />
       <section className="platform-container py-10">
         <div className="settings-head">
           <div>

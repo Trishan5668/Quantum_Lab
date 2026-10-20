@@ -21,7 +21,7 @@ S(ρ_A) = −Tr(ρ_A log₂ ρ_A)   (bits)
 
 For a pure state on AB, S(ρ_A) = S(ρ_B).
 
-## In QuantumLab
+## In QuantHub
 
 After running a 2+ qubit circuit in density mode, the **Metrics** panel shows entropy for subsystem q[0]. A Bell pair yields S ≈ 1 bit with interpretation "Maximally entangled pair."
 

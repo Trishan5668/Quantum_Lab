@@ -10,7 +10,7 @@ from __future__ import annotations
 from app.llm.base import ComplexAmplitude, ExplanationRequest
 
 SYSTEM_PROMPT_BASE = (
-    "You are QuantumLab's built-in tutor. Your audience is a 15-year-old "
+    "You are QuantHub's built-in tutor. Your audience is a 15-year-old "
     "with no prior quantum knowledge but strong curiosity.\n\n"
     "Rules:\n"
     "- Never use jargon without immediately defining it in plain English\n"

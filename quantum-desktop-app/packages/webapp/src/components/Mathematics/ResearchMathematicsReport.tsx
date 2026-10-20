@@ -82,11 +82,11 @@ export function ResearchMathematicsReport(props: ResearchMathematicsReportProps)
     <div className="research-math-report">
       <VerificationBanner verification={verification} error={verificationError} />
       <div className="mb-2 flex justify-end">
-        <FullscreenReport label="Research mathematics fullscreen" title="QuantumLab Research Mathematics" subtitle={subtitle}>
-          <ReportReader title="QuantumLab Research Mathematics" subtitle={subtitle} sections={sections} metadata={props.metadata} />
+        <FullscreenReport label="Research mathematics fullscreen" title="QuantHub Research Mathematics" subtitle={subtitle}>
+          <ReportReader title="QuantHub Research Mathematics" subtitle={subtitle} sections={sections} metadata={props.metadata} />
         </FullscreenReport>
       </div>
-      <ReportReader title="QuantumLab Research Mathematics" subtitle={subtitle} sections={sections} metadata={props.metadata} compact />
+      <ReportReader title="QuantHub Research Mathematics" subtitle={subtitle} sections={sections} metadata={props.metadata} compact />
     </div>
   );
 }

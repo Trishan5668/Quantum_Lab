@@ -11,7 +11,7 @@ export const RESEARCH_TOPICS: ResearchTopic[] = [
     slug: "noise",
     title: "Quantum Noise",
     summary: "Decoherence channels and their Kraus operator representations.",
-    content: `Real hardware couples qubits to the environment. QuantumLab models common channels:
+    content: `Real hardware couples qubits to the environment. QuantHub models common channels:
 
 - **Amplitude damping** — T1 energy relaxation
 - **Phase damping** — T2 dephasing
@@ -30,7 +30,7 @@ Apply noise to evolve density matrices and track purity loss.`,
     summary: "Reconstructing ρ from measurement statistics.",
     content: `State tomography estimates the density matrix from repeated measurements in different bases.
 
-For n qubits, exhaustive tomography requires 3ⁿ − 1 independent parameters. QuantumLab's density visualization helps validate reconstructed states against theoretical targets.`,
+For n qubits, exhaustive tomography requires 3ⁿ − 1 independent parameters. QuantHub's density visualization helps validate reconstructed states against theoretical targets.`,
     references: [
       "Paris & Řeháček, Quantum State Estimation",
       "Blume-Kohout, Optimal, reliable estimation of quantum states",
@@ -56,7 +56,7 @@ Use the Metrics panel to compute entropy and fidelity against reference states.`
     summary: "Protecting logical qubits from physical noise.",
     content: `QEC encodes logical information across many physical qubits. The threshold theorem shows that if physical error rates are below a threshold, arbitrarily long computations are possible.
 
-QuantumLab's noise models help build intuition for how error rates degrade fidelity before introducing full stabilizer codes.`,
+QuantHub's noise models help build intuition for how error rates degrade fidelity before introducing full stabilizer codes.`,
     references: [
       "Shor, Fault-tolerant quantum computation",
       "Gottesman, Stabilizer codes and quantum error correction",
@@ -72,7 +72,7 @@ QuantumLab's noise models help build intuition for how error rates degrade fidel
 - **Trapped ions** (IonQ, Quantinuum) — high fidelity, slower gates
 - **Photonic** (Xanadu, PsiQuantum) — room temperature, measurement-based
 
-T1/T2 noise presets in QuantumLab approximate realistic decoherence timescales.`,
+T1/T2 noise presets in QuantHub approximate realistic decoherence timescales.`,
     references: [
       "IBM Quantum Documentation",
       "Preskill, NISQ era and beyond",

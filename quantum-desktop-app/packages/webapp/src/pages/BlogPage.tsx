@@ -5,13 +5,13 @@ import { SectionHeader } from "../components/platform/SectionHeader";
 const POSTS = [
   {
     slug: "platform-v1",
-    title: "Introducing the QuantumLab Platform",
+    title: "Introducing the QuantHub Platform",
     date: "2026",
     summary: "One unified ecosystem: simulator, learning, algorithms, and documentation.",
   },
   {
     slug: "v2-density-noise",
-    title: "QuantumLab v2: Density Matrices & Noise",
+    title: "QuantHub v2: Density Matrices & Noise",
     date: "2026",
     summary: "Mixed-state simulation, Kraus channels, fidelity, and entanglement entropy.",
   },
@@ -20,7 +20,7 @@ const POSTS = [
 export default function BlogPage(): JSX.Element {
   return (
     <>
-      <PageMeta title="Blog" description="QuantumLab platform updates and quantum computing insights." />
+      <PageMeta title="Blog" description="QuantHub platform updates and quantum computing insights." />
       <div className="platform-container max-w-3xl py-12 sm:py-16">
         <SectionHeader eyebrow="Blog" title="Updates & insights" subtitle="Platform news and quantum education." />
         <div className="space-y-4">

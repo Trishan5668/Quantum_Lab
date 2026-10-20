@@ -1,4 +1,9 @@
-"""FastAPI entrypoint for the QuantumLab bridge service."""
+"""FastAPI entrypoint for the QuantHub API.
+
+QuantHub is the product name; the ``quantumlab`` Python distribution keeps its
+import path so existing clients, saved artifacts and deployments continue to
+work.
+"""
 
 from __future__ import annotations
 
@@ -14,6 +19,10 @@ from app.exceptions import (
     unexpected_exception_handler,
 )
 from app.models import HealthOut, envelope
+from app.quanthub.config import validate_configuration
+from app.quanthub.db import init_db
+from app.quanthub.errors import HubError, hub_error_handler
+from app.quanthub.router import router as quanthub_router
 from app.routes.ai import router as ai_router
 from app.routes.circuit import router as circuit_router
 from app.routes.editor import router as editor_router
@@ -38,11 +47,16 @@ def cors_origins_from_env() -> list[str]:
 
 
 def create_app() -> FastAPI:
+    # Fail fast and loudly on an unsafe or ambiguous deployment configuration.
+    # ``ConfigError`` carries an actionable message and never includes secrets.
+    validate_configuration()
+
     app = FastAPI(
-        title="QuantumLab API",
+        title="QuantHub API",
         description=(
-            "JSON-over-HTTP bridge between the QuantumLab desktop client "
-            "and the quantum-simulator-core Python engine."
+            "QuantHub API: project hosting, file management, experiment "
+            "execution and the quantum-simulator-core engine. The historical "
+            "/api/v1 and /api/v2 simulator routes are unchanged."
         ),
         version=SERVER_VERSION,
     )
@@ -51,7 +65,7 @@ def create_app() -> FastAPI:
         CORSMiddleware,
         allow_origins=cors_origins_from_env(),
         allow_credentials=False,
-        allow_methods=["GET", "POST", "OPTIONS"],
+        allow_methods=["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
         allow_headers=["*"],
     )
 
@@ -62,9 +76,17 @@ def create_app() -> FastAPI:
     app.include_router(v2_router)
     app.include_router(editor_router)
     app.include_router(research_router)
+    app.include_router(quanthub_router)
+
+    init_db()
 
     app.add_exception_handler(QuantumLabError, quantumlab_exception_handler)
+    app.add_exception_handler(HubError, hub_error_handler)
     app.add_exception_handler(Exception, unexpected_exception_handler)
+
+    @app.on_event("startup")
+    async def _startup() -> None:
+        init_db()
 
     @app.get("/api/v1/health")
     async def health() -> dict[str, object]:

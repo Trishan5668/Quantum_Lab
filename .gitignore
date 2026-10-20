@@ -1,5 +1,5 @@
 # =============================================================================
-# QuantumLab -- repo-wide gitignore
+# QuantHub -- repo-wide gitignore
 # =============================================================================
 
 # --- Secrets / env files ---
@@ -57,3 +57,7 @@ Desktop.ini
 
 # --- Cursor scratch ---
 .cursor/
+
+# --- QuantHub local data (SQLite, bare repos, run artifacts) ---
+.quanthub-data/
+.quanthub-data-*/

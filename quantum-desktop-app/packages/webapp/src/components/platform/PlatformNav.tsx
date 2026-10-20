@@ -3,6 +3,7 @@ import { UserMenu } from "../../auth/UserMenu";
 import { REPOSITORY_URL } from "../../config/attribution";
 
 const NAV_LINKS = [
+  { to: "/explore", label: "Explore" },
   { to: "/learn", label: "Learn" },
   { to: "/algorithms", label: "Algorithms" },
   { to: "/docs", label: "Docs" },
@@ -22,7 +23,7 @@ export function PlatformNav(): JSX.Element {
             <span className="font-display text-sm font-bold text-accent-glow">Q</span>
           </div>
           <span className="truncate font-display text-sm font-semibold tracking-wide">
-            QuantumLab
+            QuantHub
           </span>
         </Link>
 
@@ -56,6 +57,9 @@ export function PlatformNav(): JSX.Element {
               ★ Star on GitHub
             </a>
           )}
+          <Link to="/projects" className="btn btn-ghost btn-sm hidden sm:inline-flex">
+            Projects
+          </Link>
           <Link to="/app" className="btn btn-primary btn-sm">
             Launch
           </Link>

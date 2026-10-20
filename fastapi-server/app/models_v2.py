@@ -1,4 +1,4 @@
-"""Pydantic v2 models for QuantumLab API v2."""
+"""Pydantic v2 models for QuantHub API v2."""
 
 from __future__ import annotations
 

@@ -47,7 +47,7 @@ export default function LandingPage(): JSX.Element {
   return (
     <>
       <PageMeta
-        title="QuantumLab"
+        title="QuantHub"
         description="Build, visualize, and understand quantum computing. From your first qubit to quantum research."
       />
 
@@ -77,7 +77,7 @@ export default function LandingPage(): JSX.Element {
           </p>
           <div className="mt-8 flex flex-wrap items-center justify-center gap-3">
             <Link to="/app" className="btn btn-primary btn-md">
-              Launch QuantumLab
+              Launch QuantHub
             </Link>
             <Link to="/app" className="btn btn-ghost btn-md">
               Demo

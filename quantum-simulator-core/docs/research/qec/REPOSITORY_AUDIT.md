@@ -4,7 +4,7 @@
 > classifications, the Phase 2 reproduction, the Phase 3 limitation, the
 > rejected Phase 4 candidate, and blocked checks.
 
-# QuantumLab QEC repository audit
+# QuantHub QEC repository audit
 
 ## Scope and baseline
 

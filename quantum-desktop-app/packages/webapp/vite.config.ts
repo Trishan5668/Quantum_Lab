@@ -36,6 +36,16 @@ export default defineConfig({
     port: 5173,
     strictPort: true,
     host: true,
+    // Allow the sandbox preview host (and any *.e2b.app origin) in dev.
+    allowedHosts: [".e2b.app", "localhost", "127.0.0.1"],
+    // The QuantHub client uses same-origin /api/v1 URLs; proxy them to the
+    // FastAPI server in development so identity headers and downloads work.
+    proxy: {
+      "/api": {
+        target: process.env.VITE_API_PROXY ?? "http://127.0.0.1:8765",
+        changeOrigin: true,
+      },
+    },
   },
   build: {
     outDir: "dist",

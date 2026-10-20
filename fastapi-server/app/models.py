@@ -109,9 +109,15 @@ class HealthOut(BaseModel):
 
 
 class ApiError(BaseModel):
+    """Client-visible error body.
+
+    Deliberately free of stack traces and internal detail; ``reference`` is an
+    opaque correlation id an operator can match against server logs.
+    """
+
     code: str
     message: str
-    trace: str | None = None
+    reference: str | None = None
 
 
 class ApiResponse(BaseModel, Generic[T]):

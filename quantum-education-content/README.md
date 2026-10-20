@@ -1,8 +1,8 @@
 # quantum-education-content
 
-**Missions, hints, and curricula for QuantumLab.**
+**Missions, hints, and curricula for QuantHub.**
 
-This repository holds all the *content* of QuantumLab — the missions
+This repository holds all the *content* of QuantHub — the missions
 the user plays through, the textual hints, and the reference solution
 circuits.
 
@@ -55,6 +55,6 @@ Mission IDs must be globally unique, lowercase, and snake_case.
 
 CC-BY-SA 4.0. See `LICENSE`.
 
-The QuantumLab engine and desktop app are licensed under MIT in their
+The QuantHub engine and desktop app are licensed under MIT in their
 own repositories; only the educational content is share-alike to
 guarantee curricula stay open.

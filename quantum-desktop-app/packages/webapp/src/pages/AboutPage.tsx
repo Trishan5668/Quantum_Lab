@@ -35,8 +35,8 @@ export default function AboutPage(): JSX.Element {
   return (
     <>
       <PageMeta
-        title="About QuantumLab"
-        description="QuantumLab is an educational quantum computing platform for interactive visualization, mathematical derivation, physics explanation, and AI-assisted learning."
+        title="About QuantHub"
+        description="QuantHub is an educational quantum computing platform for interactive visualization, mathematical derivation, physics explanation, and AI-assisted learning."
       />
 
       <section className="platform-container py-16 sm:py-20">
@@ -50,10 +50,10 @@ export default function AboutPage(): JSX.Element {
               About
             </p>
             <h1 className="font-sans text-4xl font-semibold tracking-tight text-text-primary sm:text-5xl">
-              QuantumLab
+              QuantHub
             </h1>
             <p className="mt-5 max-w-2xl text-base leading-relaxed text-text-secondary sm:text-lg">
-              QuantumLab is an educational quantum computing platform focused on helping students
+              QuantHub is an educational quantum computing platform focused on helping students
               understand the mathematical and physical structure behind quantum systems.
             </p>
           </motion.div>

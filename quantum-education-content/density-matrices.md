@@ -8,7 +8,7 @@ For a pure state |ψ⟩, the density operator is the outer product:
 
 ρ = |ψ⟩⟨ψ|
 
-The statevector simulator in QuantumLab V1 already computes this for visualization. In V2, ρ can evolve under noise channels.
+The statevector simulator in QuantHub V1 already computes this for visualization. In V2, ρ can evolve under noise channels.
 
 ## Mixed states
 

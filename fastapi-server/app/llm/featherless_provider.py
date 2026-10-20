@@ -1,4 +1,4 @@
-"""OpenAI-compatible Featherless provider for QuantumLab AI chat."""
+"""OpenAI-compatible Featherless provider for QuantHub AI chat."""
 
 from __future__ import annotations
 
@@ -33,11 +33,11 @@ CHAT_COMPLETIONS_URL: Final[str] = f"{BASE_URL}/chat/completions"
 MAX_CONTEXT_CHARS: Final[int] = 24000
 MAX_OUTPUT_TOKENS: Final[int] = 1600
 
-SYSTEM_PROMPT: Final[str] = """You are QuantumLab AI, an assistant embedded in a quantum computing simulator.
+SYSTEM_PROMPT: Final[str] = """You are QuantHub AI, an assistant embedded in a quantum computing simulator.
 
-Answer questions about the supplied circuit and its mathematical and physical results. Treat the supplied QuantumLab context as the source of truth for circuit-specific values. Never invent amplitudes, probabilities, matrices, eigenvalues, entropy, fidelity, trace distance, or any other numerical result. If a requested quantity is absent, say it is unavailable.
+Answer questions about the supplied circuit and its mathematical and physical results. Treat the supplied QuantHub context as the source of truth for circuit-specific values. Never invent amplitudes, probabilities, matrices, eigenvalues, entropy, fidelity, trace distance, or any other numerical result. If a requested quantity is absent, say it is unavailable.
 
-Clearly distinguish QuantumLab simulation results, Wolfram-verified results, and your own explanation. Only call a result Wolfram verified when the supplied Wolfram status is VERIFIED. If it is UNAVAILABLE, PENDING, or DISCREPANCY, say so and do not imply independent verification.
+Clearly distinguish QuantHub simulation results, Wolfram-verified results, and your own explanation. Only call a result Wolfram verified when the supplied Wolfram status is VERIFIED. If it is UNAVAILABLE, PENDING, or DISCREPANCY, say so and do not imply independent verification.
 
 Provide formal quantum-mechanics and quantum-information explanations, using equations only where the supplied context supports them. Use LaTex when useful. Refer to actual gates, qubits, states, and values in the supplied context. Do not claim to have calculated or verified anything beyond that context."""
 
@@ -73,7 +73,7 @@ class FeatherlessChatProvider:
             "Authorization": f"Bearer {self._api_key}",
             "Content-Type": "application/json",
             "HTTP-Referer": "https://quantumlab.app",
-            "X-Title": "QuantumLab",
+            "X-Title": "QuantHub",
         }
         logger.info("AI provider request provider=%s model=%s", PROVIDER_NAME, self.model)
         try:
@@ -132,7 +132,7 @@ def build_messages(request: AIChatRequest) -> list[dict[str, str]]:
     if len(context_text) > MAX_CONTEXT_CHARS:
         context_text = context_text[:MAX_CONTEXT_CHARS] + "...[context truncated]"
     messages = [{"role": "system", "content": SYSTEM_PROMPT}]
-    messages.append({"role": "system", "content": f"Current QuantumLab context:\n{context_text}"})
+    messages.append({"role": "system", "content": f"Current QuantHub context:\n{context_text}"})
     messages.extend(message.model_dump() for message in request.history[-12:])
     messages.append({"role": "user", "content": request.message})
     return messages

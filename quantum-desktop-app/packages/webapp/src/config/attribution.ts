@@ -22,5 +22,5 @@ export const REPOSITORY_URL = normalizeRepositoryUrl(
     "",
 );
 
-export const APP_TITLE = "QuantumLab — by Trishan Ghosh";
+export const APP_TITLE = "QuantHub — by Trishan Ghosh";
 

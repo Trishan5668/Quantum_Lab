@@ -8,7 +8,7 @@ import { useCircuitStore } from "../../store/circuitStore";
 import { getAlgorithm } from "../../data/algorithms";
 import { Button } from "../ui/Button";
 
-/** Live simulator preview using real QuantumLab components — not a mockup. */
+/** Live simulator preview using real QuantHub components — not a mockup. */
 export function LiveSimulatorEmbed(): JSX.Element {
   const loadPreset = useCircuitStore((s) => s.loadPreset);
   const run = useCircuitStore((s) => s.run);

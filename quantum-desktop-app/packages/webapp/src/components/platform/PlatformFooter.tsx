@@ -10,7 +10,7 @@ export function PlatformFooter(): JSX.Element {
         <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-[1.3fr_1fr_1fr_1.2fr]">
           <div>
             <p className="font-display text-xs font-semibold uppercase tracking-[0.2em] text-text-secondary">
-              QuantumLab
+              QuantHub
             </p>
             <p className="mt-3 max-w-sm text-sm leading-relaxed text-text-muted">
               Open-source Interactive Quantum Computing Platform.
@@ -70,7 +70,7 @@ export function PlatformFooter(): JSX.Element {
         </div>
 
         <div className="mt-10 flex flex-col gap-3 border-t border-border/60 pt-6 font-mono text-[10px] text-text-muted sm:flex-row sm:items-center sm:justify-between">
-          <p>© 2026 QuantumLab</p>
+          <p>© 2026 QuantHub</p>
           <p>MIT License · Core & API · CC-BY-SA 4.0 · Education content</p>
         </div>
       </div>

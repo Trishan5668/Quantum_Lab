@@ -16,7 +16,7 @@ function emit(level: LogLevel, message: string, context?: LogContext): void {
 
   if (IS_DEV) {
     const fn = level === "error" ? console.error : level === "warn" ? console.warn : console.log;
-    fn(`[QuantumLab:${level}]`, message, context ?? "");
+    fn(`[QuantHub:${level}]`, message, context ?? "");
     return;
   }
 

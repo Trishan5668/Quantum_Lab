@@ -58,7 +58,7 @@ export default function EditorPage(): JSX.Element {
   return (
     <>
       <PageMeta
-        title="QuantumLab Editor"
+        title="QuantHub Editor"
         description="Write and run Qiskit and Q# quantum programs with a live circuit preview."
       />
       <div className="editor-shell bg-bg-base text-text-primary">
@@ -70,7 +70,7 @@ export default function EditorPage(): JSX.Element {
               </div>
               <div className="min-w-0">
                 <h1 className="truncate font-display text-base font-semibold tracking-wide">
-                  QuantumLab
+                  QuantHub
                 </h1>
                 <p className="truncate text-xs text-text-muted">Code editor workspace</p>
               </div>

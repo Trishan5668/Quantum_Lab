@@ -9,7 +9,7 @@ interface PageMetaProps {
 /** Sets document title and core SEO metadata. */
 export function PageMeta({ title, description }: PageMetaProps): null {
   useEffect(() => {
-    document.title = title === "QuantumLab" || title === APP_TITLE ? APP_TITLE : `${title} | ${APP_TITLE}`;
+    document.title = title === "QuantHub" || title === APP_TITLE ? APP_TITLE : `${title} | ${APP_TITLE}`;
 
     const setMeta = (name: string, content: string) => {
       let meta = document.querySelector(`meta[name="${name}"]`);
@@ -27,7 +27,7 @@ export function PageMeta({ title, description }: PageMetaProps): null {
     setMeta("author", CREATOR.name);
     setMeta(
       "keywords",
-      "Quantum Computing, Quantum Mechanics, Quantum Simulator, Education, Physics, Qubits, QuantumLab",
+      "Quantum Computing, Quantum Mechanics, Quantum Simulator, Education, Physics, Qubits, QuantHub",
     );
   }, [title, description]);
   return null;

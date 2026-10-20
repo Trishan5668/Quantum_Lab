@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useState } from "react";
+import { ProjectCircuitPanel } from "../quanthub/components/ProjectCircuitPanel";
 import { Link } from "react-router-dom";
 import { GatePalette } from "../components/CircuitBuilder/GatePalette";
 import { CircuitCanvas } from "../components/CircuitBuilder/CircuitCanvas";
@@ -94,7 +95,7 @@ export default function SimulatorPage(): JSX.Element {
   return (
     <>
       <PageMeta
-        title="QuantumLab Simulator"
+        title="QuantHub Simulator"
         description="Build quantum circuits, visualize state vectors, Bloch spheres, density matrices, and run AI-powered explanations."
       />
       <div className="app-shell bg-bg-base text-text-primary">
@@ -106,7 +107,7 @@ export default function SimulatorPage(): JSX.Element {
               </div>
               <div className="min-w-0">
                 <h1 className="truncate font-display text-base font-semibold tracking-wide">
-                  QuantumLab
+                  QuantHub
                 </h1>
                 <p className="truncate text-xs text-text-muted">
                   Quantum computing learning platform
@@ -137,6 +138,7 @@ export default function SimulatorPage(): JSX.Element {
         <CircuitDndProvider>
           <main className="app-main-grid">
             <aside className="sidebar-left border-r border-border bg-bg-surface/60">
+              <ProjectCircuitPanel />
               <div className="sidebar-scroll">
                 <GatePalette />
               </div>

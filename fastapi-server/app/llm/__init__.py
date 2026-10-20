@@ -1,4 +1,4 @@
-"""LLM provider package for QuantumLab's ELI15 endpoint.
+"""LLM provider package for QuantHub's ELI15 endpoint.
 
 Selecting a provider is environment-driven (:envvar:`LLM_PROVIDER`)
 with a deterministic offline fallback so the explanation endpoint is

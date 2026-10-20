@@ -5,7 +5,7 @@ build-backend = "setuptools.build_meta"
 [project]
 name = "quantumlab-api"
 version = "2.0.0"
-description = "FastAPI bridge between QuantumLab desktop client and the quantum simulator core."
+description = "QuantHub API: projects, files, experiments, and the quantum simulator core bridge."
 requires-python = ">=3.11"
 license = { text = "MIT" }
 authors = [{ name = "QuantumLab Contributors" }]
@@ -16,9 +16,12 @@ dependencies = [
     "httpx>=0.27",
     "google-genai>=0.7",
     "numpy>=1.26",
+    "python-multipart>=0.0.9",
     "qiskit>=1.0",
     "pennylane>=0.36",
     "qdk>=1.31",
+    # Server-side Firebase ID token verification (fail-closed if absent).
+    "firebase-admin>=6.5",
 ]
 
 [project.optional-dependencies]

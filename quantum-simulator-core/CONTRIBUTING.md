@@ -1,6 +1,6 @@
 # Contributing to quantum-simulator-core
 
-Thanks for your interest. This package is the math heart of QuantumLab —
+Thanks for your interest. This package is the math heart of QuantHub —
 correctness is paramount. Read this before opening a PR.
 
 ## House rules

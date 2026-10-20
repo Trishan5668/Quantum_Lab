@@ -1,4 +1,4 @@
-"""AI assistant route for circuit-aware QuantumLab conversations."""
+"""AI assistant route for circuit-aware QuantHub conversations."""
 
 from __future__ import annotations
 
@@ -30,7 +30,7 @@ async def chat(payload: AIChatRequest) -> dict[str, object] | JSONResponse:
         provider = get_chat_provider()
         answer = await provider.chat(payload)
     except MissingApiKeyError:
-        return _error(503, "AIUnavailable", "QuantumLab AI is not configured on this server.")
+        return _error(503, "AIUnavailable", "QuantHub AI is not configured on this server.")
     except ConfigurationError as exc:
         return _error(502, "AIProviderConfigurationError", str(exc))
     except AuthenticationError as exc:
@@ -55,5 +55,5 @@ async def chat(payload: AIChatRequest) -> dict[str, object] | JSONResponse:
 def _error(status_code: int, code: str, message: str) -> JSONResponse:
     return JSONResponse(
         status_code=status_code,
-        content={"data": None, "error": {"code": code, "message": message, "trace": None}},
+        content={"data": None, "error": {"code": code, "message": message}},
     )

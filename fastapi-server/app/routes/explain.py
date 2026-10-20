@@ -62,7 +62,7 @@ def _to_llm_request(req: ExplainRequest) -> ExplanationRequest:
 def _error_envelope(code: str, message: str) -> dict[str, object]:
     return {
         "data": None,
-        "error": {"code": code, "message": message, "trace": None},
+        "error": {"code": code, "message": message},
     }
 
 

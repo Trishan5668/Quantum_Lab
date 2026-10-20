@@ -1,4 +1,4 @@
-# QuantumLab Mathematical Audit Report
+# QuantHub Mathematical Audit Report
 
 **Version:** 2.0.0  
 **Date:** July 2026  
@@ -8,7 +8,7 @@
 
 ## Executive Summary
 
-QuantumLab's quantum core is **mathematically sound** for its documented **big-endian** Hilbert-space convention. All implemented gate matrices are unitary, tensor-product embedding is dimensionally consistent, density-matrix evolution satisfies ρ → UρU†, Kraus channels are CPTP, and fidelity/entropy formulas are standard.
+QuantHub's quantum core is **mathematically sound** for its documented **big-endian** Hilbert-space convention. All implemented gate matrices are unitary, tensor-product embedding is dimensionally consistent, density-matrix evolution satisfies ρ → UρU†, Kraus channels are CPTP, and fidelity/entropy formulas are standard.
 
 **One physics bug was fixed:** T2→phase-damping parameter mapping used `γ = 1−e^(−t/T2)` instead of the correct `γ = 1−e^(−2t/T2)` for off-diagonal decay `exp(−t/T2)`.
 
@@ -219,4 +219,4 @@ pytest quantum-simulator-core/tests/ -v
 
 ## Conclusion
 
-QuantumLab correctly implements the postulates of quantum mechanics for all supported operations within its documented big-endian convention. The T2 dephasing mapping bug has been corrected. Cross-validation against Qiskit confirms algorithm correctness with proper wire remapping.
+QuantHub correctly implements the postulates of quantum mechanics for all supported operations within its documented big-endian convention. The T2 dephasing mapping bug has been corrected. Cross-validation against Qiskit confirms algorithm correctness with proper wire remapping.

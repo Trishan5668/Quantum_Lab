@@ -1,6 +1,6 @@
 # Tensor-network backend
 
-QuantumLab's `mps` backend is a NumPy implementation of open-boundary,
+QuantHub's `mps` backend is a NumPy implementation of open-boundary,
 pure-state matrix product states. Tensors have the explicit shape
 `(left_bond, physical_dimension, right_bond)` and use the same big-endian
 site order as the statevector engine.

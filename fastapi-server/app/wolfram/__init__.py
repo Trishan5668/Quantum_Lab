@@ -1,6 +1,6 @@
 """Wolfram-backed simulator verification.
 
-QuantumLab remains the simulator. This package owns the independent
+QuantHub remains the simulator. This package owns the independent
 mathematical verification boundary used by the simulator.
 """
 
