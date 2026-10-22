@@ -122,7 +122,11 @@ The UI must never imply that a file being writable means it can be executed.
   but are not malware-scanned.
 - **Local identity is not authentication.** `QUANTHUB_TRUST_CLIENT_IDENTITY=1`
   is honoured only when `QUANTHUB_ENV` is `development` or `test`; startup fails
-  otherwise, and with `QUANTHUB_ENV` unset the headers are ignored.
+  otherwise, and with `QUANTHUB_ENV` unset the headers are ignored. A server in
+  that state is read-only: `GET /api/v1/me` reports
+  `capabilities.local_sessions = false`, the web app disables writes and
+  explains the remedy, and any write still returns `401`. Use
+  `scripts/dev-api.sh` for local work.
 - **Firebase verification needs `firebase-admin` and a project id.** The SDK is a
   declared dependency; if it or `FIREBASE_PROJECT_ID` is missing, bearer tokens
   are rejected with `401` (fail closed) rather than treated as valid.

@@ -2,6 +2,12 @@
 
 export type Visibility = "public" | "private";
 
+/** Identity mechanisms the API reports as available (see `GET /me`). */
+export interface IdentityCapabilities {
+  local_sessions: boolean;
+  firebase: boolean;
+}
+
 export interface Viewer {
   id: string;
   handle: string;
@@ -9,6 +15,7 @@ export interface Viewer {
   email: string | null;
   authenticated: boolean;
   mode: "authenticated" | "guest" | "local";
+  capabilities?: IdentityCapabilities;
   profile?: {
     id: string;
     handle: string;

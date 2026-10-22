@@ -94,14 +94,14 @@ assistance features, never project hosting or experiment execution.
 
 ## Local development
 
-```powershell
+```bash
 # from repository root
 python -m pip install -e quantum-simulator-core
 python -m pip install -e "fastapi-server[dev]"
 
-cd fastapi-server
-QUANTHUB_ENV=development QUANTHUB_TRUST_CLIENT_IDENTITY=1 \
-  python -m uvicorn app.main:app --host 127.0.0.1 --port 8765 --reload
+# Sets QUANTHUB_ENV=development and QUANTHUB_TRUST_CLIENT_IDENTITY=1, which the
+# local session requires. A bare `uvicorn app.main:app` runs read-only.
+./scripts/dev-api.sh
 ```
 
 Open <http://127.0.0.1:8765/docs> for the OpenAPI UI.

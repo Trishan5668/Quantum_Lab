@@ -15,6 +15,22 @@ create_project() {
   curl -s -X POST "$API/projects" "${AUTH[@]}" -H "Content-Type: application/json" -d "$1"
 }
 
+# Preflight: the API only accepts these identity headers when it is explicitly
+# running the development profile. Fail with the reason instead of seeding
+# nothing and printing a wall of 401s.
+mode="$(curl -sf "$API/me" "${AUTH[@]}" 2>/dev/null | python3 -c \
+  "import json,sys;print(json.load(sys.stdin)['data'].get('mode','guest'))" 2>/dev/null || echo "unreachable")"
+if [[ "$mode" != "local" && "$mode" != "authenticated" ]]; then
+  if [[ "$mode" == "unreachable" ]]; then
+    echo "cannot reach the QuantHub API at $API" >&2
+  else
+    echo "the QuantHub API at $API did not accept the seed identity (session mode: $mode)." >&2
+    echo "start it with: QUANTHUB_ENV=development QUANTHUB_TRUST_CLIENT_IDENTITY=1" >&2
+    echo "or use scripts/dev-api.sh, which sets both." >&2
+  fi
+  exit 1
+fi
+
 echo "== projects"
 for payload in \
   '{"name":"Surface Code Notes","description":"Circuit-level surface-code memory sweeps with Stim and PyMatching, plus notes on decoding.","visibility":"public","topics":["qec","surface-code","stim"],"initialize_readme":true,"gitignore_template":"python","license":"MIT"}' \

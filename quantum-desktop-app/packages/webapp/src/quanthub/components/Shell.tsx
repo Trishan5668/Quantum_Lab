@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useSession } from "../session";
+import { SessionNotice } from "./SessionNotice";
 import { LockIcon } from "./ui";
 
 const NAV = [
@@ -15,7 +16,7 @@ const NAV = [
 export function QuantHubShell({ children }: { children: React.ReactNode }): JSX.Element {
   const { pathname } = useLocation();
   const navigate = useNavigate();
-  const { viewer, identity, usingFirebase } = useSession();
+  const { viewer, identity } = useSession();
   const [query, setQuery] = useState("");
   const [menuOpen, setMenuOpen] = useState(false);
   const menuRef = useRef<HTMLDivElement | null>(null);
@@ -95,11 +96,15 @@ export function QuantHubShell({ children }: { children: React.ReactNode }): JSX.
                     </div>
                     <div>@{viewer?.handle ?? identity.handle}</div>
                     <div className="mt-1 inline-flex items-center gap-1">
-                      {viewer?.authenticated && usingFirebase ? (
+                      {viewer?.mode === "authenticated" ? (
                         <span className="qh-badge qh-badge-public">Firebase account</span>
-                      ) : (
+                      ) : viewer?.mode === "local" ? (
                         <span className="qh-badge qh-badge-private">
                           <LockIcon size={10} /> Local session
+                        </span>
+                      ) : (
+                        <span className="qh-badge qh-badge-private">
+                          <LockIcon size={10} /> Guest · read only
                         </span>
                       )}
                     </div>
@@ -139,7 +144,12 @@ export function QuantHubShell({ children }: { children: React.ReactNode }): JSX.
         </nav>
       </header>
 
-      <main>{children}</main>
+      <main>
+        <div className="qh-container pt-4">
+          <SessionNotice />
+        </div>
+        {children}
+      </main>
 
       <footer className="mt-12 border-t border-[#21262d] py-6">
         <div className="qh-container flex flex-wrap items-center justify-between gap-3 text-xs text-[#6e7681]">

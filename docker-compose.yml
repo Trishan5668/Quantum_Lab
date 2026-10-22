@@ -12,4 +12,12 @@ services:
       - .env
     environment:
       LLM_PROVIDER: ${LLM_PROVIDER:-gemini}
+      # Local development profile: this compose file publishes the API on the
+      # host and is meant for a developer's own machine. It opts into the
+      # unverified X-QuantHub-* identity headers, which are NOT a security
+      # boundary — never expose this container to untrusted networks. For a
+      # real deployment set QUANTHUB_ENV=production, configure
+      # FIREBASE_PROJECT_ID, and leave QUANTHUB_TRUST_CLIENT_IDENTITY unset.
+      QUANTHUB_ENV: ${QUANTHUB_ENV:-development}
+      QUANTHUB_TRUST_CLIENT_IDENTITY: ${QUANTHUB_TRUST_CLIENT_IDENTITY:-1}
     restart: unless-stopped

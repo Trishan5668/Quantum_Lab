@@ -164,6 +164,16 @@ interface RequestOptions {
   signal?: AbortSignal;
 }
 
+/** A short, non-sensitive description for an unsuccessful HTTP status. */
+function describeStatus(status: number): string {
+  if (status === 401) return "Sign in to continue (HTTP 401).";
+  if (status === 403) return "You do not have permission to do that (HTTP 403).";
+  if (status === 404) return "Not found (HTTP 404).";
+  if (status === 429) return "Too many requests (HTTP 429).";
+  if (status >= 500) return `The server failed to handle the request (HTTP ${status}).`;
+  return `The request was rejected (HTTP ${status}).`;
+}
+
 export async function api<T>(path: string, options: RequestOptions = {}): Promise<T> {
   const headers = await identityHeaders();
   const init: RequestInit = {
@@ -190,7 +200,9 @@ export async function api<T>(path: string, options: RequestOptions = {}): Promis
   const contentType = response.headers.get("content-type") || "";
   if (!response.ok) {
     let code = `HTTP${response.status}`;
-    let message = response.statusText || "Request failed.";
+    // Never present a bare "Request failed.": include the status so a proxy,
+    // an unauthenticated deployment and a server bug are distinguishable.
+    let message = describeStatus(response.status);
     let details: Record<string, unknown> | undefined;
     if (contentType.includes("application/json")) {
       try {
@@ -290,7 +302,7 @@ export async function uploadForm<T>(
         new ApiError(
           request.status,
           error?.code ?? `HTTP${request.status}`,
-          error?.message ?? "The upload was rejected.",
+          error?.message ?? describeStatus(request.status),
           error?.details,
         ),
       );
@@ -308,7 +320,7 @@ export async function download(path: string, filename: string): Promise<void> {
   const headers = await identityHeaders();
   const response = await fetch(`${API_ROOT}${path}`, { headers });
   if (!response.ok) {
-    throw new ApiError(response.status, "DownloadFailed", "The file could not be downloaded.");
+    throw new ApiError(response.status, "DownloadFailed", describeStatus(response.status));
   }
   const blob = await response.blob();
   const url = URL.createObjectURL(blob);

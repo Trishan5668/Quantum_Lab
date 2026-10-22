@@ -7,6 +7,7 @@ work.
 
 from __future__ import annotations
 
+import logging
 import os
 
 import quantumlab
@@ -19,7 +20,7 @@ from app.exceptions import (
     unexpected_exception_handler,
 )
 from app.models import HealthOut, envelope
-from app.quanthub.config import validate_configuration
+from app.quanthub.config import configuration_summary, validate_configuration
 from app.quanthub.db import init_db
 from app.quanthub.errors import HubError, hub_error_handler
 from app.quanthub.router import router as quanthub_router
@@ -30,6 +31,8 @@ from app.routes.explain import router as explain_router
 from app.routes.research import router as research_router
 from app.routes.v2 import router as v2_router
 from app.routes.visualize import router as visualize_router
+
+logger = logging.getLogger("quanthub.startup")
 
 SERVER_VERSION = "2.0.0"
 
@@ -50,6 +53,7 @@ def create_app() -> FastAPI:
     # Fail fast and loudly on an unsafe or ambiguous deployment configuration.
     # ``ConfigError`` carries an actionable message and never includes secrets.
     validate_configuration()
+    logger.info("QuantHub identity configuration: %s", configuration_summary())
 
     app = FastAPI(
         title="QuantHub API",

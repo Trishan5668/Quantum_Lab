@@ -129,6 +129,12 @@ def query_flag(request: Request, name: str, default: bool = False) -> bool:
 def me(request: Request) -> dict[str, Any]:
     who = principal(request)
     payload = who.to_dict()
+    # Advertise the identity mechanisms this server accepts so the web app can
+    # explain a read-only session instead of failing a write with a bare 401.
+    payload["capabilities"] = {
+        "local_sessions": config.trust_client_identity(),
+        "firebase": bool(config.firebase_project_id()),
+    }
     if who.is_authenticated:
         with db.db() as conn:
             row = conn.execute(
