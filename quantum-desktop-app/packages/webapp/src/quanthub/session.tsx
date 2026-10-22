@@ -9,7 +9,7 @@ import {
 } from "react";
 import { useAuth } from "../auth/AuthProvider";
 import { api, loadIdentity, saveIdentity, type LocalIdentity } from "./client";
-import type { Viewer } from "./types";
+import type { IdentityCapabilities, Viewer } from "./types";
 
 interface SessionValue {
   viewer: Viewer | null;
@@ -19,6 +19,10 @@ interface SessionValue {
   updateIdentity: (next: Partial<Pick<LocalIdentity, "handle" | "display_name" | "email">>) => void;
   refresh: () => void;
   usingFirebase: boolean;
+  /** Identity mechanisms advertised by the API; null until `/me` answers. */
+  capabilities: IdentityCapabilities | null;
+  /** True when this server cannot authenticate the current visitor at all. */
+  readOnlySession: boolean;
 }
 
 const SessionContext = createContext<SessionValue | null>(null);
@@ -72,6 +76,17 @@ export function SessionProvider({ children }: { children: ReactNode }): JSX.Elem
     [],
   );
 
+  const capabilities = viewer?.capabilities ?? null;
+  // A guest on a server that accepts neither local sessions nor Firebase
+  // tokens can browse but can never write. Pages surface this instead of
+  // letting the user fill a form that is guaranteed to fail.
+  const readOnlySession =
+    Boolean(viewer) &&
+    viewer?.authenticated === false &&
+    capabilities !== null &&
+    !capabilities.local_sessions &&
+    !capabilities.firebase;
+
   const value = useMemo<SessionValue>(
     () => ({
       viewer,
@@ -81,8 +96,10 @@ export function SessionProvider({ children }: { children: ReactNode }): JSX.Elem
       updateIdentity,
       refresh: () => setReloadToken((token) => token + 1),
       usingFirebase,
+      capabilities,
+      readOnlySession,
     }),
-    [viewer, loading, error, identity, updateIdentity, usingFirebase],
+    [viewer, loading, error, identity, updateIdentity, usingFirebase, capabilities, readOnlySession],
   );
 
   return <SessionContext.Provider value={value}>{children}</SessionContext.Provider>;

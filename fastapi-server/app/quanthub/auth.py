@@ -350,9 +350,30 @@ def principal_from_request(request: Request) -> Principal:
     return principal
 
 
+def sign_in_hint() -> str:
+    """Explain how *this* server expects a caller to authenticate.
+
+    The text is client-visible, so it never contains a secret, a configured
+    value, or a filesystem path.  It does describe the option that is available
+    (verified tokens or local development sessions) because a bare "Sign in to
+    continue." on a server with neither enabled is impossible to act on.
+    """
+    if config.trust_client_identity():
+        return "Sign in to continue."
+    if config.firebase_project_id():
+        return "Sign in with your account to continue."
+    return (
+        "This QuantHub server requires a signed-in account, and local "
+        "development sessions are disabled. Sign in with Firebase once "
+        "FIREBASE_PROJECT_ID is configured, or start the API with "
+        "QUANTHUB_ENV=development and QUANTHUB_TRUST_CLIENT_IDENTITY=1 for "
+        "local use."
+    )
+
+
 def require_user(principal: Principal) -> Principal:
     if not principal.is_authenticated:
-        raise unauthorized()
+        raise unauthorized(sign_in_hint())
     return principal
 
 

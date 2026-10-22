@@ -5,6 +5,7 @@ import { api, ApiError, rememberProject } from "../client";
 import { useSession } from "../session";
 import type { ProjectDetail } from "../types";
 import { ErrorState } from "../components/ui";
+import { SessionNotice } from "../components/SessionNotice";
 
 interface TemplatesPayload {
   licenses: Array<{ spdx: string; name: string; requires_attribution: boolean }>;
@@ -32,7 +33,7 @@ function slugify(value: string): string {
 }
 
 export default function NewProjectPage(): JSX.Element {
-  const { viewer } = useSession();
+  const { viewer, readOnlySession, capabilities, usingFirebase } = useSession();
   const navigate = useNavigate();
   const [params] = useSearchParams();
   const [templates, setTemplates] = useState<TemplatesPayload | null>(null);
@@ -90,9 +91,21 @@ export default function NewProjectPage(): JSX.Element {
     [files, archive],
   );
 
+  // The form is disabled in these sessions, but guard the handler too: a
+  // read-only server rejects the POST with 401 regardless of what the UI shows.
+  const cannotCreate = readOnlySession || (viewer?.mode === "guest" && !usingFirebase && !capabilities?.local_sessions);
+
   async function submit(event: React.FormEvent): Promise<void> {
     event.preventDefault();
     if (submitting) return;
+    if (cannotCreate) {
+      setError(
+        "This server cannot authenticate you, so the project was not created. " +
+          "Start the API with QUANTHUB_ENV=development QUANTHUB_TRUST_CLIENT_IDENTITY=1 " +
+          "for local use, or sign in with a Firebase account.",
+      );
+      return;
+    }
     setError(null);
     setFieldErrors({});
     setSubmitting(true);
@@ -514,11 +527,17 @@ export default function NewProjectPage(): JSX.Element {
             </div>
           )}
 
+          {cannotCreate && <SessionNotice />}
           <div className="flex items-center justify-between gap-3">
             <Link to="/" className="qh-btn">
               Cancel
             </Link>
-            <button type="submit" className="qh-btn qh-btn-primary" disabled={submitting || !name.trim()}>
+            <button
+              type="submit"
+              className="qh-btn qh-btn-primary"
+              disabled={submitting || !name.trim() || cannotCreate}
+              title={cannotCreate ? "This server cannot authenticate you" : undefined}
+            >
               {submitting ? "Creating…" : "Create project"}
             </button>
           </div>

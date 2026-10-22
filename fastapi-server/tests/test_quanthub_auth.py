@@ -351,7 +351,57 @@ def test_handle_collision_keeps_ownership_and_returns_stored_handle(
 
 
 # ---------------------------------------------------------------------------
-# 5. Error responses must not leak internals
+# 5. A guest must learn *why* the server refuses to write
+# ---------------------------------------------------------------------------
+
+
+def test_me_advertises_identity_capabilities(
+    isolated: None, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    monkeypatch.setenv("QUANTHUB_ENV", "development")
+    monkeypatch.setenv("QUANTHUB_TRUST_CLIENT_IDENTITY", "1")
+    monkeypatch.setenv("FIREBASE_PROJECT_ID", PROJECT)
+    with TestClient(create_app()) as capability_client:
+        anonymous = capability_client.get("/api/v1/me").json()["data"]
+        local = capability_client.get("/api/v1/me", headers=identity_headers()).json()["data"]
+
+    assert anonymous["mode"] == "guest"
+    assert anonymous["capabilities"] == {"local_sessions": True, "firebase": True}
+    assert local["mode"] == "local"
+    assert local["capabilities"] == {"local_sessions": True, "firebase": True}
+
+
+def test_me_reports_disabled_local_sessions_and_no_firebase(isolated: None) -> None:
+    with TestClient(create_app()) as anonymous_client:
+        payload = anonymous_client.get("/api/v1/me").json()["data"]
+    assert payload["mode"] == "guest"
+    assert payload["capabilities"] == {"local_sessions": False, "firebase": False}
+
+
+def test_write_without_any_identity_explains_the_configuration(isolated: None) -> None:
+    """The 401 must say what to configure instead of a bare "Sign in"."""
+    with TestClient(create_app()) as anonymous_client:
+        response = anonymous_client.post(
+            "/api/v1/projects", json={"name": "Nope"}, headers=identity_headers()
+        )
+    assert response.status_code == 401
+    message = response.json()["error"]["message"]
+    assert "QUANTHUB_ENV=development" in message
+    assert "QUANTHUB_TRUST_CLIENT_IDENTITY=1" in message
+    assert "FIREBASE_PROJECT_ID" in message
+    # Actionable, but still free of secrets and filesystem paths.
+    assert "token" not in message.lower()
+    assert "password" not in message.lower()
+
+
+def test_read_only_session_still_reads_public_content(client: TestClient) -> None:
+    """Hardening the message must not harden public reads into failures."""
+    for path in ("/api/v1/projects", "/api/v1/community/news", "/api/v1/dashboard"):
+        assert client.get(path).status_code == 200, path
+
+
+# ---------------------------------------------------------------------------
+# 6. Error responses must not leak internals
 # ---------------------------------------------------------------------------
 
 

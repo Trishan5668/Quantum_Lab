@@ -65,10 +65,9 @@ python -m pip install -e quantum-simulator-core
 python -m pip install -e "fastapi-server[dev]"
 
 # 2. Start the API (terminal 1) — http://127.0.0.1:8765
-#    QUANTHUB_ENV opts into the labelled local session; see "Local identity".
-cd fastapi-server
-QUANTHUB_ENV=development QUANTHUB_TRUST_CLIENT_IDENTITY=1 \
-  python -m uvicorn app.main:app --host 127.0.0.1 --port 8765
+#    Use the development launcher: a bare `uvicorn` leaves the app read-only,
+#    because the local session has to be opted into explicitly.
+./scripts/dev-api.sh
 
 # 3. Start the web app (terminal 2) — http://127.0.0.1:5173
 cd quantum-desktop-app/packages/webapp
@@ -135,6 +134,27 @@ Configuration is validated once while the app is built, so a misconfigured
 deployment refuses to start instead of silently falling back to unverified
 identities. Unknown values for `QUANTHUB_TRUST_CLIENT_IDENTITY` (for example
 `yes-please`) are an error, not a truthy default.
+
+### Read-only sessions ("every button returns 401")
+
+A server that is not explicitly in `development`/`test` ignores the
+`X-QuantHub-*` headers. If it also has no `FIREBASE_PROJECT_ID`, nobody can be
+authenticated, so **every write returns `401`** while public pages still render.
+That is the intended fail-closed default, not a bug in the UI.
+
+The web app asks `GET /api/v1/me` which mechanisms the server accepts
+(`capabilities.local_sessions`, `capabilities.firebase`). When neither is
+available it shows a banner and disables "Create project" rather than failing
+after the fact, and the `401` body names the missing configuration.
+
+Start the API with the development launcher instead of a bare `uvicorn`:
+
+```bash
+./scripts/dev-api.sh            # QUANTHUB_ENV=development + trust flag
+```
+
+`docker compose up` and the Electron shell also set the development profile;
+they are local-only. Never deploy either with the trust flag enabled.
 
 ### Server environment
 

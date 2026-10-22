@@ -23,6 +23,15 @@ function spawnApiServer() {
       process.env.QUANTUMLAB_API_CWD ||
       path.resolve(__dirname, "..", "..", "..", "fastapi-server"),
     stdio: ["ignore", "inherit", "inherit"],
+    env: {
+      ...process.env,
+      // The desktop shell owns this loopback-only API instance, so it can
+      // declare the development profile itself. Without these two variables
+      // the API treats every request as a guest and all writes return 401.
+      QUANTHUB_ENV: process.env.QUANTHUB_ENV || "development",
+      QUANTHUB_TRUST_CLIENT_IDENTITY:
+        process.env.QUANTHUB_TRUST_CLIENT_IDENTITY || "1",
+    },
   });
   apiProcess.on("error", (err) => {
     console.error("[quantumlab] failed to spawn api:", err);
